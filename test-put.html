@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Навигатор будущего — Тест и отчёт (Путь, 18–35)</title>
+<title>Навигатор будущего — Тест и отчёт (Путь, 20–35)</title>
 <style>
   :root{--bg:#f5f5f7;--card:#fff;--ink:#2a2140;--muted:#6e6e73;--line:#e7e7ea;--accent:#5b6cff;--accent2:#8a5bff;--accent-soft:#eef0ff;--green:#1f9d62;--green-soft:#e8f6ee;--amber:#b8791a;--amber-soft:#fbf2e2;--red:#c0392b;--red-soft:#fdecea;--teal:#0fa3a3;--radius:18px;--shadow:0 1px 2px rgba(0,0,0,.04),0 10px 40px rgba(0,0,0,.06)}
   *{box-sizing:border-box}
@@ -163,7 +163,7 @@
 </head>
 <body>
 <div class="stage" id="stage">
-  <div class="top"><a href="index.html" style="text-decoration:none;color:inherit"><div class="brand">Навигатор<span class="dot">.</span>будущего</div></a><div>Трек «Путь» · 18–35</div></div>
+  <div class="top"><a href="index.html" style="text-decoration:none;color:inherit"><div class="brand">Навигатор<span class="dot">.</span>будущего</div></a><div>Трек «Путь» · 20–35</div></div>
 
   <div id="test">
     <div class="progress"><i id="pbar"></i></div>
@@ -370,7 +370,7 @@ function ILLUS(l){
   R:'<circle cx="26" cy="26" r="9"/><path d="M26 10v6M26 36v6M10 26h6M36 26h6M15 15l4 4M33 33l4 4M37 15l-4 4M15 37l4-4"/>'};
  return '<div class="illus"><div class="illusbadge"><svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="url(#ig)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5b6cff"/><stop offset="1" stop-color="#8a5bff"/></linearGradient></defs>'+(S[l]||S.I)+'</svg></div></div>';
 }
-function forecast(code){const hi=/[IEC]/.test(code[0]);return hi?['100–150 тыс','180–280 тыс','от 300 тыс']:['80–120 тыс','150–220 тыс','от 250 тыс'];}
+function forecast(code){const c=code[0];if(/[IEC]/.test(c))return['150–250 тыс','300–550 тыс','от 800 тыс до 1,5 млн+'];if(/A/.test(c))return['120–220 тыс','280–500 тыс','от 700 тыс до 1,3 млн+'];return['100–180 тыс','230–450 тыс','от 600 тыс до 1 млн+'];}
 
 // ===== 12 архетипов (Юнг) =====
 const ARCH12={
@@ -632,7 +632,7 @@ function buildReport(p,a,ai){
 const AI_ENDPOINT = "";  // пусто → шаблон. Впишите URL вашего backend → включится живой AI.
 function aiPayload(p){
   const m=matchProfs(p.riasec.code);
-  return {трек:'Путь · 18–35 лет',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,
+  return {трек:'Путь · 20–35 лет',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,
     слова:{люблю:p.open.love,поток:p.open.flow,польза:p.open.contribution,хобби:p.open.hobbies,платят_сейчас:p.open.paidFor,забирает_энергию:p.open.drain},
     топ_профессии:m.spot.map(x=>x.n)};
 }

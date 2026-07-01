@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Навигатор будущего — Портрет личности (трек «Старт», 14–17)</title>
+<style>
+  :root{
+    --bg:#f5f5f7; --card:#ffffff; --ink:#2a2140; --muted:#6e6e73;
+    --line:#e7e7ea; --accent:#5b6cff; --accent2:#8a5bff; --accent-soft:#eef0ff;
+    --green:#1f9d62; --green-soft:#e8f6ee; --amber:#b8791a; --amber-soft:#fbf2e2;
+    --red:#c0392b; --red-soft:#fdecea; --teal:#0fa3a3;
+    --radius:20px; --shadow:0 1px 2px rgba(0,0,0,.04),0 10px 40px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .doc{max-width:820px;margin:0 auto;padding:0 22px 100px}
+  .demo-ribbon{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;text-align:center;font-size:13px;font-weight:600;padding:9px}
+  .demo-ribbon a{color:#fff;text-decoration:underline}
+  .cover{text-align:center;padding:56px 16px 10px}
+  .cover .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .cover h1{font-size:clamp(32px,5.5vw,50px);line-height:1.08;letter-spacing:-.03em;margin:16px 0 6px;font-weight:750}
+  .cover .who{font-size:20px;font-weight:650;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cover .meta{font-size:13.5px;color:var(--muted);margin-top:14px}
+  section{margin-top:46px}
+  .sec-num{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  h2{font-size:27px;letter-spacing:-.015em;margin:6px 0 4px;font-weight:720}
+  h3{font-size:17px;margin:22px 0 6px;font-weight:650}
+  p{margin:12px 0;font-size:16px}.lead{font-size:18px}.muted{color:var(--muted)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);margin:18px 0}
+  .conf{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px}
+  .conf.hi{background:var(--green-soft);color:var(--green)}
+  .conf.mid{background:var(--amber-soft);color:var(--amber)}
+  .conf.low{background:var(--red-soft);color:var(--red)}
+  .src{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);background:#f4f3f9;border:1px solid var(--line);border-radius:10px;padding:7px 13px;margin:4px 0 14px}
+  .src b{color:var(--accent);font-weight:700}
+  .firstletter::first-letter{font-size:52px;font-weight:750;float:left;line-height:.82;margin:6px 12px 0 0;color:var(--accent)}
+  .bridge{font-size:14.5px;color:var(--muted);border-left:3px solid var(--accent);padding:4px 0 4px 16px;margin:18px 0 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}h2{font-size:23px}}
+  .bar{margin:11px 0}
+  .bar .t{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+  .bar .track{height:9px;background:#eeeef2;border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar .fill.g{background:linear-gradient(90deg,#1f9d62,#37c285)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;font-weight:600;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:6px 13px}
+  .chip.v{background:#eafaf3;color:var(--green)}
+  .deftype{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0;background:#fbfbfe}
+  .deftype .tt{font-weight:700;color:var(--accent);font-size:14.5px}
+  .deftype p{margin:6px 0 0;font-size:14.5px;color:var(--muted)}
+  .ikiwrap{display:flex;gap:26px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .ikilegend{font-size:14px;color:var(--muted);max-width:320px}
+  .ikilegend div{margin:9px 0;display:flex;gap:8px;align-items:flex-start}
+  .sw{width:14px;height:14px;border-radius:4px;flex:none;margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+  th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  td.pn{font-weight:700}
+  .tag{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;white-space:nowrap}
+  .tag.dem{background:var(--green-soft);color:var(--green)}.tag.mid{background:var(--amber-soft);color:var(--amber)}
+  .spot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+  @media(max-width:680px){.spot{grid-template-columns:1fr}}
+  .spotc{border:1px solid var(--line);border-radius:16px;padding:18px 20px;background:linear-gradient(180deg,#fbfbfe,#fff)}
+  .spotc .rank{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+  .spotc h4{margin:4px 0 6px;font-size:17px}.spotc p{margin:0 0 10px;font-size:13.5px;color:var(--muted)}
+  .spotc .mini{display:flex;gap:6px;flex-wrap:wrap}
+  .subj{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:680px){.subj{grid-template-columns:1fr}}
+  .subjc{border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .subjc .lvl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  .subjc .lvl.main{color:var(--accent)}.subjc .lvl.sup{color:var(--teal)}
+  .subjc h4{margin:5px 0 6px;font-size:16px}.subjc p{margin:0;font-size:14px;color:var(--muted)}
+  .vuz{border-left:3px solid var(--accent);padding:8px 0 8px 16px;margin:14px 0}
+  .vuz h4{margin:0 0 3px;font-size:16px}.vuz p{margin:0;font-size:14px;color:var(--muted)}
+  .burn{background:linear-gradient(180deg,#f6f9ff,#fff);border:1px solid #d8e2fb;border-radius:var(--radius);padding:22px 24px;margin:16px 0}
+  .burnmeter{height:14px;border-radius:99px;background:linear-gradient(90deg,#1f9d62,#e0b020 55%,#c0392b);position:relative;margin:16px 0 8px}
+  .burnmeter .pin{position:absolute;top:-6px;width:4px;height:26px;background:#2a2140;border-radius:3px;box-shadow:0 0 0 3px #fff}
+  .burnscale{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+  .rec{display:flex;gap:12px;align-items:flex-start;margin:11px 0}
+  .rec .ri{width:30px;height:30px;border-radius:9px;background:var(--green-soft);color:var(--green);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+  .rec .rt{font-size:14.5px}.rec .rt b{color:var(--ink)}
+  .note{background:#fffbe9;border:1px solid #f0e3b8;border-radius:12px;padding:12px 16px;font-size:13.5px;color:#7a6a2e;margin:14px 0}
+  .timeline{position:relative;margin:18px 0;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),var(--accent2))}
+  .tl{position:relative;margin:18px 0}
+  .tl::before{content:"";position:absolute;left:-23px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .tl .when{font-size:12.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .tl h4{margin:3px 0 4px;font-size:16px}.tl ul{margin:6px 0 0;padding-left:18px}.tl li{font-size:14.5px;color:var(--muted);margin:4px 0}
+  .scen{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:12px 0}
+  .scen .prob{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .scen h4{margin:4px 0 5px;font-size:16px}.scen p{margin:0;font-size:14.5px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+  .footer a{color:var(--accent);text-decoration:none}
+  .backhome{display:inline-block;margin:30px 0 0;font-size:14px;color:var(--accent);text-decoration:none;font-weight:600}
+  .namebox{max-width:440px;margin:22px auto 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);text-align:left}
+  .namebox label{font-size:13px;color:var(--muted);display:block;margin-bottom:7px;font-weight:600}
+  .namebox input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;font-size:15.5px;font-family:inherit;color:var(--ink);outline:none}
+  .namebox input:focus{border-color:var(--accent)}
+  .namebox .np{display:block;font-size:11.5px;color:var(--muted);margin-top:8px}
+  .cta{text-align:center;background:linear-gradient(120deg,#241a33,#3a2a63);color:#fff;border-radius:var(--radius);padding:36px 28px;margin:50px 0 0}
+  .cta h3{color:#fff;font-size:25px;margin:0 0 8px;letter-spacing:-.01em}
+  .cta p{color:#cdcdd8;font-size:15px;margin:0 auto 22px;max-width:460px}
+  .ctabtn{display:inline-block;background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;font-weight:700;font-size:16px;padding:15px 32px;border-radius:13px}
+  .cta .small{display:block;color:#a9a9b8;font-size:12.5px;margin-top:14px}
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:16px 0}
+  @media(max-width:680px){.toc{grid-template-columns:1fr}}
+  .toccol h3{margin:0 0 10px;font-size:15px}
+  .tocl{list-style:none;margin:0;padding:0;counter-reset:t}
+  .tocl li{counter-increment:t;position:relative;padding:7px 0 7px 30px;font-size:14px;border-bottom:1px solid var(--line)}
+  .tocl li:last-child{border-bottom:none}
+  .tocl li::before{content:counter(t);position:absolute;left:0;top:6px;width:20px;height:20px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .tocl.b li::before{background:#eafaf3;color:var(--green)}
+  .tocl li b{font-weight:650}.tocl li span{color:var(--muted)}
+  .map6{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  @media(max-width:680px){.map6{grid-template-columns:1fr}}
+  .m6{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+  .m6.on{border-color:var(--accent);background:var(--accent-soft)}
+  .m6 b{color:var(--ink)}.m6.on b{color:var(--accent)}
+  .m6 span{color:var(--muted)}
+  .earth{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  @media(max-width:680px){.earth{grid-template-columns:1fr}}
+  .ec{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .ec .en{font-weight:700;font-size:14.5px}
+  .ec .ed{font-size:13px;color:var(--muted);margin-top:3px}
+  @media print{
+    @page{size:A4;margin:14mm 13mm}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{background:#fff}
+    .demo-ribbon,.namebox,.cta,.backhome{display:none!important}
+    .doc{max-width:none;padding:0}
+    section{margin-top:22px}
+    .card,.spotc,.deftype,.scen,.tl,.burn,.vrow,.ec,.m6,.mitem,.vp,.subjc,.happy .h,.ikiwrap,.bar,.vuz{break-inside:avoid}
+    h1,h2,h3{break-after:avoid}
+    a{color:var(--ink);text-decoration:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">Пример отчёта на демо-данных · ваш будет построен по вашим ответам · <a href="index.html">пройти диагностику →</a></div>
+
+<div class="doc">
+
+  <div class="cover">
+    <div class="eyebrow">персональный AI-отчёт · трек «Старт» · 14–17</div>
+    <h1>Портрет личности<span style="display:block;font-size:.5em;font-weight:650;color:var(--muted);margin-top:8px">и навигатор по вашему будущему</span></h1>
+    <div class="who">Кирилл · Изобретатель, которому интересно докопаться до сути</div>
+    <div class="meta">Профиль RIASEC: A·I·S · 42 ответа · 10 систем диагностики</div>
+    <div class="namebox">
+      <label>Сделаем отчёт личным — впишите своё имя</label>
+      <input id="nameInput" type="text" placeholder="Например, Кирилл" />
+      <span class="np">🔒 Имя остаётся только в вашем браузере и принадлежит лишь вам</span>
+    </div>
+  </div>
+
+  <!-- ПОРТРЕТ -->
+  <section style="margin-top:34px">
+    <div class="sec-num">Портрет личности</div>
+    <h2>Творческий ум</h2>
+    <p class="lead firstletter"><span id="pName">Вы</span> из тех, кто задаёт сто вопросов и при этом любит придумывать своё. Когда что-то работает странно, внутри сразу зажигается: «а почему так?» — и хочется разобрать и собрать заново, уже по-своему. Это очень ценный склад ума, даже если в школе он иногда мешает спокойно зубрить параграф.</p>
+    <p>Высокая открытость новому тянет вас к интересному, как магнит. Вам скучно там, где всё понятно и однообразно, и наоборот — вы оживаете, когда есть загадка или творческая задача. Из таких людей вырастают изобретатели, дизайнеры, учёные с фантазией: те, кто соединяет воображение и логику.</p>
+    <p>И вот что важно запомнить про себя: вы счастливее всего, когда есть свобода пробовать и видеть результат своими глазами. Дальше в отчёте — как этот характер проявился в каждой методике, какие предметы и ВУЗы вам подходят и с чего начать прямо сейчас.</p>
+  </section>
+
+  <!-- СОДЕРЖАНИЕ -->
+  <section>
+    <div class="sec-num">Как устроен отчёт</div>
+    <h2>Из чего собран ваш разбор</h2>
+    <p>Отчёт идёт в два больших блока. Сначала — <b>кто вы</b>: мы изучаем вас по очереди через десять систем и сводим их в колесо Икигай. Затем — <b>что с этим делать</b>: предметы, ВУЗы, профессии и план до поступления. Вот полное содержание по порядку.</p>
+    <div class="toc">
+      <div class="toccol">
+        <h3>Часть 1. Кто вы — 10 систем</h3>
+        <ul class="tocl">
+          <li><b>Big Five</b> <span>— пять черт характера</span></li>
+          <li><b>RIASEC</b> <span>— профессиональный тип</span></li>
+          <li><b>VIA</b> <span>— сильные стороны</span></li>
+          <li><b>Типы интеллекта</b> <span>— языки способностей</span></li>
+          <li><b>Мотивация</b> <span>— что вас запускает</span></li>
+          <li><b>Ценности</b> <span>— что для вас важно</span></li>
+          <li><b>Рабочий стиль</b> <span>— как вам действовать</span></li>
+          <li><b>Поток (Flow)</b> <span>— где теряете счёт времени</span></li>
+          <li><b>Икигай</b> <span>— синтез четырёх кругов</span></li>
+          <li><b>Навыки будущего</b> <span>— готовность к миру ИИ</span></li>
+        </ul>
+      </div>
+      <div class="toccol">
+        <h3>Часть 2. Что с этим делать</h3>
+        <ul class="tocl b">
+          <li><b>Где вы раскроетесь</b> <span>— ваша среда</span></li>
+          <li><b>Баланс нагрузки</b> <span>— учиться без перегруза</span></li>
+          <li><b>Предметы и ЕГЭ</b> <span>— на что налечь</span></li>
+          <li><b>Куда поступать</b> <span>— ВУЗы и проходной балл</span></li>
+          <li><b>Профессии</b> <span>— подходящие и земные</span></li>
+          <li><b>Что развивать</b> <span>— вне школы</span></li>
+          <li><b>Дорожная карта</b> <span>— 8–9 / 10 / 11 класс</span></li>
+          <li><b>Сценарии</b> <span>— куда ведёт ваш путь</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="bridge">Логика проста: сначала по кирпичику собираем картину личности, затем соединяем кирпичики в Икигай — и только потом переходим к ВУЗам и плану.</p>
+  </section>
+
+  <!-- 1. BIG FIVE -->
+  <section>
+    <div class="sec-num">Система 1 · Личность</div>
+    <h2>Big Five — «Большая пятёрка» <span class="conf hi" style="float:right;margin-top:14px">высокая увер.</span></h2>
+    <div class="src">📊 Источник: <b>BFI-10</b> — короткая шкала «Большой пятёрки»</div>
+    <p>Big Five — самая надёжная модель характера в науке. Она раскладывает личность на пять черт, и сочетание ваших значений и есть ваш «отпечаток». Сначала результаты, затем что они значат.</p>
+    <div class="card">
+      <div class="bar"><div class="t"><span>Открытость новому</span><b>88%</b></div><div class="track"><div class="fill" style="width:88%"></div></div></div>
+      <div class="bar"><div class="t"><span>Доброжелательность</span><b>72%</b></div><div class="track"><div class="fill" style="width:72%"></div></div></div>
+      <div class="bar"><div class="t"><span>Эмоциональная устойчивость</span><b>54%</b></div><div class="track"><div class="fill" style="width:54%"></div></div></div>
+      <div class="bar"><div class="t"><span>Добросовестность</span><b>50%</b></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+      <div class="bar"><div class="t"><span>Экстраверсия</span><b>46%</b></div><div class="track"><div class="fill" style="width:46%"></div></div></div>
+    </div>
+    <h3>Что означает каждая черта у вас</h3>
+    <p><b>Открытость 88% — ваша вершина.</b> Эта черта про любовь к новому, идеям, творчеству. Высокие значения встречаются у изобретателей и художников: вы легко загораетесь, схватываете на лету и любите всё необычное. Это ваш главный двигатель.</p>
+    <p><b>Доброжелательность 72%.</b> Вы тёплый и отзывчивый, с вами легко в команде и дружбе.</p>
+    <p><b>Эмоциональная устойчивость 54%.</b> Средний уровень: эмоции у вас живые, и это нормально для подростка. Спокойный режим и сон помогут держать ровный фон.</p>
+    <p><b>Добросовестность 50%.</b> Вы собранны там, где интересно, а скучные задачи даются труднее. Тут выручают план и понятные сроки — они станут вашими помощниками.</p>
+    <p><b>Экстраверсия 46%.</b> Вам одинаково хорошо и в компании, и наедине с любимым делом — вы гибко переключаетесь.</p>
+    <h3>Вывод по пятёрке</h3>
+    <p>Сочетание «очень высокая открытость + теплота + живые эмоции» рисует портрет <b>творческого, любознательного ума</b>, которому нужна свобода и интересные задачи. Это сильный склад для всего, что связано с придумыванием и созданием нового.</p>
+  </section>
+
+  <!-- 2. RIASEC -->
+  <section>
+    <div class="sec-num">Система 2 · Профессиональный тип</div>
+    <h2>RIASEC — модель Холланда <span class="conf hi" style="float:right;margin-top:14px">высокая увер.</span></h2>
+    <div class="src">🧭 Источник: <b>RIASEC (модель Холланда)</b></div>
+    <p>Эта модель — основа профориентации во всём мире. Она делит интересы на шесть типов: счастье в деле приходит, когда ваш тип совпадает со средой. Сначала все шесть, затем глубоко ваши.</p>
+    <div class="map6">
+      <div class="m6"><b>R — Реалистичный</b><br><span>Руки, техника, природа, конкретный результат.</span></div>
+      <div class="m6 on"><b>I — Исследователь ✓</b><br><span>Думать, разбираться, как всё устроено.</span></div>
+      <div class="m6 on"><b>A — Артист ✓</b><br><span>Создавать, придумывать, выражать себя.</span></div>
+      <div class="m6 on"><b>S — Социальный ◦</b><br><span>Помогать, объяснять, быть с людьми.</span></div>
+      <div class="m6"><b>E — Предприимчивый</b><br><span>Вести, влиять, запускать своё.</span></div>
+      <div class="m6"><b>C — Организатор</b><br><span>Порядок, точность, данные, правила.</span></div>
+    </div>
+    <p>Ваш код — <b>A·I·S</b>: ведущие Артист и Исследователь, с социальной ноткой. Разберём каждый.</p>
+    <div class="deftype"><div class="tt">A — Артист (ваш ведущий)</div><p>Любит создавать и выражать: придумывать, рисовать, писать, проектировать, мастерить. Ценит свободу и оригинальность, хочет вкладывать в работу свой стиль. Сильные стороны — фантазия, вкус, нестандартный взгляд. Среда мечты — там, где можно творить и пробовать новое.</p></div>
+    <div class="deftype"><div class="tt">I — Исследователь (сильный второй)</div><p>Любит думать и разбираться, как устроены вещи. Ему интересны идеи, опыты, причины. Сильные стороны — логика и любознательность. В связке с Артистом это значит, что вам мало придумать красиво — хочется ещё и понять, как это работает.</p></div>
+    <div class="deftype"><div class="tt">S — Социальный (нотка)</div><p>Тянется к людям, любит объяснять и делиться. У вас это звучит мягким фоном: вам приятно показать другим то, что вы создали или узнали.</p></div>
+    <h3>Что даёт ваша связка A+I+S на практике</h3>
+    <p>Артист плюс Исследователь — это <b>творчество с глубиной</b>. Вы умеете соединять воображение и логику, а это сегодня очень ценят и в технологиях, и в дизайне, и в науке. Из таких людей получаются те, кто придумывает новое и доводит идею до работающей вещи.</p>
+  </section>
+
+  <!-- 3. VIA -->
+  <section>
+    <div class="sec-num">Система 3 · Сильные стороны</div>
+    <h2>VIA — достоинства характера <span class="conf mid" style="float:right;margin-top:14px">средняя увер.</span></h2>
+    <div class="src">💎 Источник: <b>VIA Character Strengths</b></div>
+    <p>VIA выделяет 24 сильные стороны характера. Сильная сторона — это то, что заряжает вас, когда вы её применяете. Ваши ведущие:</p>
+    <div class="chips" style="margin:14px 0"><span class="chip">Любознательность</span><span class="chip">Креативность</span><span class="chip">Любовь к учению</span><span class="chip">Доброта</span></div>
+    <div class="card">
+      <p style="margin-top:0"><b>Любознательность</b> — вам интересно всё вокруг, и это двигатель развития. <b>Креативность</b> — вы придумываете нестандартные решения. <b>Любовь к учению</b> — вам нравится узнавать новое само по себе, а это огромный плюс на годы вперёд. <b>Доброта</b> — вы внимательны к людям рядом.</p>
+    </div>
+    <p>Ваша суперсила — <b>учиться с удовольствием и придумывать своё</b>. Пока другие учат из-под палки, вы делаете это с интересом — и обгоняете.</p>
+  </section>
+
+  <!-- 4. ТИПЫ ИНТЕЛЛЕКТА -->
+  <section>
+    <div class="sec-num">Система 4 · Языки способностей</div>
+    <h2>Типы интеллекта <span class="conf low" style="float:right;margin-top:14px">индикативно</span></h2>
+    <div class="src">🎭 Источник: самооценка по модели множественного интеллекта</div>
+    <p>Ум бывает разным, и у каждого есть «языки», на которых он схватывает быстрее. Это рамка для размышления, своего рода ориентир. У вас ярче всего звучат три:</p>
+    <div class="card">
+      <div class="bar"><div class="t"><span>Образный / визуальный (картинки, формы)</span><b></b></div><div class="track"><div class="fill" style="width:84%"></div></div></div>
+      <div class="bar"><div class="t"><span>Логико-математический (логика, числа)</span><b></b></div><div class="track"><div class="fill" style="width:80%"></div></div></div>
+      <div class="bar"><div class="t"><span>Словесный (слова, тексты)</span><b></b></div><div class="track"><div class="fill" style="width:64%"></div></div></div>
+    </div>
+    <p>Связка «образы + логика» — идеальная для дизайна, инженерии и технологий: вы и видите красиво, и понимаете, как это устроено.</p>
+  </section>
+
+  <!-- 5. МОТИВАЦИЯ -->
+  <section>
+    <div class="sec-num">Система 5 · Что вас запускает</div>
+    <h2>Мотивация</h2>
+    <div class="src">🔥 Источник: ранжирование <b>драйверов</b></div>
+    <div class="card">
+      <div class="bar"><div class="t"><span>Творчество</span><b></b></div><div class="track"><div class="fill" style="width:88%"></div></div></div>
+      <div class="bar"><div class="t"><span>Свобода</span><b></b></div><div class="track"><div class="fill" style="width:80%"></div></div></div>
+      <div class="bar"><div class="t"><span>Развитие</span><b></b></div><div class="track"><div class="fill" style="width:74%"></div></div></div>
+    </div>
+    <p>Ваше топливо — <b>творчество и свобода</b>. Вы выкладываетесь, когда можете придумывать своё и пробовать без жёстких рамок. Это подсказка: ищите дело и учёбу, где есть простор для идей.</p>
+  </section>
+
+  <!-- 6. ЦЕННОСТИ -->
+  <section>
+    <div class="sec-num">Система 6 · Что для вас важно</div>
+    <h2>Ценности</h2>
+    <div class="src">⚖️ Источник: выбор ведущих <b>ценностей</b></div>
+    <div class="chips" style="margin:14px 0"><span class="chip v">Свобода</span><span class="chip v">Дружба</span><span class="chip v">Интерес</span><span class="chip v">Честность</span></div>
+    <p>Ценности — это внутренний компас. У вас в основе — <b>свобода и интерес</b>. Вам важно заниматься тем, что по-настоящему увлекает, и быть честным с собой. Поэтому верные решения для вас — те, что оставляют простор и зажигают любопытство.</p>
+  </section>
+
+  <!-- 7. РАБОЧИЙ СТИЛЬ -->
+  <section>
+    <div class="sec-num">Система 7 · Как вам действовать</div>
+    <h2>Рабочий стиль</h2>
+    <div class="src">🛠️ Источник: ситуационные вопросы о <b>рабочем стиле</b></div>
+    <div class="card">
+      <div class="bar"><div class="t"><span>Создатель</span><b></b></div><div class="track"><div class="fill g" style="width:90%"></div></div></div>
+      <div class="bar"><div class="t"><span>Исследователь</span><b></b></div><div class="track"><div class="fill g" style="width:78%"></div></div></div>
+      <div class="bar"><div class="t"><span>Наставник</span><b></b></div><div class="track"><div class="fill g" style="width:50%"></div></div></div>
+      <div class="bar"><div class="t"><span>Организатор</span><b></b></div><div class="track"><div class="fill g" style="width:30%"></div></div></div>
+    </div>
+    <p>Ваш стиль — <b>придумывать и пробовать</b>. Вам комфортно создавать новое и разбираться, роль строгого организатора — явно чужая, и это нормально. Лучший формат: проект, где можно сделать своё от идеи до результата.</p>
+  </section>
+
+  <!-- 8. FLOW -->
+  <section>
+    <div class="sec-num">Система 8 · Где теряете счёт времени</div>
+    <h2>Поток (Flow)</h2>
+    <div class="src">🌊 Источник: открытые ответы о состоянии потока</div>
+    <p>Поток — это состояние, когда дело так увлекает, что время исчезает. Самый честный указатель на занятие по душе. По вашим ответам вы входите в поток, когда:</p>
+    <div class="card">
+      <p style="margin-top:0">— <b>создаёте что-то своё</b>: рисунок, проект, модель, код, историю;</p>
+      <p>— <b>разбираетесь в загадке</b>, как и почему что-то работает;</p>
+      <p style="margin-bottom:0">— <b>пробуете новое</b>, экспериментируете и видите результат.</p>
+    </div>
+    <p>Вывод: ваш поток живёт там, где <b>творчество встречается с любопытством</b>. Ищите такие задачи — в учёбе и в будущей профессии.</p>
+  </section>
+
+  <!-- 9. ИКИГАЙ -->
+  <section>
+    <div class="sec-num">Система 9 · Синтез всех систем</div>
+    <h2>Колесо Икигай</h2>
+    <div class="src">🌸 Синтез: <b>Flow</b> + <b>ценности</b> + <b>RIASEC</b> + <b>сильные стороны</b></div>
+    <p>Теперь соединим всё в одну картину. Икигай — точка, где встречаются четыре круга: что вы любите (из Flow и ценностей), что умеете (из сильных сторон и типа), что нужно людям и за что платят. Поэтому Икигай идёт здесь — он собирает предыдущие системы вместе.</p>
+    <div class="card">
+      <div class="ikiwrap">
+        <svg width="260" height="260" viewBox="0 0 240 240">
+          <circle cx="95" cy="95" r="72" fill="#5b6cff" fill-opacity="0.32"/>
+          <circle cx="145" cy="95" r="72" fill="#8a5bff" fill-opacity="0.32"/>
+          <circle cx="95" cy="145" r="72" fill="#0fa3a3" fill-opacity="0.32"/>
+          <circle cx="145" cy="145" r="72" fill="#1f9d62" fill-opacity="0.32"/>
+          <text x="66" y="64" font-size="11" fill="#2a2140" text-anchor="middle" font-weight="600">Люблю</text>
+          <text x="174" y="64" font-size="11" fill="#2a2140" text-anchor="middle" font-weight="600">Умею</text>
+          <text x="60" y="186" font-size="11" fill="#2a2140" text-anchor="middle" font-weight="600">Нужно</text>
+          <text x="182" y="186" font-size="11" fill="#2a2140" text-anchor="middle" font-weight="600">Платят</text>
+          <circle cx="120" cy="120" r="22" fill="#fff" fill-opacity="0.9"/>
+          <text x="120" y="125" font-size="16" text-anchor="middle">✦</text>
+        </svg>
+        <div class="ikilegend">
+          <div><span class="sw" style="background:#5b6cff"></span><span><b>Любите:</b> придумывать, разбираться, как всё устроено</span></div>
+          <div><span class="sw" style="background:#8a5bff"></span><span><b>Умеете:</b> образное мышление + логика, быстро схватывать новое</span></div>
+          <div><span class="sw" style="background:#0fa3a3"></span><span><b>Нужно людям:</b> технологии, удобные и красивые решения</span></div>
+          <div><span class="sw" style="background:#1f9d62"></span><span><b>Платят:</b> IT, дизайн, инженерия, наука</span></div>
+        </div>
+      </div>
+      <p class="muted" style="text-align:center;margin-bottom:0">Центр пересечения — где творчество встречает технологии: <b>создание цифровых продуктов</b>.</p>
+    </div>
+  </section>
+
+  <!-- 10. НАВЫКИ БУДУЩЕГО -->
+  <section>
+    <div class="sec-num">Система 10 · Готовность к миру ИИ</div>
+    <h2>Навыки будущего <span class="conf mid" style="float:right;margin-top:14px">WEF 2025</span></h2>
+    <div class="src">🚀 Источник: <b>WEF Future of Jobs 2025</b> × ваш профиль</div>
+    <p>По данным Всемирного экономического форума, к 2030 году ценятся гибкие навыки: критическое мышление, любопытство, адаптивность и работа с технологиями. У вас крепкая база — вот ваша карта:</p>
+    <div class="card">
+      <div class="bar"><div class="t"><span>Любознательность</span><b>ваша сила</b></div><div class="track"><div class="fill g" style="width:96%"></div></div></div>
+      <div class="bar"><div class="t"><span>Креативность</span><b>ваша сила</b></div><div class="track"><div class="fill g" style="width:90%"></div></div></div>
+      <div class="bar"><div class="t"><span>Критическое мышление</span><b>усиливать</b></div><div class="track"><div class="fill" style="width:70%"></div></div></div>
+      <div class="bar"><div class="t"><span>Работа с ИИ-инструментами</span><b>зона роста</b></div><div class="track"><div class="fill" style="width:55%"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ===== ЧАСТЬ 2 ===== -->
+
+  <!-- СРЕДА -->
+  <section>
+    <div class="sec-num">Часть 2 · Где вы раскроетесь</div>
+    <h2>Ваша среда</h2>
+    <p>Вам нужна обстановка, где можно творить и пробовать: проекты вместо зубрёжки, свобода предлагать своё, наставники, которые поддерживают идеи. В такой среде ваша любознательность раскрывается полностью. Это пригодится и при выборе ВУЗа, и будущей работы — ищите места, где ценят инициативу.</p>
+  </section>
+
+  <!-- БАЛАНС -->
+  <section>
+    <div class="sec-num">Часть 2 · Баланс</div>
+    <h2>Баланс и учебная нагрузка</h2>
+    <div class="src">⚡ По данным: вопросы об <b>энергии</b> и нагрузке</div>
+    <div class="burn">
+      <h3 style="margin-top:0">Ваш уровень учебного напряжения</h3>
+      <div class="burnmeter"><div class="pin" style="left:44%"></div></div>
+      <div class="burnscale"><span>спокойно</span><span>есть нагрузка</span><span>сильный стресс</span></div>
+      <p style="margin:14px 0 0">Нагрузка ощутимая, но управляемая — ближе к экзаменам она будет расти. Несколько привычек помогут учиться ровно и сохранять интерес:</p>
+      <div style="margin-top:12px">
+        <div class="rec"><div class="ri">1</div><div class="rt"><b>Учитесь блоками с паузами.</b> 40–50 минут занятий, затем короткий отдых. Так мозг усваивает больше.</div></div>
+        <div class="rec"><div class="ri">2</div><div class="rt"><b>Берегите сон.</b> Это лучший «усилитель памяти» перед контрольными и ЕГЭ.</div></div>
+        <div class="rec"><div class="ri">3</div><div class="rt"><b>Оставляйте время на любимое.</b> Творческие проекты возвращают энергию и держат интерес к учёбе.</div></div>
+      </div>
+      <div class="note">Если тревога или усталость накрывают надолго — это повод поговорить с близкими или со школьным психологом. Просить поддержку — это сильно.</div>
+    </div>
+  </section>
+
+  <!-- ПРЕДМЕТЫ -->
+  <section>
+    <div class="sec-num">Часть 2 · Школа</div>
+    <h2>На что налечь в школе</h2>
+    <div class="src">🎯 На основе: <b>типы интеллекта</b> + <b>RIASEC</b> + интересы</div>
+    <p>Под ваш склад логичнее всего усиливать предметы, которые открывают самые интересные для вас направления:</p>
+    <div class="subj">
+      <div class="subjc"><div class="lvl main">главное</div><h4>Математика (профильная)</h4><p>Ключ почти ко всем технологичным и инженерно-творческим направлениям. Прокачивает вашу логику.</p></div>
+      <div class="subjc"><div class="lvl main">главное</div><h4>Информатика</h4><p>Соединяет логику и творчество — ровно ваше сочетание. Открывает IT, дизайн, разработку.</p></div>
+      <div class="subjc"><div class="lvl sup">поддержка</div><h4>Физика</h4><p>Для инженерных и научных направлений. Развивает понимание, «как всё устроено».</p></div>
+      <div class="subjc"><div class="lvl sup">поддержка</div><h4>Русский язык</h4><p>Обязателен для ЕГЭ. Заодно усиливает умение ясно выражать идеи — вашу артистичную сторону.</p></div>
+    </div>
+    <p>Творческую жилку стоит подпитывать кружками по дизайну, рисунку или проектами — это пригодится в портфолио на креативных направлениях.</p>
+    <div class="note">⚠️ Точный список предметов ЕГЭ для конкретного направления и ВУЗа сверяйте на сайте приёмной комиссии за актуальный год.</div>
+  </section>
+
+  <!-- ВУЗЫ -->
+  <section>
+    <div class="sec-num">Часть 2 · Поступление</div>
+    <h2>Куда поступать</h2>
+    <div class="src">🎓 Подбор по вашему профилю интересов и способностей</div>
+    <p>Эти направления соединяют технологии и творчество — то, что вам близко:</p>
+    <div class="vuz"><h4>Прикладная математика и информатика</h4><p>Логика + данные + простор для исследований. Базовое направление для аналитики, ИИ, разработки.</p></div>
+    <div class="vuz"><h4>Программная инженерия / Разработка ПО</h4><p>Создавать продукты с нуля — для вашего «придумать и разобраться».</p></div>
+    <div class="vuz"><h4>Дизайн / Цифровой продукт (UX)</h4><p>Творчество с пользой: проектировать удобные и красивые интерфейсы.</p></div>
+    <div class="vuz"><h4>Бизнес-информатика</h4><p>Мост между технологиями и людьми — подходит вашей социальной нотке.</p></div>
+    <div class="vuz"><h4>Медиа и коммуникации / Геймдизайн</h4><p>Для самой яркой творческой части — если хочется создавать впечатления.</p></div>
+    <p class="muted" style="font-size:14px">Сильные ВУЗы по этим направлениям в РФ: ВШЭ, МФТИ, ИТМО, МГУ, МГТУ им. Баумана и их региональные аналоги. Конкретный выбор зависит от города, баллов и формата обучения.</p>
+
+    <h3>Как проверить проходной балл</h3>
+    <div class="card">
+      <p style="margin-top:0">Проходной балл показывает, с какой суммой по ЕГЭ реально пройти на бюджет. Проверяйте так:</p>
+      <div class="rec"><div class="ri">1</div><div class="rt"><b>Сайт ВУЗа → раздел «Абитуриентам» / «Приёмная комиссия».</b> Там публикуют проходные баллы прошлых лет по каждому направлению.</div></div>
+      <div class="rec"><div class="ri">2</div><div class="rt"><b>Смотрите 2–3 последних года.</b> Балл слегка плавает год от года, поэтому ориентируйтесь на средний и закладывайте небольшой запас сверху.</div></div>
+      <div class="rec"><div class="ri">3</div><div class="rt"><b>Разделяйте бюджет и платное.</b> На платном проходной балл обычно ниже — это запасной вариант.</div></div>
+      <div class="rec"><div class="ri">4</div><div class="rt"><b>Подавайте в несколько ВУЗов разом.</b> Возьмите один «мечта», пару «реалистичных» и один «надёжный» — так шанс поступить остаётся высоким.</div></div>
+      <div class="rec"><div class="ri">5</div><div class="rt"><b>Учитывайте льготы и олимпиады.</b> Победа в профильной олимпиаде иногда даёт поступление без вступительных или дополнительные баллы.</div></div>
+    </div>
+    <div class="note">⚠️ Проходные баллы и правила приёма обновляются ежегодно — берите цифры за свежий год прямо с сайта приёмной комиссии.</div>
+  </section>
+
+  <!-- ПРОФЕССИИ -->
+  <section>
+    <div class="sec-num">Часть 2 · Профессии</div>
+    <h2>Профессии будущего для вас</h2>
+    <div class="src">🧭 Матчинг профиля × профессии, востребованные к 2030 (<b>WEF</b>, рынок РФ)</div>
+    <div class="spot">
+      <div class="spotc"><div class="rank">★ топ-направление</div><h4>Разработчик / IT</h4><p>Создавать и решать головоломки — соединяет вашу логику и творчество.</p></div>
+      <div class="spotc"><div class="rank">★ топ-направление</div><h4>Продуктовый дизайнер</h4><p>Придумывать удобные и красивые продукты для людей.</p></div>
+      <div class="spotc"><div class="rank">★ топ-направление</div><h4>Специалист по ИИ</h4><p>Новизна, опыты и фронтир технологий — для самых любопытных.</p></div>
+    </div>
+    <table>
+      <tr><th>Профессия</th><th>Почему вам зайдёт</th><th>Спрос</th><th>Риск ИИ</th></tr>
+      <tr><td class="pn">Разработчик</td><td>Создавать и решать головоломки</td><td><span class="tag dem">высокий</span></td><td><span class="tag mid">средний</span></td></tr>
+      <tr><td class="pn">Продуктовый дизайнер (UX)</td><td>Творчество + забота о людях</td><td><span class="tag dem">растёт</span></td><td><span class="tag mid">средний</span></td></tr>
+      <tr><td class="pn">Аналитик данных</td><td>Разбираться, «почему так»</td><td><span class="tag dem">высокий</span></td><td><span class="tag mid">средний</span></td></tr>
+      <tr><td class="pn">Специалист по ИИ</td><td>Новизна + логика + опыты</td><td><span class="tag dem">растёт</span></td><td><span class="tag dem">низкий</span></td></tr>
+      <tr><td class="pn">Геймдизайнер</td><td>Придумывать миры и правила</td><td><span class="tag mid">средний</span></td><td><span class="tag mid">средний</span></td></tr>
+      <tr><td class="pn">Инженер-изобретатель</td><td>Создавать новое «в железе»</td><td><span class="tag dem">растёт</span></td><td><span class="tag dem">низкий</span></td></tr>
+      <tr><td class="pn">Архитектор / промышленный дизайн</td><td>Форма + расчёт + смысл</td><td><span class="tag mid">средний</span></td><td><span class="tag dem">низкий</span></td></tr>
+      <tr><td class="pn">Исследователь / учёный</td><td>Глубина и любопытство</td><td><span class="tag mid">нишевый</span></td><td><span class="tag dem">низкий</span></td></tr>
+    </table>
+
+    <h3>Если тянет к рукам и творчеству вживую</h3>
+    <p>Хорошая профессия — это и работа руками или с живым ремеслом. Под ваш склад (творчество + любопытство + аккуратность) отлично подходят:</p>
+    <div class="earth">
+      <div class="ec"><div class="en">Дизайнер интерьеров</div><div class="ed">Красота + расчёт + забота о людях. Творчество с понятным результатом.</div></div>
+      <div class="ec"><div class="en">Реставратор</div><div class="ed">Руки, внимание к деталям и любовь к истории вещей.</div></div>
+      <div class="ec"><div class="en">Повар-кондитер</div><div class="ed">Творчество, эстетика и мгновенный результат, который радует людей.</div></div>
+      <div class="ec"><div class="en">Фотограф / видеограф</div><div class="ed">Образное мышление + техника. Свобода и свой стиль.</div></div>
+      <div class="ec"><div class="en">Ветеринар</div><div class="ed">Любопытство к живому + доброта + ответственность.</div></div>
+      <div class="ec"><div class="en">Агроном / биотехнолог</div><div class="ed">Наука + живая природа + конкретный результат.</div></div>
+      <div class="ec"><div class="en">Мастер 3D-печати / прототипирования</div><div class="ed">Придумать и сделать руками — на стыке технологий и творчества.</div></div>
+      <div class="ec"><div class="en">Столяр-краснодеревщик</div><div class="ed">Ремесло с авторским почерком. Вещи, которые служат годами.</div></div>
+    </div>
+    <p class="muted" style="font-size:14px">Это ориентир, а выбор остаётся за вами. Многие из этих профессий будут меняться к моменту выпуска — поэтому важнее всего развивать гибкие навыки.</p>
+  </section>
+
+  <!-- ЧТО РАЗВИВАТЬ -->
+  <section>
+    <div class="sec-num">Часть 2 · Развитие</div>
+    <h2>Что развивать вне школы</h2>
+    <div class="card">
+      <p style="margin-top:0"><b>Делайте свои мини-проекты.</b> Сайт, игра, рисунок, эксперимент — что угодно от идеи до результата. Лучший способ понять, что вам по душе, и собрать портфолио.</p>
+      <p><b>Пробуйте олимпиады и кружки.</b> Особенно по математике, информатике, дизайну. Они и баллы дают, и интерес проверяют.</p>
+      <p style="margin-bottom:0"><b>Учитесь работать с ИИ.</b> Это навык вашего поколения. Используйте его как помощника в учёбе и проектах — будете на шаг впереди.</p>
+    </div>
+  </section>
+
+  <!-- ДОРОЖНАЯ КАРТА -->
+  <section>
+    <div class="sec-num">Часть 2 · План</div>
+    <h2>Дорожная карта до поступления</h2>
+    <div class="timeline">
+      <div class="tl"><div class="when">8–9 класс</div><h4>Пробуйте и наблюдайте</h4>
+        <ul><li>Сделайте 2–3 разных проекта (код, дизайн, эксперимент).</li><li>Запишитесь в кружок по математике или информатике.</li><li>Отмечайте, от чего теряете счёт времени.</li></ul></div>
+      <div class="tl"><div class="when">10 класс</div><h4>Выберите направление и предметы ЕГЭ</h4>
+        <ul><li>Определите 1–2 направления подготовки из списка выше.</li><li>Усильте профильную математику и информатику.</li><li>Сходите на день открытых дверей в 2–3 ВУЗа.</li></ul></div>
+      <div class="tl"><div class="when">11 класс</div><h4>Готовьтесь и поступайте</h4>
+        <ul><li>Системная подготовка к ЕГЭ по выбранным предметам.</li><li>Соберите портфолио проектов и достижений.</li><li>Подайте документы в несколько ВУЗов для подстраховки.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- СЦЕНАРИИ -->
+  <section>
+    <div class="sec-num">Часть 2 · Сценарии</div>
+    <h2>Куда может привести ваш путь <span class="conf mid" style="float:right;margin-top:14px">развилки-вероятности</span></h2>
+    <div class="src">🧭 На основе профиля и трендов рынка — для ориентира</div>
+    <div class="scen"><span class="prob">наиболее вероятно</span><h4>IT и цифровые продукты</h4><p>Сильная математика + информатика открывают дорогу в разработку и аналитику — растущие и хорошо оплачиваемые сферы.</p></div>
+    <div class="scen"><span class="prob">по душе</span><h4>Дизайн и создание продуктов</h4><p>Если творческая сторона возьмёт верх — UX и продуктовый дизайн соединят красоту и пользу.</p></div>
+    <div class="scen"><span class="prob">для самых любопытных</span><h4>Наука и исследования</h4><p>Если захочется глубины — путь учёного или инженера-изобретателя даст простор уму.</p></div>
+    <div class="scen"><span class="prob">рычаг для любого пути</span><h4>Дружба с ИИ</h4><p>Освойте ИИ-инструменты уже сейчас — это ускорит учёбу и любой будущий выбор.</p></div>
+  </section>
+
+  <div class="cta">
+    <h3>Хотите узнать про себя так же?</h3>
+    <p>Это пример. Ваш разбор построится по вашим ответам — 12 минут, и вы увидите свои таланты, подходящие ВУЗы и план до поступления.</p>
+    <a class="ctabtn" href="index.html">Пройти диагностику · 1399 ₽ →</a>
+    <span class="small">Без регистрации · без хранения данных · результат сразу после оплаты</span>
+  </div>
+
+  <a class="backhome" href="index.html">← Пройти свою диагностику</a>
+
+  <div class="footer">
+    <b>О методологии.</b> Отчёт построен на признанных моделях: Big Five (BFI-10), RIASEC (Холланд), VIA, дополненных типами интеллекта, рамками Икигай, Flow и интересов. Профессии и направления подобраны по профилю и трендам рынка (WEF, рынок РФ). Списки ВУЗов и предметов ЕГЭ — ориентир; актуальные требования сверяйте на сайтах ВУЗов. Профили индикативны. Это пример на демонстрационных данных.<br><br>
+    Источники: <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/digest/">WEF Future of Jobs 2025</a> · <a href="https://www.gesis.org/en/services/planning-studies-and-collecting-data/items-scales/bfi-10">BFI-10 (GESIS)</a>
+  </div>
+
+</div>
+<script>
+(function(){
+  var i=document.getElementById('nameInput'),g=document.getElementById('greetName'),p=document.getElementById('pName');
+  function upd(){var v=i.value.trim();if(g)g.textContent=v||'Кирилл';if(p)p.textContent=v?v:'Вы';}
+  if(i){i.addEventListener('input',upd);}
+})();
+</script>
+</body>
+</html>

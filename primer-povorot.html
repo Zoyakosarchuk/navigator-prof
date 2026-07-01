@@ -131,6 +131,13 @@
   .archrow{display:flex;gap:20px;flex-wrap:wrap;margin:12px 0 4px;font-size:14px}.archrow div{flex:1 1 220px}.archrow b{color:#8a8aff}
   .arch .amuted{color:#a1a1a6;font-size:13px}
   .arch h3{color:#fff;font-size:15px;margin:16px 0 4px}
+  .arch2{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16)}
+  .archname2{font-size:21px;font-weight:740;margin:4px 0 2px;letter-spacing:-.01em;color:#fff}
+  .syscmt{background:#f4f5ff;border:1px solid #e3e6ff;border-radius:12px;padding:12px 16px;margin:12px 0 4px;font-size:14.5px;line-height:1.62}
+  .syscmt .sct{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:5px}
+  .pcard{background:linear-gradient(135deg,#eef0ff,#f6effd);border:1px solid #e3e6ff;border-radius:18px;padding:20px;margin:18px 0;text-align:center}
+  .pcard .pcardtag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
+  .pcard img{max-width:100%;border-radius:14px;box-shadow:0 8px 30px rgba(90,108,255,.18)}
   .herotext{text-align:left;max-width:600px;margin:6px auto 0}
   .burn{background:linear-gradient(180deg,#fff6f4,#fff);border:1px solid #f3d3ce;border-radius:14px;padding:18px 20px;margin:14px 0}
   .burnmeter{height:13px;border-radius:99px;background:linear-gradient(90deg,#1f9d62,#e0b020 55%,#c0392b);position:relative;margin:14px 0 6px}
@@ -469,12 +476,14 @@ function buildReport(p,a,ai){
   const payNow = p.open.paidFor ? esc(p.open.paidFor) : null;
   const pay = (payNow ? 'сейчас — '+payNow+'; подходит — ' : '') + m.spot.map(x=>x.n).slice(0,3).join(', ');
   const d0=code[0],d1=code[1],w0=TW[d0]||TW.I,f=forecast(code);
+  const AIS=(k,d)=>'<div class="syscmt"><span class="sct">что это значит для вас</span>'+((ai&&ai.sys&&ai.sys[k])?esc(ai.sys[k]):d)+'</div>';
   let h='';
   // ЭМОЦИОНАЛЬНЫЙ ЭКРАН (WOW)
   h+='<div class="hero">'+ILLUS(d0)+'<div class="eyebrow">кто вы</div><h1 class="wowtitle">'+title+'</h1></div>';
   // АРХЕТИП (Юнг)
-  const a12=archetype12(p),A12=ARCH12[a12.top],mt=mbtiType(b),MT=MBTI[mt];
-  h+='<div class="arch"><div class="archtag">ваш архетип</div><h2 class="archname">'+a12.top+'</h2><div class="archsub">'+A12.tag+'</div><p>'+A12.d+'</p><div class="archrow"><div><b>Суперсила:</b> '+A12.power+'</div><div><b>Теневая сторона:</b> '+A12.shadow+'</div></div><h3>Как применить в жизни и работе</h3><p>'+A12.use+'</p><h3>Что вам подходит</h3><p>'+A12.fit+'.</p><h3>Ваш тип по MBTI: '+mt+' — '+MT.n+'</h3><p>'+MT.d+'</p><p><b style="color:#8a8aff">Что с этим делать:</b> '+MT.use+'</p><p class="amuted">Второй по силе архетип — <b style="color:#c2c8ff">'+a12.second+'</b>: он дополняет вашу картину.</p></div>';
+  const a12=archetype12(p),A12=ARCH12[a12.top],A12b=ARCH12[a12.second]||A12,mt=mbtiType(b),MT=MBTI[mt];
+  h+='<div class="arch"><div class="archtag">ваш архетип</div><h2 class="archname">'+a12.top+'</h2><div class="archsub">'+A12.tag+'</div><p>'+A12.d+'</p><div class="archrow"><div><b>Суперсила:</b> '+A12.power+'</div><div><b>Теневая сторона:</b> '+A12.shadow+'</div></div><h3>Как применить в жизни и работе</h3><p>'+A12.use+'</p><h3>Что вам подходит</h3><p>'+A12.fit+'.</p><h3>Ваш тип по MBTI: '+mt+' — '+MT.n+'</h3><p>'+MT.d+'</p><p><b style="color:#8a8aff">Что с этим делать:</b> '+MT.use+'</p><div class="arch2"><div class="archtag">второй ведущий архетип</div><h3 class="archname2">'+a12.second+'</h3><div class="archsub">'+(A12b.tag||'')+'</div><p>'+((ai&&ai.archetype2)?esc(ai.archetype2):(A12b.d||''))+'</p><p><b style="color:#8a8aff">Как сочетается с главным.</b> В вас соединяются '+a12.top+' и '+a12.second+': '+(A12b.power||'вторая грань')+' поддерживает вашу главную суперсилу. Такое сочетание даёт объём, которого нет у людей с одним ярким архетипом — и это ваше отличие.</p></div></div>';
+  if(ai&&ai.card_image){ h+='<div class="pcard"><div class="pcardtag">ваша карточка личности</div><img src="'+esc(ai.card_image)+'" alt="Карточка личности — '+esc(a12.top)+'"><p class="muted" style="margin:12px 0 0;font-size:13px">Сохраните и поделитесь — это ваш архетип «'+a12.top+'».</p></div>'; }
   // ПОРТРЕТ ЛИЧНОСТИ (богатый)
   const HOOK={R:'Есть люди-теоретики, а есть те, кто берёт и делает. Вы из вторых',I:'Есть люди-исполнители, а есть люди-вопросы. Вы из вторых',A:'Есть люди, которые повторяют, и есть те, кто создаёт своё. Вы из вторых',S:'Есть люди, которые только берут, и есть те, кто отдаёт и делает других сильнее. Вы из вторых',E:'Есть люди, которые ждут, и есть те, кто ведёт и запускает. Вы из вторых',C:'Есть люди, которые ищут бурю, и есть те, на ком держится тихая суша. Вы из вторых'};
   h+='<div class="sec-num">Портрет личности</div><h2>'+title+'</h2>';
@@ -535,6 +544,7 @@ function buildReport(p,a,ai){
   h+='<div class="sec-num">Система 1 · Личность</div><h2>Big Five</h2>';
   h+='<div class="card">'+big5Interp(b).map(x=>bar(x[0],x[1])).join('')+'</div>';
   h+=big5Interp(b).map(x=>'<p style="font-size:14.5px"><b>'+x[0]+' '+x[1]+'%.</b> '+x[2]+'</p>').join('');
+  h+=AIS('big5',(function(){var a=big5Interp(b).slice().sort((x,y)=>y[1]-x[1]);return '<b>Ярче всего у вас — '+a[0][0].toLowerCase()+' ('+a[0][1]+'%).</b> '+a[0][2]+' Слабее выражено — '+a[a.length-1][0].toLowerCase()+' ('+a[a.length-1][1]+'%): это не минус, а подсказка выбирать среду, где эта черта не в центре. Характер — фундамент, на нём держится всё остальное в отчёте.';})());
   // RIASEC
   h+='<div class="sec-num">Система 2 · Профессиональный тип</div><h2>RIASEC — ваш код '+code+'</h2>';
   const order=['R','I','A','S','E','C'];
@@ -544,16 +554,19 @@ function buildReport(p,a,ai){
   h+='<p>Вы соединяете два сильных начала: способность '+w0.talent+' и способность '+w1c.talent+'. Это редкое сочетание — вы '+w0.ess+', и при этом '+w1c.ess+'. Именно стык двух сторон делает вас непохожим на «узких» специалистов.</p>';
   h+='<p><b>Как применить в работе.</b> Ваш склад раскрывается там, где '+w0.ideal+' встречается с задачами, в которых важно '+w1c.talent+'. Ищите роли на пересечении — там вы приносите больше всего пользы и растёте быстрее.</p>';
   h+='<p><b>Как это помогает зарабатывать.</b> Больше всего такой склад ценят в сферах: '+w0.money+', а также '+w1c.money+'. На пересечении этих направлений — ваша максимальная ценность на рынке и самый быстрый рост дохода.</p>';
+  h+=AIS('riasec','<b>Код '+code+' — ваш профессиональный ДНК.</b> Именно в такой связке он встречается редко. Сильнее всего вы раскрываетесь на пересечении «'+TN[d0]+'» и «'+TN[d1]+'» — ищите роли, где нужны обе стороны сразу. А среду, где важны только противоположные типы, стоит обходить: там вы будете быстро выдыхаться, даже если хорошо справляетесь.');
   // Сильные стороны + мотивация + ценности
   h+='<div class="sec-num">Системы 3–6 · Сильные стороны, мотивация, ценности</div><h2>Что у вас в основе</h2>';
   h+='<div class="card"><h3 style="margin-top:0">Сильные стороны</h3>'+chips(p.strengths.length?p.strengths:['—'])+
      '<h3>Что вас запускает</h3>'+chips(p.drivers)+
      '<h3>Ценности</h3>'+chips(p.values.length?p.values:['—'],true)+
      '<h3>Ведущий интеллект</h3>'+chips(p.intelligences)+'</div>';
+  h+=AIS('base','<b>Это ваше «топливо».</b> Сильные стороны — '+(p.strengths.slice(0,3).join(', ')||'—')+' — стоит применять каждый день, а не беречь на особый случай. Запускает вас прежде всего '+((p.drivers[0]||'—').toLowerCase())+', поэтому выбирайте среду, которая это даёт. Ценности используйте как фильтр: работа против них выматывает даже при хорошей зарплате.');
   // Рабочий стиль
   h+='<div class="sec-num">Система 7 · Рабочий стиль</div><h2>Как вам действовать</h2>';
   h+='<div class="card">'+roleTop.map(r=>bar(r[0],r[1],true)).join('')+'</div>';
   h+='<p>Ваш ведущий стиль — <b>'+topRole+'</b>. Ищите роли, где это ваша основная задача.</p>';
+  h+=AIS('workstyle','<b>В команде вы сильнее всего в роли «'+topRole+'».</b> Берите задачи, где это главное, и по возможности договаривайтесь передавать то, что даётся тяжелее. Так вы и результат даёте выше, и устаёте меньше — сильная роль работает на вас, а не против.');
   // Икигай
   h+='<div class="sec-num">Система 9 · Синтез</div><h2>Ваше колесо Икигай</h2>';
   h+='<div class="card"><div class="ikiwrap"><svg width="230" height="230" viewBox="0 0 240 240"><circle cx="95" cy="95" r="72" fill="#5b6cff" fill-opacity="0.32"/><circle cx="145" cy="95" r="72" fill="#8a5bff" fill-opacity="0.32"/><circle cx="95" cy="145" r="72" fill="#0fa3a3" fill-opacity="0.32"/><circle cx="145" cy="145" r="72" fill="#1f9d62" fill-opacity="0.32"/><text x="66" y="64" font-size="11" text-anchor="middle" font-weight="600">Люблю</text><text x="174" y="64" font-size="11" text-anchor="middle" font-weight="600">Умею</text><text x="60" y="186" font-size="11" text-anchor="middle" font-weight="600">Нужно</text><text x="182" y="186" font-size="11" text-anchor="middle" font-weight="600">Платят</text><circle cx="120" cy="120" r="21" fill="#fff" fill-opacity="0.9"/><text x="120" y="125" font-size="15" text-anchor="middle">✦</text></svg>'+
@@ -563,13 +576,15 @@ function buildReport(p,a,ai){
      '<div><span class="sw" style="background:#0fa3a3"></span><span><b>Нужно миру:</b> '+need+'</span></div>'+
      '<div><span class="sw" style="background:#1f9d62"></span><span><b>Платят:</b> '+pay+'</span></div>'+
      '</div></div><p class="muted" style="text-align:center;margin-bottom:0">Центр пересечения — где сходятся все четыре: <b>'+(m.spot[0]?m.spot[0].n:'ваше направление')+'</b>.</p></div>';
+  h+=AIS('ikigai','<b>Икигай — точка, где всё сходится.</b> Ваш центр — «'+(m.spot[0]?m.spot[0].n:'ваше направление')+'»: здесь встречаются то, что вы любите, что умеете, что нужно людям и за что платят. Чем ближе работа к этому центру, тем меньше выгорания и больше смысла. Это ваш ориентир при любом выборе.');
   // Навыки будущего
   h+='<div class="sec-num">Система 10 · Навыки будущего</div><h2>Готовность к миру ИИ</h2>';
   h+='<div class="card">'+Object.entries(p.skills).sort((x,y)=>y[1]-x[1]).map(s=>bar(s[0],s[1])).join('')+'</div>';
+  h+=AIS('skills',(function(){var s=Object.entries(p.skills).sort((x,y)=>y[1]-x[1]);return '<b>Готовность к миру ИИ.</b> Сильнее всего у вас развит навык «'+s[0][0].toLowerCase()+'» — это ваша опора на ближайшие годы. А подтянуть стоит «'+s[s.length-1][0].toLowerCase()+'»: именно этот навык быстрее всего окупится, когда рутину заберёт ИИ, а ценность людей сместится в сторону мышления и общения.';})());
   // Система 11 · Климов
   const KLIM={'Люди':{n:'Человек — Человек',d:'Вам близка работа с людьми: общение, помощь, обучение, забота. Такие люди — сильны в педагогике, HR, медицине, сервисе и управлении.'},'Техника и механизмы':{n:'Человек — Техника',d:'Вам близка работа с техникой и механизмами, конкретный результат. Сильны в инженерии, IT, производстве, наладке.'},'Природа и живое':{n:'Человек — Природа',d:'Вам близка работа с живым и природой. Сильны в агросфере, ветеринарии, биологии, экологии.'},'Цифры, тексты, данные':{n:'Человек — Знаковая система',d:'Вам близка работа с данными, текстами, цифрами и кодом. Сильны в аналитике, финансах, программировании, редактуре.'},'Образы и творчество':{n:'Человек — Художественный образ',d:'Вам близка работа с образами и творчеством. Сильны в дизайне, искусстве, медиа, режиссуре.'}};
   const kl=KLIM[p.klimov];
-  if(kl){h+='<div class="sec-num">Система 11 · Типы профессий (Климов)</div><h2>'+kl.n+'</h2><p>'+kl.d+'</p>';}
+  if(kl){h+='<div class="sec-num">Система 11 · Типы профессий (Климов)</div><h2>'+kl.n+'</h2><p>'+kl.d+'</p>';h+=AIS('klimov','<b>Это про то, с чем вам приятнее иметь дело каждый день.</b> Ваш тип — «'+kl.n+'». Выбирая профессию, проверяйте главный предмет труда: даёт ли работа контакт именно с этим. Даже внутри одной сферы есть роли ближе и дальше от вашего типа — выбирайте те, что ближе, там вы дольше остаётесь в ресурсе.');}
   // Система 12 · Выгорание
   const bo=p.burnout;
   h+='<div class="sec-num">Система 12 · Состояние</div><h2>Уровень выгорания</h2>';
@@ -578,6 +593,7 @@ function buildReport(p,a,ai){
   if(bo>=55){h+='<div class="rec"><div class="ri">1</div><div class="rt"><b>Верните восстановление.</b> Сон, паузы и один свободный день в неделю.</div></div><div class="rec"><div class="ri">2</div><div class="rt"><b>Границы нагрузки.</b> Делегируйте то, что давно тянете в одиночку.</div></div><div class="rec"><div class="ri">3</div><div class="rt"><b>Опора на людей.</b> При стойком упадке сил обратитесь к психологу или врачу — это разумный шаг.</div></div>';}
   h+='</div>';
   // Профессии
+  h+=AIS('burnout','<b>Состояние — это фон, на котором вы принимаете все решения.</b> '+(bo>=55?'Сейчас ресурс близок к нулю, поэтому порядок такой: сначала восстановление, потом крупные перемены. Решения на усталости редко бывают верными.':bo>=30?'Есть заметная усталость — стоит заранее выстроить здоровый ритм, чтобы не сползти в выгорание, пока строите планы.':'Вы в хорошем ресурсе — самое время для смелых шагов: сил хватит и на перемены, и на то, чтобы их закрепить.'));
   h+='<div class="sec-num">Профессии</div><h2>Что вам подходит</h2>';
   h+='<div class="spot">'+m.spot.map((x,i)=>'<div class="spotc"><div class="rank">★ попадание №'+(i+1)+'</div><h4>'+x.n+'</h4><p>'+x.why+'</p><div class="mini"><span class="tag '+demClass(x.d)+'">спрос: '+x.d+'</span><span class="tag '+riskClass(x.r)+'">ИИ: '+x.r+'</span></div></div>').join('')+'</div>';
   h+='<table><tr><th>Профессия</th><th>Почему</th><th>Спрос</th><th>Риск ИИ</th></tr>'+m.list.map(x=>'<tr><td class="pn">'+x.n+'</td><td>'+x.why+'</td><td><span class="tag '+demClass(x.d)+'">'+x.d+'</span></td><td><span class="tag '+riskClass(x.r)+'">'+x.r+'</span></td></tr>').join('')+'</table>';

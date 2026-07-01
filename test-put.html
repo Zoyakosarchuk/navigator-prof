@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Навигатор будущего — Тест и отчёт (Путь, 18–35)</title>
+<style>
+  :root{--bg:#f5f5f7;--card:#fff;--ink:#2a2140;--muted:#6e6e73;--line:#e7e7ea;--accent:#5b6cff;--accent2:#8a5bff;--accent-soft:#eef0ff;--green:#1f9d62;--green-soft:#e8f6ee;--amber:#b8791a;--amber-soft:#fbf2e2;--red:#c0392b;--red-soft:#fdecea;--teal:#0fa3a3;--radius:18px;--shadow:0 1px 2px rgba(0,0,0,.04),0 10px 40px rgba(0,0,0,.06)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .stage{max-width:680px;margin:0 auto;padding:26px 20px 70px}
+  .docw{max-width:760px}
+  .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);padding:4px 2px 20px}
+  .brand{font-weight:700;color:var(--ink)}.brand .dot{color:var(--accent)}
+  /* test */
+  .progress{height:6px;background:#e6e6ea;border-radius:99px;overflow:hidden;margin-bottom:8px}
+  .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width .3s}
+  .meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:22px}
+  .qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;box-shadow:var(--shadow);margin-bottom:16px;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .qkind{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .qt{font-size:21px;font-weight:650;letter-spacing:-.01em;margin:8px 0 20px;line-height:1.3}
+  .likert{display:flex;gap:8px}
+  .likert button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:13px;padding:15px 4px;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;transition:.12s}
+  .likert button:hover{border-color:var(--accent);color:var(--accent)}
+  .likert button.sel{border-color:var(--accent);background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff}
+  .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:9px}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:13px 16px;font-size:15px;cursor:pointer;transition:.12s;text-align:left;font-family:inherit;color:var(--ink)}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
+  .opt .chk{float:right;color:var(--accent);font-weight:700;display:none}.opt.sel .chk{display:inline}
+  .chipwrap{display:flex;flex-wrap:wrap;gap:9px}
+  .chipb{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 15px;font-size:14px;cursor:pointer;transition:.12s;font-family:inherit;color:var(--ink)}
+  .chipb:hover{border-color:var(--accent)}
+  .chipb.sel{border-color:var(--accent);background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff}
+  .rank{display:flex;flex-direction:column;gap:8px}
+  .ritem{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:12px;padding:12px 15px;background:#fff;font-size:15px}
+  .ritem .num{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+  .ritem .nm{flex:1}.ritem .arr{display:flex;gap:4px}
+  .ritem .arr button{border:1px solid var(--line);background:#fff;border-radius:7px;width:30px;height:28px;cursor:pointer;color:var(--muted);font-size:12px}
+  .ritem .arr button:hover{border-color:var(--accent);color:var(--accent)}
+  textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;font-size:15px;font-family:inherit;color:var(--ink);outline:none;resize:vertical;min-height:88px}
+  textarea:focus{border-color:var(--accent)}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:10px}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+  .btn{border:none;border-radius:13px;padding:13px 26px;font-size:15px;font-weight:650;cursor:pointer;transition:.15s;font-family:inherit}
+  .btn.primary{background:var(--ink);color:#fff}.btn.primary:hover{background:#000}
+  .btn.primary:disabled{background:#c8c8cf;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--muted)}
+  /* report */
+  .report{display:none}.report.on{display:block}
+  .sec-num{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:40px}
+  h2r{}
+  .report h2{font-size:24px;letter-spacing:-.01em;margin:6px 0 4px;font-weight:720}
+  .report h3{font-size:16px;margin:18px 0 6px;font-weight:650}
+  .report p{margin:11px 0;font-size:15.5px}
+  .lead{font-size:17px}.muted{color:var(--muted)}
+  .cover{text-align:center;padding:24px 10px 6px}
+  .cover .eyebrow{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .cover h1{font-size:34px;line-height:1.1;letter-spacing:-.02em;margin:12px 0 6px;font-weight:750}
+  .cover .who{font-size:18px;font-weight:650;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cover .metar{font-size:13px;color:var(--muted);margin-top:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin:14px 0}
+  .bar{margin:9px 0}.bar .t{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:4px}
+  .bar .track{height:8px;background:#eeeef2;border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar .fill.g{background:linear-gradient(90deg,#1f9d62,#37c285)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:12.5px;font-weight:600;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:5px 12px}
+  .chip.v{background:#eafaf3;color:var(--green)}
+  .deftype{border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin:10px 0;background:#fbfbfe}
+  .deftype .tt{font-weight:700;color:var(--accent);font-size:14px}.deftype p{margin:5px 0 0;font-size:14px;color:var(--muted)}
+  .map6{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+  @media(max-width:560px){.map6{grid-template-columns:1fr}}
+  .m6{border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:13px}
+  .m6.on{border-color:var(--accent);background:var(--accent-soft)}.m6 b{color:var(--ink)}.m6.on b{color:var(--accent)}.m6 span{color:var(--muted)}
+  .ikiwrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .ikilegend{font-size:13.5px;color:var(--muted);max-width:320px}
+  .ikilegend div{margin:8px 0;display:flex;gap:8px;align-items:flex-start}
+  .sw{width:13px;height:13px;border-radius:4px;flex:none;margin-top:3px}
+  .spot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+  @media(max-width:560px){.spot{grid-template-columns:1fr}}
+  .spotc{border:1px solid var(--line);border-radius:14px;padding:15px 17px;background:linear-gradient(180deg,#fbfbfe,#fff)}
+  .spotc .rank{font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+  .spotc h4{margin:4px 0 5px;font-size:16px}.spotc p{margin:0 0 8px;font-size:13px;color:var(--muted)}
+  .spotc .mini{display:flex;gap:5px;flex-wrap:wrap}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+  th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  td.pn{font-weight:700;white-space:nowrap}
+  .tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;white-space:nowrap}
+  .tag.dem{background:var(--green-soft);color:var(--green)}.tag.demmid{background:var(--amber-soft);color:var(--amber)}
+  .tag.low{background:var(--green-soft);color:var(--green)}.tag.mid{background:var(--amber-soft);color:var(--amber)}.tag.high{background:var(--red-soft);color:var(--red)}
+  .earth{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+  @media(max-width:560px){.earth{grid-template-columns:1fr}}
+  .ec{border:1px solid var(--line);border-radius:11px;padding:11px 13px}.ec .en{font-weight:700;font-size:14px}.ec .ed{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .tl{position:relative;margin:14px 0 14px 18px;padding-left:16px;border-left:2px solid var(--accent-soft)}
+  .tl .when{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .tl h4{margin:2px 0 4px;font-size:15px}.tl p{margin:0;font-size:14px;color:var(--muted)}
+  .scen{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+  .scen .prob{font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .scen h4{margin:3px 0 4px;font-size:15px}.scen p{margin:0;font-size:14px;color:var(--muted)}
+  .note{background:#fffbe9;border:1px solid #f0e3b8;border-radius:12px;padding:13px 16px;font-size:13px;color:#7a6a2e;margin:18px 0}
+  .aiflag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 7px;margin-left:6px}
+  /* WOW-апгрейд */
+  .hero{text-align:center;padding:18px 6px 6px}
+  .hero .illus{margin:0 auto 14px;display:flex;justify-content:center}
+  .hero .eyebrow{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .wowtitle{font-size:32px;line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;font-weight:770;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .wowlead{font-size:20px;line-height:1.4;font-weight:600;max-width:560px;margin:0 auto 16px}.wowlead b{color:var(--accent)}
+  .wowline{font-size:16px;margin:8px auto;max-width:520px}
+  .wowline .wl{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:1px}
+  .illusbadge{width:96px;height:96px;border-radius:26px;background:linear-gradient(135deg,var(--accent-soft),#fff);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+  .glav{background:linear-gradient(180deg,#f6f7ff,#fff);border:1px solid #dfe3ff;border-radius:var(--radius);padding:22px 24px;margin:22px 0}.glav h2{margin-top:0}
+  .gi{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15.5px}.gi:last-child{border-bottom:none}
+  .gi .gk{font-weight:700;flex:none;width:170px;color:var(--ink)}.gi .gv{color:var(--muted)}
+  @media(max-width:560px){.gi{flex-direction:column;gap:2px}.gi .gk{width:auto}}
+  .pscale{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);margin:16px 0}
+  .psrow{display:flex;align-items:center;gap:12px;margin:9px 0}.psrow .pl{width:120px;font-size:14px;font-weight:600;flex:none}
+  .psrow .pt{flex:1;font-size:16px;letter-spacing:1px;color:var(--accent);overflow:hidden;white-space:nowrap}
+  .fc{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}@media(max-width:560px){.fc{grid-template-columns:1fr}}
+  .fcc{border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;background:linear-gradient(180deg,#fbfbfe,#fff)}
+  .fcc .fy{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700}.fcc .fv{font-size:21px;font-weight:750;margin-top:4px;letter-spacing:-.01em}
+  .fam{display:flex;gap:10px;flex-wrap:wrap}.famc{border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-weight:600;font-size:15px;background:var(--card);flex:1 1 150px;text-align:center}
+  .arch{background:linear-gradient(135deg,#1d1d1f,#2c2350);color:#fff;border-radius:var(--radius);padding:24px 26px;margin:20px 0}
+  .arch .archtag{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#8a8aff;font-weight:700}
+  .archname{font-size:30px;font-weight:770;margin:6px 0 2px;letter-spacing:-.02em}
+  .archsub{font-size:15px;color:#c2c8ff;font-weight:600;margin-bottom:10px}
+  .arch p{color:#e4e4ea;font-size:15.5px}
+  .archrow{display:flex;gap:20px;flex-wrap:wrap;margin:12px 0 4px;font-size:14px}.archrow div{flex:1 1 220px}.archrow b{color:#8a8aff}
+  .arch .amuted{color:#a1a1a6;font-size:13px}
+  .arch h3{color:#fff;font-size:15px;margin:16px 0 4px}
+  .arch2{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16)}
+  .archname2{font-size:21px;font-weight:740;margin:4px 0 2px;letter-spacing:-.01em;color:#fff}
+  .syscmt{background:#f4f5ff;border:1px solid #e3e6ff;border-radius:12px;padding:12px 16px;margin:12px 0 4px;font-size:14.5px;line-height:1.62}
+  .syscmt .sct{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:5px}
+  .pcard{background:linear-gradient(135deg,#eef0ff,#f6effd);border:1px solid #e3e6ff;border-radius:18px;padding:20px;margin:18px 0;text-align:center}
+  .pcard .pcardtag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
+  .pcard img{max-width:100%;border-radius:14px;box-shadow:0 8px 30px rgba(90,108,255,.18)}
+  .herotext{text-align:left;max-width:600px;margin:6px auto 0}
+  .burn{background:linear-gradient(180deg,#fff6f4,#fff);border:1px solid #f3d3ce;border-radius:14px;padding:18px 20px;margin:14px 0}
+  .burnmeter{height:13px;border-radius:99px;background:linear-gradient(90deg,#1f9d62,#e0b020 55%,#c0392b);position:relative;margin:14px 0 6px}
+  .burnmeter .pin{position:absolute;top:-6px;width:4px;height:25px;background:#2a2140;border-radius:3px;box-shadow:0 0 0 3px #fff}
+  .burnscale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+  .rec{display:flex;gap:11px;align-items:flex-start;margin:10px 0}.rec .ri{width:26px;height:26px;border-radius:8px;background:var(--green-soft);color:var(--green);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px}.rec .rt{font-size:14px}.rec .rt b{color:var(--ink)}
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:16px 0}@media(max-width:560px){.toc{grid-template-columns:1fr}}
+  .toccol h3{margin:0 0 10px;font-size:15px}
+  .tocl{list-style:none;margin:0;padding:0;counter-reset:t}
+  .tocl li{counter-increment:t;position:relative;padding:7px 0 7px 30px;font-size:13.5px;border-bottom:1px solid var(--line)}.tocl li:last-child{border-bottom:none}
+  .tocl li::before{content:counter(t);position:absolute;left:0;top:6px;width:20px;height:20px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .tocl.b li::before{background:#eafaf3;color:var(--green)}
+  .tocl li b{font-weight:650}.tocl li span{color:var(--muted)}
+  .search{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);margin:16px 0}
+  .search .row{display:flex;gap:8px;flex-wrap:wrap}
+  .search input{flex:1;min-width:200px;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;font-size:15px;font-family:inherit;outline:none;color:var(--ink)}
+  .search input:focus{border-color:var(--accent)}
+  .search .sbtn{border:none;border-radius:11px;padding:12px 20px;font-weight:650;background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;cursor:pointer;font-family:inherit}
+  .sres{margin-top:14px;display:none}.sres.on{display:block}
+  .verdict{display:inline-block;font-weight:700;padding:4px 12px;border-radius:999px;font-size:14px}
+  .verdict.yes{background:var(--green-soft);color:var(--green)}.verdict.mid{background:var(--amber-soft);color:var(--amber)}.verdict.no{background:var(--red-soft);color:var(--red)}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="top"><a href="index.html" style="text-decoration:none;color:inherit"><div class="brand">Навигатор<span class="dot">.</span>будущего</div></a><div>Трек «Путь» · 18–35</div></div>
+
+  <div id="test">
+    <div class="progress"><i id="pbar"></i></div>
+    <div class="meta"><span id="block"></span><span id="counter"></span></div>
+    <div id="qhost"></div>
+    <div class="nav">
+      <button class="btn ghost" id="back">← Назад</button>
+      <button class="btn primary" id="next" disabled>Дальше →</button>
+    </div>
+    <p class="hint" id="hint" style="text-align:center"></p>
+  </div>
+
+  <div class="report" id="report"></div>
+</div>
+
+<script>
+// ===== ВОПРОСЫ (45) =====
+const L=['1','2','3','4','5'];
+const Q=[
+ {id:'q1',b:'Личность',k:'шкала',t:'Мне нравится браться за задачи, где нет готового решения.',type:'likert'},
+ {id:'q2',b:'Личность',k:'шкала',t:'Меня быстро утомляет однообразие и рутина.',type:'likert'},
+ {id:'q3',b:'Личность',k:'шкала',t:'Я довожу начатое до конца, даже когда становится скучно.',type:'likert'},
+ {id:'q4',b:'Личность',k:'шкала',t:'Я планирую дела заранее, а не действую по наитию.',type:'likert'},
+ {id:'q5',b:'Личность',k:'шкала',t:'Меня заряжает энергия шумной компании и новых знакомств.',type:'likert'},
+ {id:'q6',b:'Личность',k:'шкала',t:'После активного общения я чувствую прилив сил.',type:'likert'},
+ {id:'q7',b:'Личность',k:'шкала',t:'Мне важно, чтобы людям рядом было хорошо и комфортно.',type:'likert'},
+ {id:'q8',b:'Личность',k:'шкала',t:'Я легко иду навстречу и уступаю ради общего дела.',type:'likert'},
+ {id:'q9',b:'Личность',k:'шкала',t:'Под давлением я сохраняю спокойствие и ясную голову.',type:'likert'},
+ {id:'q10',b:'Личность',k:'шкала',t:'Я редко подолгу переживаю из-за мелких неудач.',type:'likert'},
+ {id:'q11',b:'Профтип',k:'шкала',t:'Мне нравится чинить и собирать что-то руками, работать с техникой.',type:'likert'},
+ {id:'q12',b:'Профтип',k:'шкала',t:'Мне нравится работать с материалами, оборудованием, на природе.',type:'likert'},
+ {id:'q13',b:'Профтип',k:'шкала',t:'Мне нравится разбираться, почему что-то устроено именно так, и копаться в данных.',type:'likert'},
+ {id:'q14',b:'Профтип',k:'шкала',t:'Мне нравится проводить исследования и проверять гипотезы.',type:'likert'},
+ {id:'q15',b:'Профтип',k:'шкала',t:'Мне нравится придумывать и создавать своё: дизайн, тексты, идеи.',type:'likert'},
+ {id:'q16',b:'Профтип',k:'шкала',t:'Мне нравится работать там, где ценят оригинальность и свободу.',type:'likert'},
+ {id:'q17',b:'Профтип',k:'шкала',t:'Мне нравится помогать людям, учить и поддерживать.',type:'likert'},
+ {id:'q18',b:'Профтип',k:'шкала',t:'Мне нравится работать в тесном контакте с людьми и заботиться о них.',type:'likert'},
+ {id:'q19',b:'Профтип',k:'шкала',t:'Мне нравится вести за собой, убеждать, запускать своё дело.',type:'likert'},
+ {id:'q20',b:'Профтип',k:'шкала',t:'Мне нравится брать ответственность и влиять на результат.',type:'likert'},
+ {id:'q21',b:'Профтип',k:'шкала',t:'Мне нравится наводить порядок в данных, вести учёт, работать по чётким правилам.',type:'likert'},
+ {id:'q22',b:'Профтип',k:'шкала',t:'Мне нравится отвечать за точность, документы и регламенты.',type:'likert'},
+ {id:'q23',b:'Мотивация',k:'ранжирование',t:'Расставьте по важности — что вас по-настоящему заряжает:',type:'rank',items:['Деньги','Свобода','Влияние','Творчество','Польза','Признание','Развитие']},
+ {id:'q24',b:'Ценности',k:'выбор до 5',t:'Отметьте до 5 ценностей, которые вам важнее всего:',type:'multi',max:5,options:['Стабильность','Свобода','Семья','Развитие','Смысл','Признание','Творчество','Честность','Порядок','Влияние','Дружба','Здоровье','Независимость','Достаток','Польза']},
+ {id:'q25',b:'Сильные стороны',k:'выбор до 5',t:'Отметьте до 5 качеств, которые вам ближе всего:',type:'multi',max:5,options:['Любознательность','Креативность','Любовь к учению','Рассудительность','Смелость','Настойчивость','Честность','Энергичность','Доброта','Социальный интеллект','Командность','Справедливость','Лидерство','Скромность','Благоразумие','Самоконтроль','Чувство прекрасного','Благодарность','Оптимизм','Юмор','Надёжность']},
+ {id:'q26',b:'Типы интеллекта',k:'ранжирование',t:'Что даётся вам легче всего? Расставьте по силе:',type:'rank',items:['Логика и числа','Слова и тексты','Образы и пространство','Музыка и ритм','Тело и движение','Общение с людьми','Понимание себя','Природа']},
+ {id:'q27',b:'Рабочий стиль',k:'ситуация',t:'Новый проект. Что притягивает больше всего?',type:'single',options:[['Придумать концепцию с нуля','Создатель'],['Раскопать, как всё устроено','Исследователь'],['Организовать и запустить процесс','Организатор'],['Довести детали до идеала','Исполнитель'],['Собрать и повести команду','Лидер'],['Помочь и научить участников','Наставник']]},
+ {id:'q28',b:'Рабочий стиль',k:'ситуация',t:'Пятница, дедлайн близко. Какая роль в команде ваша?',type:'single',options:[['Генератор идей','Создатель'],['Аналитик','Исследователь'],['Координатор','Организатор'],['Исполнитель-перфекционист','Исполнитель'],['Лидер','Лидер'],['Опора и поддержка','Наставник']]},
+ {id:'q29',b:'Рабочий стиль',k:'ситуация',t:'Что о вас скорее скажут коллеги?',type:'single',options:[['«Фонтан идей»','Создатель'],['«Дотошный аналитик»','Исследователь'],['«Держит всё под контролем»','Организатор'],['«На него можно положиться»','Исполнитель'],['«Ведёт за собой»','Лидер'],['«К нему идут за помощью»','Наставник']]},
+ {id:'q30',b:'Поток',k:'ситуация',t:'Когда вы теряли счёт времени за делом — это было про то, что вы…',type:'single',options:[['Создавал/придумывал','Создавал/придумывал'],['Разбирался/анализировал','Разбирался/анализировал'],['Общался/помогал','Общался/помогал'],['Организовывал/наводил порядок','Организовывал/наводил порядок'],['Мастерил руками','Мастерил руками'],['Учился новому','Учился новому']]},
+ {id:'q31',b:'Поток',k:'открытый',t:'Опишите одним-двумя предложениями занятие, за которым забываете о времени.',type:'open',opt:true},
+ {id:'q32',b:'Навыки будущего',k:'шкала',t:'Мне легко осваивать новое, когда всё быстро меняется.',type:'likert'},
+ {id:'q33',b:'Навыки будущего',k:'шкала',t:'Я подвергаю сомнению информацию и проверяю факты.',type:'likert'},
+ {id:'q34',b:'Навыки будущего',k:'шкала',t:'Мне интересно разбираться в новых технологиях и ИИ.',type:'likert'},
+ {id:'q35',b:'Навыки будущего',k:'шкала',t:'Я легко объясняю сложное простыми словами.',type:'likert'},
+ {id:'q36',b:'Навыки будущего',k:'шкала',t:'Я быстро учусь новому по видео, статьям, практике.',type:'likert'},
+ {id:'q37',b:'Навыки будущего',k:'шкала',t:'Мне комфортно принимать решения самому, без указаний.',type:'likert'},
+ {id:'q38',b:'Навыки будущего',k:'шкала',t:'Мне любопытно узнавать новое просто ради интереса.',type:'likert'},
+ {id:'q39',b:'Икигай',k:'открытый',t:'Что вы любите делать больше всего — то, что радует само по себе?',type:'open',opt:true},
+ {id:'q40',b:'Икигай',k:'открытый',t:'Какую пользу людям вам хотелось бы приносить?',type:'open',opt:true},
+ {id:'q55',b:'Икигай',k:'открытый',t:'Чем вы увлекаетесь в свободное время? Хобби, любимые занятия.',type:'open',opt:true},
+ {id:'q41',b:'Икигай',k:'выбор',t:'Какой доход в месяц был бы для вас комфортным?',type:'single',options:[['до 60 тыс','до 60 тыс'],['60–120 тыс','60–120 тыс'],['120–250 тыс','120–250 тыс'],['250 тыс+','250 тыс+'],['пока не важно','пока не важно']]},
+ {id:'q46',b:'Икигай',k:'открытый',t:'За что вам платят сейчас — какая работа или дело приносит вам доход?',type:'open',opt:true},
+ {id:'q50',b:'Икигай',k:'выбор',t:'Ваш текущий доход в месяц (примерно)?',type:'single',options:[['пока нет дохода','пока нет дохода'],['до 60 тыс','до 60 тыс'],['60–120 тыс','60–120 тыс'],['120–200 тыс','120–200 тыс'],['200 тыс+','200 тыс+']]},
+ {id:'q42',b:'Контекст',k:'выбор',t:'Чем вы занимаетесь сейчас?',type:'single',options:[['Работаю по найму','Работаю по найму'],['Учусь','Учусь'],['Фриланс / своё дело','Фриланс / своё дело'],['В поиске','В поиске'],['Другое','Другое']]},
+ {id:'q43',b:'Контекст',k:'шкала',t:'Насколько вам нравится то, чем вы занимаетесь сейчас?',type:'likert'},
+ {id:'q44',b:'Контекст',k:'открытый',t:'Что сильнее всего забирает у вас энергию в работе?',type:'open',opt:true},
+ {id:'q45',b:'Контекст',k:'выбор нескольких',t:'Почему хотите что-то изменить?',type:'multi',max:99,options:['Мало смысла','Мало денег','Выгорание','Нет роста','Не моё направление','Хочу больше свободы','Просто интересно узнать себя']},
+ {id:'q51',b:'Склонности',k:'ранжирование',t:'С чем вам приятнее всего работать? Расставьте по порядку:',type:'rank',items:['Люди','Техника и механизмы','Природа и живое','Цифры, тексты, данные','Образы и творчество']},
+ {id:'q52',b:'Состояние',k:'шкала',t:'Я чувствую упадок сил даже после отдыха.',type:'likert'},
+ {id:'q53',b:'Состояние',k:'шкала',t:'Работа всё чаще теряет для меня смысл.',type:'likert'},
+ {id:'q54',b:'Состояние',k:'шкала',t:'Я всё больше отдаляюсь от своей работы.',type:'likert'}
+];
+
+// ===== СКОРИНГ =====
+const VIRTUE={'Любознательность':'Мудрость','Креативность':'Мудрость','Любовь к учению':'Мудрость','Рассудительность':'Мудрость','Смелость':'Мужество','Настойчивость':'Мужество','Честность':'Мужество','Энергичность':'Мужество','Надёжность':'Мужество','Доброта':'Человечность','Социальный интеллект':'Человечность','Командность':'Справедливость','Справедливость':'Справедливость','Лидерство':'Справедливость','Скромность':'Умеренность','Благоразумие':'Умеренность','Самоконтроль':'Умеренность','Чувство прекрасного':'Трансцендентность','Благодарность':'Трансцендентность','Оптимизм':'Трансцендентность','Юмор':'Трансцендентность'};
+function computeProfile(a){
+  const pct=v=>Math.round((v-1)/4*100),avg=(x,y)=>(x+y)/2,avg3=(x,y,z)=>(x+y+z)/3;
+  const big5={openness:pct(avg(a.q1,a.q2)),conscientiousness:pct(avg(a.q3,a.q4)),extraversion:pct(avg(a.q5,a.q6)),agreeableness:pct(avg(a.q7,a.q8)),stability:pct(avg(a.q9,a.q10))};
+  const raw={R:a.q11+a.q12,I:a.q13+a.q14,A:a.q15+a.q16,S:a.q17+a.q18,E:a.q19+a.q20,C:a.q21+a.q22};
+  const riasecPct={};for(const k in raw)riasecPct[k]=Math.round((raw[k]-2)/8*100);
+  const code=Object.entries(raw).sort((x,y)=>y[1]-x[1]).slice(0,3).map(e=>e[0]).join('');
+  const roles={Создатель:0,Исследователь:0,Организатор:0,Исполнитель:0,Лидер:0,Наставник:0};
+  [a.q27,a.q28,a.q29].forEach(r=>{if(roles[r]!==undefined)roles[r]++;});
+  const rolesPct={};for(const k in roles)rolesPct[k]=Math.round(roles[k]/3*100);
+  const virtues={Мудрость:0,Мужество:0,Человечность:0,Справедливость:0,Умеренность:0,Трансцендентность:0};
+  (a.q25||[]).forEach(s=>{const v=VIRTUE[s];if(v)virtues[v]++;});
+  const skills={'Адаптивность':pct(a.q32),'Критическое мышление':pct(a.q33),'Работа с технологиями':pct(a.q34),'Коммуникация':pct(a.q35),'Обучаемость':pct(a.q36),'Самостоятельность':pct(a.q37),'Любознательность':pct(a.q38)};
+  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46}};
+}
+
+// ===== КАТАЛОГ ПРОФЕССИЙ =====
+const TN={R:'Практик',I:'Исследователь',A:'Творец',S:'Помощник',E:'Лидер',C:'Организатор'};
+const TDESC={
+ R:'Любит работать руками и с техникой, ценит конкретный результат.',
+ I:'Любит думать, анализировать и разбираться в причинах.',
+ A:'Стремится создавать и выражать, ценит свободу и оригинальность.',
+ S:'Тянется к людям — помогать, обучать, заботиться.',
+ E:'Любит вести за собой, влиять и запускать новое.',
+ C:'Ценит порядок, точность и понятные правила.'};
+const PROFS=[
+ {n:'Продуктовый аналитик',t:'IC',d:'высокий',r:'низкий',why:'данные + логика + влияние на продукт',sk:'SQL, метрики, гипотезы'},
+ {n:'Data Scientist',t:'I',d:'высокий',r:'средний',why:'загадки в данных и математика',sk:'Python, ML, статистика'},
+ {n:'UX-исследователь',t:'IA',d:'растёт',r:'низкий',why:'любопытство + смыслы + люди',sk:'интервью, синтез'},
+ {n:'Продуктовый дизайнер',t:'AI',d:'растёт',r:'средний',why:'творчество с пользой',sk:'прототипы, дизайн-мышление'},
+ {n:'Продакт-менеджер',t:'EI',d:'высокий',r:'низкий',why:'создание + развитие + влияние',sk:'стратегия, приоритеты'},
+ {n:'ML-инженер',t:'I',d:'растёт',r:'низкий',why:'глубина, новизна, математика',sk:'ML, эксперименты'},
+ {n:'Системный аналитик',t:'IC',d:'высокий',r:'средний',why:'мост между людьми и системой',sk:'требования, модели'},
+ {n:'Аналитик кибербезопасности',t:'IC',d:'высокий',r:'низкий',why:'расследование причин',sk:'анализ угроз, логика'},
+ {n:'Инженер данных',t:'IC',d:'высокий',r:'средний',why:'системность + технологии',sk:'пайплайны, облака'},
+ {n:'Контент-стратег',t:'AS',d:'средний',r:'средний',why:'смыслы + слово + свобода',sk:'текст, нарратив'},
+ {n:'Геймдизайнер',t:'AI',d:'средний',r:'средний',why:'придумывать миры и правила',sk:'механики, нарратив'},
+ {n:'Дата-журналист',t:'AI',d:'нишевый',r:'средний',why:'данные + сторителлинг',sk:'анализ, визуал'},
+ {n:'HR / People-партнёр',t:'SE',d:'высокий',r:'средний',why:'забота о людях + влияние',sk:'подбор, оценка'},
+ {n:'Ментор / коуч',t:'SE',d:'растёт',r:'низкий',why:'развивать людей',sk:'коммуникация, эмпатия'},
+ {n:'Преподаватель / методолог',t:'SA',d:'средний',r:'низкий',why:'передавать знания',sk:'дидактика, объяснение'},
+ {n:'Проджект-менеджер',t:'EC',d:'высокий',r:'низкий',why:'координация + сроки + люди',sk:'планы, риски'},
+ {n:'Маркетолог-аналитик',t:'EI',d:'высокий',r:'средний',why:'эксперименты + данные',sk:'A/B, аналитика'},
+ {n:'Основатель продукта',t:'EA',d:'для своих',r:'низкий',why:'свобода + создание + развитие',sk:'продукт, лидерство'},
+ {n:'Бухгалтер',t:'C',d:'высокий',r:'средний',why:'точность и цифры',sk:'1С, учёт, налоги'},
+ {n:'Логист',t:'CE',d:'высокий',r:'средний',why:'системность + координация',sk:'цепочки поставок'},
+ {n:'Аудитор',t:'C',d:'средний',r:'средний',why:'внимание к деталям',sk:'проверка, отчётность'},
+ {n:'Специалист по закупкам',t:'CE',d:'высокий',r:'средний',why:'порядок + переговоры',sk:'тендеры, договоры'},
+ {n:'Менеджер по качеству',t:'CI',d:'растёт',r:'низкий',why:'стандарты + порядок',sk:'ISO, контроль'},
+ {n:'Научный сотрудник / R&D',t:'I',d:'нишевый',r:'низкий',why:'чистое исследование',sk:'метод, публикации'},
+ {n:'Финансовый аналитик',t:'IC',d:'средний',r:'средний',why:'загадки в числах',sk:'модели, финансы'},
+ {n:'Архитектор решений',t:'IE',d:'высокий',r:'низкий',why:'системное мышление + создание',sk:'архитектура, облака'},
+ {n:'Специалист по этике ИИ',t:'IS',d:'растёт',r:'низкий',why:'глубина + ценности',sk:'ИИ, право, риски'},
+ {n:'Руководитель отдела',t:'EC',d:'высокий',r:'низкий',why:'вести людей и процесс',sk:'управление, люди'},
+ // земные
+ {n:'Инженер-изобретатель',t:'RI',d:'растёт',r:'низкий',why:'создавать новое «в железе»',earth:1},
+ {n:'Реставратор',t:'RA',d:'нишевый',r:'низкий',why:'руки + внимание + история вещей',earth:1},
+ {n:'Ветеринар',t:'RS',d:'средний',r:'низкий',why:'забота о живом + аккуратность',earth:1},
+ {n:'Агроном',t:'RC',d:'растёт',r:'низкий',why:'наука + природа + результат',earth:1},
+ {n:'Повар-кондитер',t:'RA',d:'средний',r:'средний',why:'творчество + мгновенный результат',earth:1},
+ {n:'Мастер 3D-печати',t:'RA',d:'растёт',r:'средний',why:'придумать и сделать руками',earth:1},
+ {n:'Фотограф / видеограф',t:'RA',d:'средний',r:'средний',why:'образное мышление + техника',earth:1},
+ {n:'Медсестра / фельдшер',t:'RS',d:'высокий',r:'низкий',why:'забота о людях + точность',earth:1},
+ {n:'Врач',t:'IS',d:'высокий',r:'низкий',why:'наука + забота о людях'},
+ {n:'Юрист',t:'CE',d:'высокий',r:'средний',why:'логика + правила + защита интересов'},
+ {n:'Маркетолог',t:'EA',d:'высокий',r:'средний',why:'идеи + влияние + аналитика'},
+ {n:'Event-менеджер',t:'ES',d:'средний',r:'низкий',why:'люди + организация + драйв'},
+ {n:'Логопед / дефектолог',t:'SI',d:'растёт',r:'низкий',why:'помощь + внимание + метод'},
+ {n:'Социальный работник',t:'S',d:'средний',r:'низкий',why:'забота и поддержка людей'},
+ {n:'Тренер / фитнес-инструктор',t:'SE',d:'растёт',r:'низкий',why:'люди + энергия + результат',earth:1},
+ {n:'Повар',t:'RA',d:'высокий',r:'низкий',why:'ремесло + вкус + результат',earth:1},
+ {n:'Кондитер',t:'RA',d:'средний',r:'низкий',why:'творчество + вкусный результат',earth:1},
+ {n:'Флорист',t:'AR',d:'средний',r:'низкий',why:'красота + руки + люди',earth:1},
+ {n:'Столяр / краснодеревщик',t:'RA',d:'нишевый',r:'низкий',why:'ремесло с авторским почерком',earth:1},
+ {n:'Электрик / монтажник',t:'R',d:'высокий',r:'низкий',why:'конкретный результат, надёжность',earth:1},
+ {n:'Автомеханик',t:'R',d:'высокий',r:'низкий',why:'техника + руки + результат',earth:1},
+ {n:'Строитель / прораб',t:'RE',d:'высокий',r:'низкий',why:'создавать и организовывать',earth:1},
+ {n:'Парикмахер / стилист',t:'AS',d:'средний',r:'низкий',why:'красота + люди + мастерство',earth:1},
+ {n:'Ландшафтный дизайнер',t:'AR',d:'растёт',r:'низкий',why:'творчество + природа',earth:1},
+ {n:'Фермер / своё хозяйство',t:'RC',d:'растёт',r:'низкий',why:'своя земля + результат',earth:1}
+];
+function demClass(d){return (d==='высокий'||d==='растёт')?'dem':'demmid';}
+function riskClass(r){return r==='низкий'?'low':r==='средний'?'mid':'high';}
+function matchProfs(code){
+  const w={};code.split('').forEach((c,i)=>w[c]=3-i);
+  const scored=PROFS.map(p=>{let s=0;p.t.split('').forEach(l=>{if(w[l])s+=w[l];});if(p.d==='высокий')s+=0.6;if(p.d==='растёт')s+=0.4;return Object.assign({s},p);}).filter(p=>p.s>0).sort((a,b)=>b.s-a.s);
+  const office=scored.filter(p=>!p.earth), earth=scored.filter(p=>p.earth);
+  return {spot:office.slice(0,3),list:office.slice(0,14),earth:earth.slice(0,6)};
+}
+
+// ===== ГЕНЕРАТОР ОТЧЁТА =====
+const FLOWPHRASE={'Создавал/придумывал':'создаёте что-то своё','Разбирался/анализировал':'разбираетесь, как и почему что-то устроено','Общался/помогал':'помогаете людям','Организовывал/наводил порядок':'наводите порядок в делах','Мастерил руками':'мастерите руками','Учился новому':'осваиваете новое'};
+const ARCH={IA:'Исследователь с душой Создателя',AI:'Творец, которому нужно докопаться до сути',IS:'Вдумчивый помощник',SI:'Помощник-аналитик',SE:'Лидер с тёплым сердцем',ES:'Человечный руководитель',EC:'Организатор-руководитель',CE:'Надёжный организатор',CS:'Надёжная опора',SC:'Заботливый организатор',IE:'Стратег-исследователь',EI:'Предприниматель с аналитикой',RI:'Инженер-практик',RA:'Мастер с фантазией',AC:'Дизайнер-систематизатор'};
+function archetype(code,big5){
+  const two=code.slice(0,2);
+  const title=ARCH[two]||(TN[code[0]]+' + '+TN[code[1]]);
+  return title;
+}
+function lvl(v,hi,mid,lo){return v>=70?hi:v>=45?mid:lo;}
+function big5Interp(b){
+  return [
+   ['Открытость новому',b.openness, lvl(b.openness,'Высокая: вас тянет к новому и необычному, вы легко загораетесь идеями и быстро скучаете от рутины.','Умеренная: вы открыты новому, но цените и проверенное.','Сдержанная: вы предпочитаете надёжное и знакомое частым переменам.')],
+   ['Добросовестность',b.conscientiousness, lvl(b.conscientiousness,'Высокая: вы организованны, доводите дела до конца, на вас можно положиться.','Средняя: вы собранны там, где интересно; помогают планы и сроки.','Гибкая: вам ближе спонтанность; внешняя структура будет опорой.')],
+   ['Экстраверсия',b.extraversion, lvl(b.extraversion,'Высокая: вы заряжаетесь от людей и общения.','Средняя: вам комфортно и в общении, и в тишине.','Сдержанная: энергию вы восстанавливаете наедине и в фокусе.')],
+   ['Доброжелательность',b.agreeableness, lvl(b.agreeableness,'Высокая: вы тёплый, командный человек, к которому тянутся.','Средняя: вы дружелюбны, но держите свою позицию.','Прямая: вы честны и принципиальны, иногда в ущерб дипломатии.')],
+   ['Эмоц. устойчивость',b.stability, lvl(b.stability,'Высокая: вы спокойны под давлением и держите ровный фон.','Средняя: в целом устойчивы; помогает забота о ресурсе.','Чувствительная: вы эмоционально живой человек; берегите восстановление.')]
+  ];
+}
+function bar(l,v,g){return '<div class="bar"><div class="t"><span>'+l+'</span><b>'+v+'%</b></div><div class="track"><div class="fill'+(g?' g':'')+'" style="width:'+v+'%"></div></div></div>';}
+function chips(a,g){return '<div class="chips">'+a.map(x=>'<span class="chip'+(g?' v':'')+'">'+x+'</span>').join('')+'</div>';}
+function esc(s){return (s||'').replace(/</g,'&lt;');}
+
+// ===== WOW-данные =====
+const ADJ={R:'умелый',I:'умный',A:'творческий',S:'добрый',E:'активный',C:'организованный'};
+const TW={
+ R:{ess:'создаёт работающие вещи там, где другие только рассуждают',talent:'превращать идеи в конкретный, осязаемый результат',become:'мастерами и инженерами, на чьих руках держится дело',mistake:'недооценивать свои идеи и уходить в чистую рутину',ideal:'конкретные задачи, инструменты и видимый результат',money:'инженерия, производство, технологичное ремесло',dont:'запирать себя в бесконечной бумажной работе',future:'ведущим специалистом или мастером своего дела'},
+ I:{ess:'находит ответы там, где другие видят хаос',talent:'докапываться до сути и видеть закономерности за деталями',become:'аналитиками, учёными и экспертами, к которым идут за истиной',mistake:'утонуть в анализе и так и не перейти к действию',ideal:'сложные задачи и свобода мыслить по-своему',money:'данные, аналитика, исследования, технологии',dont:'заставлять себя в рутине без смысла и загадки',future:'сильным аналитиком, экспертом или исследователем'},
+ A:{ess:'создаёт новое там, где другие копируют',talent:'придумывать и придавать форму тому, чего ещё нет',become:'дизайнерами, авторами и создателями продуктов',mistake:'бросать начатое, гоняясь за новой идеей',ideal:'свобода творить и вкладывать свой почерк',money:'дизайн, продукт, контент, креативные индустрии',dont:'загонять себя в жёсткие рамки без пространства',future:'автором, продуктовым дизайнером или основателем своего'},
+ S:{ess:'делает людей сильнее там, где другие только требуют',talent:'видеть людей и помогать им раскрываться',become:'наставниками и лидерами, к которым идут за опорой',mistake:'брать всё на себя и молча выгорать',ideal:'живой человеческий результат и тёплая команда',money:'обучение, HR, консалтинг, помогающие профессии',dont:'жертвовать собой ради всех подряд',future:'наставником или руководителем с человеческим лицом'},
+ E:{ess:'создаёт движение там, где другие ждут указаний',talent:'вести за собой и превращать идею в живое дело',become:'предпринимателями и руководителями, которые запускают',mistake:'распыляться на десять дел сразу',ideal:'свобода решать и влиять на результат',money:'управление, продукт, собственное дело',dont:'сидеть там, где нет простора и влияния',future:'руководителем или основателем своего дела'},
+ C:{ess:'создаёт устойчивость там, где другие создают хаос',talent:'наводить порядок и держать систему, на которой всё стоит',become:'теми, на ком держатся команды, семьи и компании',mistake:'брать на себя слишком много и тянуть в одиночку',ideal:'понятные правила и надёжная, предсказуемая система',money:'операции, финансы, кадры, управление процессами',dont:'запирать себя в вечном хаосе без структуры',future:'руководителем отдела и надёжной опорой команды'}};
+const FAM={R:['Илон Маск','Генри Форд','Юрий Гагарин'],I:['Альберт Эйнштейн','Мария Кюри','Григорий Перельман'],A:['Стив Джобс','Уолт Дисней','Хаяо Миядзаки'],S:['Опра Уинфри','Януш Корчак','Далай-лама'],E:['Ричард Брэнсон','Коко Шанель','Уолт Дисней'],C:['Уоррен Баффет','Ангела Меркель','Сергей Королёв']};
+function ILLUS(l){
+ const S={
+  C:'<path d="M26 6 20 40M26 6 32 40M20 40H32M22 22H30"/><path d="M14 12l6 3M38 12l-6 3"/>',
+  I:'<circle cx="23" cy="23" r="12"/><path d="M32 32 44 44"/>',
+  A:'<path d="M26 8 30 22 44 26 30 30 26 44 22 30 8 26 22 22Z"/>',
+  S:'<path d="M26 44V26"/><circle cx="26" cy="18" r="11"/><path d="M26 44c-6-2-10-6-12-10M26 44c6-2 10-6 12-10"/>',
+  E:'<path d="M26 6c8 6 8 20 0 30-8-10-8-24 0-30Z"/><path d="M20 30l-6 8h8M32 30l6 8h-8"/>',
+  R:'<circle cx="26" cy="26" r="9"/><path d="M26 10v6M26 36v6M10 26h6M36 26h6M15 15l4 4M33 33l4 4M37 15l-4 4M15 37l4-4"/>'};
+ return '<div class="illus"><div class="illusbadge"><svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="url(#ig)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5b6cff"/><stop offset="1" stop-color="#8a5bff"/></linearGradient></defs>'+(S[l]||S.I)+'</svg></div></div>';
+}
+function forecast(code){const hi=/[IEC]/.test(code[0]);return hi?['100–150 тыс','180–280 тыс','от 300 тыс']:['80–120 тыс','150–220 тыс','от 250 тыс'];}
+
+// ===== 12 архетипов (Юнг) =====
+const ARCH12={
+ 'Искатель':{tag:'вечный первопроходец',d:'Вам тесно в четырёх стенах привычного. Вас ведёт жажда нового опыта, свободы и горизонта за горизонтом. Там, где другие ищут покой, вы ищете дорогу.',power:'находить новые пути и не бояться неизвестного',shadow:'бесконечный поиск, когда трудно где-то осесть',use:'Выбирайте работу с разнообразием, новыми проектами и свободой действий. Ваш рост и доход быстрее всего там, где вы первым заходите на неизведанное.',fit:'проекты и стартапы, исследования, всё новое и меняющееся'},
+ 'Творец':{tag:'тот, кто создаёт миры',d:'Вы видите не то, что есть, а то, что могло бы быть — и превращаете это в форму. Пустой лист для вас не страх, а приглашение.',power:'воображение, воплощённое в реальность',shadow:'перфекционизм и вечная неудовлетворённость',use:'Давайте себе пространство создавать и обязательно доводите работы до конца — именно завершённые проекты приносят имя и деньги. Ваш капитал — портфолио.',fit:'дизайн, продукт, контент, архитектура, креативные индустрии'},
+ 'Мудрец':{tag:'искатель истины',d:'Вы хотите понимать, как устроен мир, и не терпите поверхностности. Знание для вас — и сила, и удовольствие.',power:'видеть суть и отделять правду от шума',shadow:'анализ вместо действия',use:'Превращайте знание в пользу: объясняйте, консультируйте, создавайте на основе анализа. Экспертность — ваш главный актив и источник дохода.',fit:'аналитика, наука, экспертиза, консалтинг, преподавание'},
+ 'Маг':{tag:'тот, кто превращает',d:'Вы умеете превращать идеи в реальность, а хаос — в смысл. Там, где другие видят проблему, вы видите точку трансформации.',power:'менять правила игры и вести к новому',shadow:'соблазн всё держать под контролем',use:'Беритесь за задачи трансформации — превратить хаос в систему, идею в продукт. Вы дороже всего там, где меняете правила и создаёте новое.',fit:'продукт, инновации, запуск нового, ИИ, управление изменениями'},
+ 'Правитель':{tag:'создатель порядка',d:'Вы берёте ответственность и выстраиваете систему, в которой всё работает. Вам доверяют штурвал — и не зря.',power:'вести, организовывать и держать курс',shadow:'жёсткость и нежелание отпускать контроль',use:'Берите ответственность и стройте системы. Ваш доход растёт вместе с масштабом того, чем вы управляете.',fit:'руководство, операции, финансы, собственное дело'},
+ 'Герой':{tag:'тот, кто преодолевает',d:'Вы расцветаете там, где есть вызов. Трудности вас будят. Вы доказываете себе и миру, на что способны.',power:'смелость и умение доводить до победы',shadow:'борьба даже там, где можно выдохнуть',use:'Ставьте амбициозные цели и берите вызовы — вы раскрываетесь под задачу «докажи». Достижения быстро превращаются в статус и деньги.',fit:'продажи, предпринимательство, антикризис, управление, спорт'},
+ 'Заботливый':{tag:'опора для других',d:'Ваша сила — в тепле и заботе. Рядом с вами людям спокойнее и лучше. Вы даёте то, чего многим не хватает — надёжное плечо.',power:'поддерживать и делать людей сильнее',shadow:'забывать о себе, отдавая всё другим',use:'Стройте карьеру вокруг помощи людям — но берегите себя. Ваша ценность в устойчивой заботе, а выгорание её разрушает.',fit:'обучение, HR, медицина, сервис, наставничество'},
+ 'Любовник':{tag:'ценитель жизни и красоты',d:'Вы чувствуете тоньше других — красоту, людей, момент. Для вас важны глубокие связи и то, что наполняет жизнь вкусом.',power:'создавать близость и находить прекрасное',shadow:'зависимость от одобрения',use:'Работайте там, где важны отношения, вкус и эстетика. Ваш доход — в качестве связей и красоте того, что вы создаёте.',fit:'бренд, маркетинг, дизайн, гостеприимство, работа с клиентами'},
+ 'Свой парень':{tag:'тот, на ком всё держится',d:'Вам доверяют, потому что вы настоящий и надёжный. Без пафоса — но именно на таких людях держится всё вокруг.',power:'надёжность и умение быть своим для всех',shadow:'растворяться в других, теряя своё',use:'Станьте тем, на ком держится команда — надёжность ценят и повышают. Стабильная компания даст вам рост и спокойствие.',fit:'операции, поддержка, координация, стабильные компании'},
+ 'Бунтарь':{tag:'тот, кто ломает рамки',d:'Вам тесно в чужих правилах. Вы задаёте неудобные вопросы и меняете то, что другие терпят. Свобода для вас — воздух.',power:'смелость идти против течения',shadow:'протест ради протеста',use:'Идите туда, где нужно менять устаревшее. Вам платят за смелость делать иначе — избегайте душных иерархий.',fit:'стартапы, реформы, новые рынки, независимые проекты'},
+ 'Шут':{tag:'тот, кто дарит лёгкость',d:'Вы превращаете серьёзное в живое, а тяжёлое — в лёгкое. Рядом с вами дышится свободнее.',power:'заражать радостью и снимать напряжение',shadow:'прятать за шуткой то, что важно',use:'Используйте лёгкость и обаяние как силу — там, где нужно вовлекать людей. Это редкий и востребованный талант.',fit:'медиа, продажи, ивенты, коммуникации, творчество'},
+ 'Простодушный':{tag:'человек света',d:'Вы верите в хорошее и видите простую красоту жизни. Ваш оптимизм — не наивность, а сила, которая держит на плаву.',power:'вера, тепло и умение радоваться',shadow:'избегать сложного и неприятного',use:'Выбирайте дело, в которое искренне верите — ваша честность заражает и притягивает людей.',fit:'помогающие профессии, сервис, сообщества, доброе и понятное дело'}
+};
+function archetype12(p){
+  const b=p.big5,r=p.riasec.pct,d=p.drivers||[],st=p.strengths||[],vl=p.values||[];
+  const inA=(arr,x)=>arr.indexOf(x)>=0?1:0;
+  const S={
+   'Искатель': b.openness*0.6 + inA(d,'Свобода')*25 + r.I*0.2 + r.A*0.1,
+   'Творец': r.A*0.6 + inA(d,'Творчество')*25 + inA(st,'Креативность')*15 + b.openness*0.2,
+   'Мудрец': r.I*0.6 + inA(st,'Любознательность')*15 + inA(st,'Любовь к учению')*12 + b.openness*0.15,
+   'Маг': b.openness*0.4 + r.I*0.25 + r.E*0.2 + inA(d,'Развитие')*15 + inA(d,'Влияние')*10,
+   'Правитель': r.C*0.5 + r.E*0.3 + b.conscientiousness*0.3 + inA(d,'Влияние')*20 + inA(st,'Лидерство')*12,
+   'Герой': b.conscientiousness*0.4 + r.E*0.3 + inA(st,'Смелость')*15 + inA(st,'Настойчивость')*12 + inA(d,'Признание')*12,
+   'Заботливый': r.S*0.6 + b.agreeableness*0.4 + inA(st,'Доброта')*15 + inA(d,'Польза')*18,
+   'Любовник': b.agreeableness*0.35 + inA(st,'Чувство прекрасного')*18 + r.A*0.25 + inA(vl,'Дружба')*12,
+   'Свой парень': b.agreeableness*0.35 + b.stability*0.25 + inA(st,'Надёжность')*18 + inA(vl,'Стабильность')*15 + inA(vl,'Семья')*12,
+   'Бунтарь': b.openness*0.4 + inA(d,'Свобода')*20 + (100-b.agreeableness)*0.25 + inA(vl,'Независимость')*15,
+   'Шут': b.extraversion*0.5 + inA(st,'Юмор')*25 + inA(st,'Оптимизм')*12,
+   'Простодушный': b.agreeableness*0.4 + b.stability*0.35 + inA(st,'Оптимизм')*15 + inA(st,'Благодарность')*10
+  };
+  const sorted=Object.entries(S).sort((x,y)=>y[1]-x[1]);
+  return {top:sorted[0][0],second:sorted[1][0]};
+}
+
+// ===== MBTI (16 типов) =====
+const MBTI={
+ INTJ:{n:'Стратег',d:'Вы мыслите системно и на годы вперёд: видите цель и путь к ней. Независимы, требовательны к логике и к себе.',use:'Беритесь за стратегию, сложные проекты и экспертизу — там ваш масштаб и доход.'},
+ INTP:{n:'Мыслитель',d:'Вам интересно понять, как всё устроено. Вы генерируете идеи и докапываетесь до сути.',use:'Идите в анализ, исследования, R&D — туда, где ценят глубину мысли.'},
+ ENTJ:{n:'Командир',d:'Прирождённый организатор с волей к результату: видите, как построить систему и повести людей.',use:'Руководство, запуск и масштабирование дела — ваша стихия.'},
+ ENTP:{n:'Изобретатель',d:'Фонтан идей и здоровых споров. Быстро схватываете новое и любите вызовы.',use:'Стартапы, продукт, всё новое — там вы в своей тарелке.'},
+ INFJ:{n:'Советник',d:'Вы глубоко чувствуете людей и стремитесь к смыслу. Тихая сила и цельность.',use:'Наставничество, психология, дело с миссией.'},
+ INFP:{n:'Мечтатель',d:'Вами движут ценности и идеалы. Вы ищете настоящее и тонко чувствуете.',use:'Творчество, тексты, помогающие профессии со смыслом.'},
+ ENFJ:{n:'Наставник',d:'Вы вдохновляете и ведёте людей к лучшему. Тепло плюс харизма.',use:'Обучение, HR, лидерство с человеческим лицом.'},
+ ENFP:{n:'Вдохновитель',d:'Заряжаете энергией, идеями и верой в людей. Свободолюбивы и креативны.',use:'Творчество, коммуникации, всё, где нужны идеи и люди.'},
+ ISTJ:{n:'Администратор',d:'Надёжность, порядок, ответственность. На вас держится система.',use:'Учёт, операции, право — всё, где важна точность.'},
+ ISFJ:{n:'Хранитель',d:'Заботливый и надёжный: держите тыл и помогаете тихо, но крепко.',use:'Медицина, сервис, поддержка, кадры.'},
+ ESTJ:{n:'Управленец',d:'Наводите порядок и добиваетесь результата. Чёткость и лидерство.',use:'Управление, операции, собственное дело.'},
+ ESFJ:{n:'Консул',d:'Объединяете людей и создаёте тепло вокруг. Заботливы и организованны.',use:'HR, сервис, мероприятия, работа с людьми.'},
+ ISTP:{n:'Мастер',d:'Понимаете, как всё работает, и решаете руками и головой. Спокойны и практичны.',use:'Инженерия, техника — всё «руками плюс логикой».'},
+ ISFP:{n:'Артист',d:'Тонкий вкус и своё видение красоты. Живёте моментом, цените свободу.',use:'Дизайн, творчество, ремёсла, эстетика.'},
+ ESTP:{n:'Делец',d:'Энергия, действие, азарт. Решаете здесь и сейчас и заряжаете других.',use:'Продажи, предпринимательство, динамичные сферы.'},
+ ESFP:{n:'Артист сцены',d:'Обаяние, лёгкость, жизнь на полную. Вы дарите людям эмоции.',use:'Медиа, ивенты, продажи, творчество и люди.'}
+};
+function mbtiType(b){return (b.extraversion>=50?'E':'I')+(b.openness>=50?'N':'S')+(b.agreeableness>=50?'F':'T')+(b.conscientiousness>=50?'J':'P');}
+
+// ===== УМНЫЙ ПОИСК (профессия/ВУЗ → подходит или нет и почему) =====
+const KW={
+ I:['аналит','данн','исследов','наук','статист','data','логик','эксперт','биоинформ','физик','математик'],
+ A:['дизайн','творч','художн','арт','контент','копирайт','музык','режисс','иллюстр','фото','гейм','мода','стил'],
+ S:['психолог','педагог','учит','препод','врач','медиц','сестр','кадр','hr','настав','коуч','социальн','помога','воспитат','логопед','терапевт'],
+ E:['руковод','менеджер','продаж','бизнес','предприн','маркет','директор','лидер','проджект','основат'],
+ C:['бухгалт','учёт','учет','финанс','аудит','логист','делопроизв','юрист','налог','документ','закуп','администрат','экономист','нотариус'],
+ R:['инженер','техник','механик','строй','строит','электр','монтаж','агроном','ветеринар','повар','мастер','водител','наладчик','столяр','фермер','сварщ','робот','пилот']
+};
+const TNR={R:'Практик',I:'Исследователь',A:'Творец',S:'Помощник',E:'Лидер',C:'Организатор'};
+function evalFit(q,p){
+  const s=q.toLowerCase().trim();
+  const letters=[];for(const L in KW){if(KW[L].some(k=>s.includes(k)))letters.push(L);}
+  if(!letters.length){const hit=PROFS.find(pr=>{const n=pr.n.toLowerCase();return n.includes(s)||s.includes(n.split(' ')[0]);});if(hit)hit.t.split('').forEach(l=>{if(!letters.includes(l))letters.push(l);});}
+  const code=p.riasec.code,w={};code.split('').forEach((c,i)=>w[c]=3-i);
+  let score=0;const matched=[],missed=[];
+  letters.forEach(l=>{if(w[l]){score+=w[l];matched.push(l);}else missed.push(l);});
+  if(!letters.length)return {verdict:'Сложно оценить',vc:'mid',reasons:['Уточните формулировку — по этому запросу трудно определить тип деятельности.']};
+  let verdict,vc;
+  if(score>=3){verdict='Подойдёт';vc='yes';}else if(score>=1){verdict='Скорее подойдёт';vc='mid';}else{verdict='Скорее не ваше';vc='no';}
+  const reasons=[];
+  if(matched.length)reasons.push('Совпадает с вашими ведущими сторонами: '+matched.map(l=>TNR[l]).join(', ')+' — здесь вы сильны.');
+  if(missed.length)reasons.push('Эта сфера во многом опирается на тип «'+missed.map(l=>TNR[l]).join(', ')+'», выраженный у вас слабее — это стоит учесть.');
+  if(vc==='yes')reasons.push('Ваш код '+code+' хорошо ложится на это направление — здесь ваш потенциал и рост.');
+  if(vc==='no')reasons.push('Скорее всего, будет забирать энергию: ключевые задачи лежат вне вашего склада.');
+  return {verdict,vc,reasons};
+}
+function wireSearch(p){
+  const btn=document.getElementById('sbtn'),inp=document.getElementById('sq'),res=document.getElementById('sres');
+  if(!btn)return;
+  const run=()=>{const q=(inp.value||'').trim();if(!q)return;const r=evalFit(q,p);res.innerHTML='<span class="verdict '+r.vc+'">'+r.verdict+'</span>'+r.reasons.map(x=>'<p style="font-size:14.5px;margin:8px 0 0">'+x+'</p>').join('');res.classList.add('on');};
+  btn.addEventListener('click',run);inp.addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+}
+
+function buildReport(p,a,ai){
+  const code=p.riasec.code, b=p.big5;
+  const title=archetype(code,b);
+  const m=matchProfs(code);
+  const roleTop=Object.entries(p.roles).sort((x,y)=>y[1]-x[1]);
+  const topRole=roleTop[0][0];
+  // Икигай квадранты из ответов
+  const love = [p.open.love?esc(p.open.love):null,(FLOWPHRASE[p.flow]||null),(p.open.hobbies?('хобби — '+esc(p.open.hobbies)):null)].filter(Boolean).join('; ')||'заниматься любимым делом';
+  const umeyu = [p.strengths.slice(0,2).join(', '),(p.intelligences[0]||null)].filter(Boolean).join(', ')+' · тип '+code;
+  const need = p.open.contribution ? esc(p.open.contribution) : ('приносить пользу'+((p.values.indexOf('Польза')>=0||p.drivers.indexOf('Польза')>=0)?' людям':' через своё дело'));
+  const payNow = p.open.paidFor ? esc(p.open.paidFor) : null;
+  const pay = (payNow ? 'сейчас — '+payNow+'; подходит — ' : '') + m.spot.map(x=>x.n).slice(0,3).join(', ');
+  const d0=code[0],d1=code[1],w0=TW[d0]||TW.I,f=forecast(code);
+  const AIS=(k,d)=>'<div class="syscmt"><span class="sct">что это значит для вас</span>'+((ai&&ai.sys&&ai.sys[k])?esc(ai.sys[k]):d)+'</div>';
+  let h='';
+  // ЭМОЦИОНАЛЬНЫЙ ЭКРАН (WOW)
+  h+='<div class="hero">'+ILLUS(d0)+'<div class="eyebrow">кто вы</div><h1 class="wowtitle">'+title+'</h1></div>';
+  // АРХЕТИП (Юнг)
+  const a12=archetype12(p),A12=ARCH12[a12.top],A12b=ARCH12[a12.second]||A12,mt=mbtiType(b),MT=MBTI[mt];
+  h+='<div class="arch"><div class="archtag">ваш архетип</div><h2 class="archname">'+a12.top+'</h2><div class="archsub">'+A12.tag+'</div><p>'+A12.d+'</p><div class="archrow"><div><b>Суперсила:</b> '+A12.power+'</div><div><b>Теневая сторона:</b> '+A12.shadow+'</div></div><h3>Как применить в жизни и работе</h3><p>'+A12.use+'</p><h3>Что вам подходит</h3><p>'+A12.fit+'.</p><h3>Ваш тип по MBTI: '+mt+' — '+MT.n+'</h3><p>'+MT.d+'</p><p><b style="color:#8a8aff">Что с этим делать:</b> '+MT.use+'</p><div class="arch2"><div class="archtag">второй ведущий архетип</div><h3 class="archname2">'+a12.second+'</h3><div class="archsub">'+(A12b.tag||'')+'</div><p>'+((ai&&ai.archetype2)?esc(ai.archetype2):(A12b.d||''))+'</p><p><b style="color:#8a8aff">Как сочетается с главным.</b> В вас соединяются '+a12.top+' и '+a12.second+': '+(A12b.power||'вторая грань')+' поддерживает вашу главную суперсилу. Такое сочетание даёт объём, которого нет у людей с одним ярким архетипом — и это ваше отличие.</p></div></div>';
+  if(ai&&ai.card_image){ h+='<div class="pcard"><div class="pcardtag">ваша карточка личности</div><img src="'+esc(ai.card_image)+'" alt="Карточка личности — '+esc(a12.top)+'"><p class="muted" style="margin:12px 0 0;font-size:13px">Сохраните и поделитесь — это ваш архетип «'+a12.top+'».</p></div>'; }
+  // ПОРТРЕТ ЛИЧНОСТИ (богатый)
+  const HOOK={R:'Есть люди-теоретики, а есть те, кто берёт и делает. Вы из вторых',I:'Есть люди-исполнители, а есть люди-вопросы. Вы из вторых',A:'Есть люди, которые повторяют, и есть те, кто создаёт своё. Вы из вторых',S:'Есть люди, которые только берут, и есть те, кто отдаёт и делает других сильнее. Вы из вторых',E:'Есть люди, которые ждут, и есть те, кто ведёт и запускает. Вы из вторых',C:'Есть люди, которые ищут бурю, и есть те, на ком держится тихая суша. Вы из вторых'};
+  h+='<div class="sec-num">Портрет личности</div><h2>'+title+'</h2>';
+  if(ai&&ai.portrait){ h+=ai.portrait.split(/\n\n+|\n/).filter(Boolean).map((x,idx)=>'<p'+(idx===0?' class="lead"':'')+'>'+esc(x)+'</p>').join(''); }
+  else {
+    h+='<p class="lead">'+(HOOK[d0]||'Вы — цельная, самобытная личность')+' — и это огромная сила: вы '+w0.ess+'.</p>';
+    h+='<p>Ваш главный талант — '+w0.talent+'. Такие люди становятся '+w0.become+'. Это редкий и ценный склад — фундамент, на котором строится всё остальное.</p>';
+    const topT=[['открытость новому',b.openness],['добросовестность',b.conscientiousness],['доброжелательность',b.agreeableness],['эмоциональная устойчивость',b.stability]].sort((x,y)=>y[1]-x[1])[0];
+    h+='<p>По характеру у вас особенно выражена '+topT[0]+' ('+topT[1]+'%). Вам ближе '+w0.ideal+' — и именно в такой среде вы раскрываетесь полностью.</p>';
+    h+='<p>Вы отметили, что входите в поток, когда '+(FLOWPHRASE[p.flow]||'заняты любимым делом')+(p.open.love?(', и особенно — когда «'+esc(p.open.love)+'»'):'')+(p.open.hobbies?('. А в свободное время вас тянет к тому, что вы назвали: «'+esc(p.open.hobbies)+'» — это тоже часть вашей силы'):'')+'. Запомните это ощущение — вокруг него построен весь отчёт.</p>';
+  }
+  // WOW-акценты (после портрета)
+  h+='<p class="wowlead" style="margin-top:14px">Вы не просто '+(ADJ[d0]||'')+' человек. Вы тот, кто <b>'+w0.ess+'</b>.</p>';
+  h+='<p class="wowline"><span class="wl">Ваш главный талант</span>'+w0.talent+'.</p>';
+  h+='<p class="wowline"><span class="wl">Такие люди становятся</span>'+w0.become+'.</p>';
+  h+='<p class="wowline"><span class="wl">Ваше предназначение</span>соединить умение '+w0.talent+' с делом, которое приносит пользу и вам, и людям.</p>';
+  // СОДЕРЖАНИЕ (12 систем)
+  h+='<div class="sec-num">Как устроен отчёт</div><h2>Из чего собран ваш разбор</h2>';
+  h+='<p class="muted" style="margin-top:0">Сначала — кто вы: 12 систем, от черт характера до состояния и склонностей. Затем — что с этим делать: профессии, доход, план.</p>';
+  h+='<div class="toc"><div class="toccol"><h3>Часть 1. Кто вы — 12 систем</h3><ul class="tocl">'+
+     '<li><b>Big Five</b> <span>— черты характера</span></li>'+
+     '<li><b>RIASEC</b> <span>— профессиональный тип</span></li>'+
+     '<li><b>VIA</b> <span>— сильные стороны</span></li>'+
+     '<li><b>Типы интеллекта</b> <span>— языки способностей</span></li>'+
+     '<li><b>Мотивация</b> <span>— что вас запускает</span></li>'+
+     '<li><b>Ценности</b> <span>— что важно</span></li>'+
+     '<li><b>Рабочий стиль</b> <span>— как действуете</span></li>'+
+     '<li><b>Поток (Flow)</b> <span>— где теряете счёт времени</span></li>'+
+     '<li><b>Икигай</b> <span>— синтез</span></li>'+
+     '<li><b>Навыки будущего</b> <span>— готовность к ИИ</span></li>'+
+     '<li><b>Типы профессий (Климов)</b> <span>— с чем работать</span></li>'+
+     '<li><b>Выгорание</b> <span>— ваше состояние</span></li>'+
+     '</ul></div><div class="toccol"><h3>Часть 2. Что с этим делать</h3><ul class="tocl b">'+
+     '<li><b>Архетип</b> <span>— кто вы образно</span></li>'+
+     '<li><b>Главное</b> <span>— на одной странице</span></li>'+
+     '<li><b>Профессии</b> <span>— подходящие и земные</span></li>'+
+     '<li><b>Прогноз дохода</b> <span>— 3 / 5 / 10 лет</span></li>'+
+     '<li><b>Похожие люди</b> <span>— ваш склад</span></li>'+
+     '<li><b>Дорожная карта</b> <span>— пошагово</span></li>'+
+     '<li><b>Сценарии</b> <span>— вероятные пути</span></li>'+
+     '<li><b>Умный поиск</b> <span>— проверьте профессию</span></li>'+
+     '</ul></div></div>';
+  // САМОЕ ГЛАВНОЕ
+  h+='<div class="glav"><h2>Главное</h2>';
+  const gi=(k,v)=>'<div class="gi"><span class="gk">'+k+'</span><span class="gv">'+v+'</span></div>';
+  h+=gi('✔ Главный талант',w0.talent);
+  h+=gi('✔ Идеальная работа',(m.spot[0]?m.spot[0].n:'ваше направление')+' — '+w0.ideal);
+  h+=gi('✔ Где будут деньги',w0.money);
+  h+=gi('✔ Главная ошибка',w0.mistake);
+  h+=gi('✘ Чего избегать',w0.dont);
+  h+=gi('✔ Через 5 лет',('можете стать '+w0.future));
+  h+='</div>';
+  // ШКАЛА ПРОФИЛЯ
+  const roleAll=Object.entries(p.roles).sort((x,y)=>y[1]-x[1]);
+  h+='<div class="pscale"><h3 style="margin:0 0 10px">Ваш профиль</h3>'+roleAll.map(r=>'<div class="psrow"><span class="pl">'+r[0]+'</span><span class="pt">'+('█'.repeat(Math.max(1,Math.round(r[1]/10))))+'</span></div>').join('')+'</div>';
+  // (детальный портрет теперь наверху, богатый)
+  // Big Five
+  h+='<div class="sec-num">Система 1 · Личность</div><h2>Big Five</h2>';
+  h+='<div class="card">'+big5Interp(b).map(x=>bar(x[0],x[1])).join('')+'</div>';
+  h+=big5Interp(b).map(x=>'<p style="font-size:14.5px"><b>'+x[0]+' '+x[1]+'%.</b> '+x[2]+'</p>').join('');
+  h+=AIS('big5',(function(){var a=big5Interp(b).slice().sort((x,y)=>y[1]-x[1]);return '<b>Ярче всего у вас — '+a[0][0].toLowerCase()+' ('+a[0][1]+'%).</b> '+a[0][2]+' Слабее выражено — '+a[a.length-1][0].toLowerCase()+' ('+a[a.length-1][1]+'%): это не минус, а подсказка выбирать среду, где эта черта не в центре. Характер — фундамент, на нём держится всё остальное в отчёте.';})());
+  // RIASEC
+  h+='<div class="sec-num">Система 2 · Профессиональный тип</div><h2>RIASEC — ваш код '+code+'</h2>';
+  const order=['R','I','A','S','E','C'];
+  h+='<div class="map6">'+order.map(l=>'<div class="m6'+(code.includes(l)?' on':'')+'"><b>'+l+' — '+TN[l]+(code.includes(l)?' ✓':'')+'</b><br><span>'+TDESC[l]+'</span></div>').join('')+'</div>';
+  const w1c=TW[d1]||TW.I;
+  h+='<h3>Что значит ваша связка «'+TN[d0]+' + '+TN[d1]+'»</h3>';
+  h+='<p>Вы соединяете два сильных начала: способность '+w0.talent+' и способность '+w1c.talent+'. Это редкое сочетание — вы '+w0.ess+', и при этом '+w1c.ess+'. Именно стык двух сторон делает вас непохожим на «узких» специалистов.</p>';
+  h+='<p><b>Как применить в работе.</b> Ваш склад раскрывается там, где '+w0.ideal+' встречается с задачами, в которых важно '+w1c.talent+'. Ищите роли на пересечении — там вы приносите больше всего пользы и растёте быстрее.</p>';
+  h+='<p><b>Как это помогает зарабатывать.</b> Больше всего такой склад ценят в сферах: '+w0.money+', а также '+w1c.money+'. На пересечении этих направлений — ваша максимальная ценность на рынке и самый быстрый рост дохода.</p>';
+  h+=AIS('riasec','<b>Код '+code+' — ваш профессиональный ДНК.</b> Именно в такой связке он встречается редко. Сильнее всего вы раскрываетесь на пересечении «'+TN[d0]+'» и «'+TN[d1]+'» — ищите роли, где нужны обе стороны сразу. А среду, где важны только противоположные типы, стоит обходить: там вы будете быстро выдыхаться, даже если хорошо справляетесь.');
+  // Сильные стороны + мотивация + ценности
+  h+='<div class="sec-num">Системы 3–6 · Сильные стороны, мотивация, ценности</div><h2>Что у вас в основе</h2>';
+  h+='<div class="card"><h3 style="margin-top:0">Сильные стороны</h3>'+chips(p.strengths.length?p.strengths:['—'])+
+     '<h3>Что вас запускает</h3>'+chips(p.drivers)+
+     '<h3>Ценности</h3>'+chips(p.values.length?p.values:['—'],true)+
+     '<h3>Ведущий интеллект</h3>'+chips(p.intelligences)+'</div>';
+  h+=AIS('base','<b>Это ваше «топливо».</b> Сильные стороны — '+(p.strengths.slice(0,3).join(', ')||'—')+' — стоит применять каждый день, а не беречь на особый случай. Запускает вас прежде всего '+((p.drivers[0]||'—').toLowerCase())+', поэтому выбирайте среду, которая это даёт. Ценности используйте как фильтр: работа против них выматывает даже при хорошей зарплате.');
+  // Рабочий стиль
+  h+='<div class="sec-num">Система 7 · Рабочий стиль</div><h2>Как вам действовать</h2>';
+  h+='<div class="card">'+roleTop.map(r=>bar(r[0],r[1],true)).join('')+'</div>';
+  h+='<p>Ваш ведущий стиль — <b>'+topRole+'</b>. Ищите роли, где это ваша основная задача.</p>';
+  h+=AIS('workstyle','<b>В команде вы сильнее всего в роли «'+topRole+'».</b> Берите задачи, где это главное, и по возможности договаривайтесь передавать то, что даётся тяжелее. Так вы и результат даёте выше, и устаёте меньше — сильная роль работает на вас, а не против.');
+  // Икигай
+  h+='<div class="sec-num">Система 9 · Синтез</div><h2>Ваше колесо Икигай</h2>';
+  h+='<div class="card"><div class="ikiwrap"><svg width="230" height="230" viewBox="0 0 240 240"><circle cx="95" cy="95" r="72" fill="#5b6cff" fill-opacity="0.32"/><circle cx="145" cy="95" r="72" fill="#8a5bff" fill-opacity="0.32"/><circle cx="95" cy="145" r="72" fill="#0fa3a3" fill-opacity="0.32"/><circle cx="145" cy="145" r="72" fill="#1f9d62" fill-opacity="0.32"/><text x="66" y="64" font-size="11" text-anchor="middle" font-weight="600">Люблю</text><text x="174" y="64" font-size="11" text-anchor="middle" font-weight="600">Умею</text><text x="60" y="186" font-size="11" text-anchor="middle" font-weight="600">Нужно</text><text x="182" y="186" font-size="11" text-anchor="middle" font-weight="600">Платят</text><circle cx="120" cy="120" r="21" fill="#fff" fill-opacity="0.9"/><text x="120" y="125" font-size="15" text-anchor="middle">✦</text></svg>'+
+     '<div class="ikilegend">'+
+     '<div><span class="sw" style="background:#5b6cff"></span><span><b>Люблю:</b> '+love+'</span></div>'+
+     '<div><span class="sw" style="background:#8a5bff"></span><span><b>Умею:</b> '+umeyu+'</span></div>'+
+     '<div><span class="sw" style="background:#0fa3a3"></span><span><b>Нужно миру:</b> '+need+'</span></div>'+
+     '<div><span class="sw" style="background:#1f9d62"></span><span><b>Платят:</b> '+pay+'</span></div>'+
+     '</div></div><p class="muted" style="text-align:center;margin-bottom:0">Центр пересечения — где сходятся все четыре: <b>'+(m.spot[0]?m.spot[0].n:'ваше направление')+'</b>.</p></div>';
+  h+=AIS('ikigai','<b>Икигай — точка, где всё сходится.</b> Ваш центр — «'+(m.spot[0]?m.spot[0].n:'ваше направление')+'»: здесь встречаются то, что вы любите, что умеете, что нужно людям и за что платят. Чем ближе работа к этому центру, тем меньше выгорания и больше смысла. Это ваш ориентир при любом выборе.');
+  // Навыки будущего
+  h+='<div class="sec-num">Система 10 · Навыки будущего</div><h2>Готовность к миру ИИ</h2>';
+  h+='<div class="card">'+Object.entries(p.skills).sort((x,y)=>y[1]-x[1]).map(s=>bar(s[0],s[1])).join('')+'</div>';
+  h+=AIS('skills',(function(){var s=Object.entries(p.skills).sort((x,y)=>y[1]-x[1]);return '<b>Готовность к миру ИИ.</b> Сильнее всего у вас развит навык «'+s[0][0].toLowerCase()+'» — это ваша опора на ближайшие годы. А подтянуть стоит «'+s[s.length-1][0].toLowerCase()+'»: именно этот навык быстрее всего окупится, когда рутину заберёт ИИ, а ценность людей сместится в сторону мышления и общения.';})());
+  // Система 11 · Климов
+  const KLIM={'Люди':{n:'Человек — Человек',d:'Вам близка работа с людьми: общение, помощь, обучение, забота. Такие люди — сильны в педагогике, HR, медицине, сервисе и управлении.'},'Техника и механизмы':{n:'Человек — Техника',d:'Вам близка работа с техникой и механизмами, конкретный результат. Сильны в инженерии, IT, производстве, наладке.'},'Природа и живое':{n:'Человек — Природа',d:'Вам близка работа с живым и природой. Сильны в агросфере, ветеринарии, биологии, экологии.'},'Цифры, тексты, данные':{n:'Человек — Знаковая система',d:'Вам близка работа с данными, текстами, цифрами и кодом. Сильны в аналитике, финансах, программировании, редактуре.'},'Образы и творчество':{n:'Человек — Художественный образ',d:'Вам близка работа с образами и творчеством. Сильны в дизайне, искусстве, медиа, режиссуре.'}};
+  const kl=KLIM[p.klimov];
+  if(kl){h+='<div class="sec-num">Система 11 · Типы профессий (Климов)</div><h2>'+kl.n+'</h2><p>'+kl.d+'</p>';h+=AIS('klimov','<b>Это про то, с чем вам приятнее иметь дело каждый день.</b> Ваш тип — «'+kl.n+'». Выбирая профессию, проверяйте главный предмет труда: даёт ли работа контакт именно с этим. Даже внутри одной сферы есть роли ближе и дальше от вашего типа — выбирайте те, что ближе, там вы дольше остаётесь в ресурсе.');}
+  // Система 12 · Выгорание
+  const bo=p.burnout;
+  h+='<div class="sec-num">Система 12 · Состояние</div><h2>Уровень выгорания</h2>';
+  h+='<div class="burn"><div class="burnmeter"><div class="pin" style="left:'+bo+'%"></div></div><div class="burnscale"><span>в ресурсе</span><span>усталость</span><span>высокое</span></div>';
+  h+='<p style="margin:12px 0 '+(bo>=55?'6px':'0')+'">'+lvl(bo,'Уровень выгорания высокий — это сигнал перегрузки, знак, что вы долго держались на пределе. Сначала стоит восстановить ресурс, и уже потом менять курс.','Есть заметная усталость — хороший момент выстроить здоровый ритм заранее.','Вы в хорошем ресурсе, силы при вас — можно смело планировать перемены.')+'</p>';
+  if(bo>=55){h+='<div class="rec"><div class="ri">1</div><div class="rt"><b>Верните восстановление.</b> Сон, паузы и один свободный день в неделю.</div></div><div class="rec"><div class="ri">2</div><div class="rt"><b>Границы нагрузки.</b> Делегируйте то, что давно тянете в одиночку.</div></div><div class="rec"><div class="ri">3</div><div class="rt"><b>Опора на людей.</b> При стойком упадке сил обратитесь к психологу или врачу — это разумный шаг.</div></div>';}
+  h+='</div>';
+  // Профессии
+  h+=AIS('burnout','<b>Состояние — это фон, на котором вы принимаете все решения.</b> '+(bo>=55?'Сейчас ресурс близок к нулю, поэтому порядок такой: сначала восстановление, потом крупные перемены. Решения на усталости редко бывают верными.':bo>=30?'Есть заметная усталость — стоит заранее выстроить здоровый ритм, чтобы не сползти в выгорание, пока строите планы.':'Вы в хорошем ресурсе — самое время для смелых шагов: сил хватит и на перемены, и на то, чтобы их закрепить.'));
+  h+='<div class="sec-num">Профессии</div><h2>Что вам подходит</h2>';
+  h+='<div class="spot">'+m.spot.map((x,i)=>'<div class="spotc"><div class="rank">★ попадание №'+(i+1)+'</div><h4>'+x.n+'</h4><p>'+x.why+'</p><div class="mini"><span class="tag '+demClass(x.d)+'">спрос: '+x.d+'</span><span class="tag '+riskClass(x.r)+'">ИИ: '+x.r+'</span></div></div>').join('')+'</div>';
+  h+='<table><tr><th>Профессия</th><th>Почему</th><th>Спрос</th><th>Риск ИИ</th></tr>'+m.list.map(x=>'<tr><td class="pn">'+x.n+'</td><td>'+x.why+'</td><td><span class="tag '+demClass(x.d)+'">'+x.d+'</span></td><td><span class="tag '+riskClass(x.r)+'">'+x.r+'</span></td></tr>').join('')+'</table>';
+  if(m.earth.length){h+='<h3>Если тянет ближе к рукам и земле</h3><div class="earth">'+m.earth.map(x=>'<div class="ec"><div class="en">'+x.n+'</div><div class="ed">'+x.why+'</div></div>').join('')+'</div>';}
+  // ПРОГНОЗ ДОХОДА
+  h+='<div class="sec-num">Прогноз дохода</div><h2>Куда можно расти</h2><div class="fc"><div class="fcc"><div class="fy">через 3 года</div><div class="fv">'+f[0]+'</div></div><div class="fcc"><div class="fy">через 5 лет</div><div class="fv">'+f[1]+'</div></div><div class="fcc"><div class="fy">через 10 лет</div><div class="fv">'+f[2]+'</div></div></div>';
+  h+='<p class="muted" style="font-size:14px">Ориентир при активном развитии в выбранном направлении.'+((p.currentIncome&&p.currentIncome!=='пока нет дохода')?(' Сейчас у вас '+p.currentIncome+' — есть куда расти.'):'')+'</p>';
+  // ПОХОЖИЙ СКЛАД
+  h+='<div class="sec-num">Похожий склад</div><h2>По типу вы напоминаете</h2><div class="fam">'+(FAM[d0]||[]).map(n=>'<div class="famc">'+n+'</div>').join('')+'</div><p class="muted" style="font-size:13.5px">По складу личности.</p>';
+  // Дорожная карта
+  const goal=m.spot[0]?m.spot[0].n:'выбранное направление';
+  h+='<div class="sec-num">План</div><h2>Дорожная карта</h2>';
+  h+='<div class="tl"><div class="when">3 месяца</div><h4>База под '+goal+'</h4><p>Освойте ключевые навыки направления и сделайте один пет-проект «от вопроса к результату». Добавьте 1–2 ИИ-инструмента в работу.</p></div>';
+  h+='<div class="tl"><div class="when">1 год</div><h4>Первая роль в направлении</h4><p>Соберите портфолио, найдите позицию или стажировку. Закрепите навыки на реальных задачах.</p></div>';
+  h+='<div class="tl"><div class="when">3 года</div><h4>Сильный специалист или рывок</h4><p>Дорастите до senior-уровня либо запустите своё, опираясь на накопленный опыт.</p></div>';
+  // Сценарии
+  h+='<div class="sec-num">Сценарии</div><h2>Вероятные пути</h2>';
+  if(ai&&ai.scenarios&&ai.scenarios.length){
+    h+=ai.scenarios.map(s=>'<div class="scen"><span class="prob">'+esc(s.prob||'')+'</span><h4>'+esc(s.title||'')+'</h4><p>'+esc(s.text||'')+'</p></div>').join('');
+  } else {
+    h+='<div class="scen"><span class="prob">наиболее вероятно</span><h4>Переход в '+goal+'</h4><p>Совпадает с вашим складом и востребован на рынке — самый сбалансированный путь.</p></div>';
+    h+='<div class="scen"><span class="prob">возможно</span><h4>Своё дело / R&D</h4><p>Подходит по стилю — со здравой подготовкой и подушкой безопасности.</p></div>';
+    h+='<div class="scen"><span class="prob">рычаг</span><h4>ИИ как усилитель</h4><p>Освойте 2–3 ИИ-инструмента своей сферы — ускорите любой путь.</p></div>';
+  }
+  // AI-примечание
+  // УМНЫЙ ПОИСК
+  h+='<div class="sec-num">Умный поиск</div><h2>Проверьте профессию или специальность</h2>';
+  h+='<p class="muted" style="margin-top:0">Впишите профессию, направление или специальность ВУЗа — оценю, подходит ли она вам, и объясню почему, на основе вашего профиля.</p>';
+  h+='<div class="search"><div class="row"><input id="sq" type="text" placeholder="Например: продуктовый аналитик, психология, врач…" /><button class="sbtn" id="sbtn">Проверить</button></div><div class="sres" id="sres"></div></div>';
+  h+='<div class="note">Это рабочая шаблонная сборка отчёта по вашим реальным баллам. <span class="aiflag">место под AI</span> — на следующем этапе портрет, сильные стороны, сценарии и умный поиск будет вести нейросеть: живой текст и оценка любой профессии. Оценки — ориентир, не приговор.</div>';
+  h+='<div class="nav" style="margin-top:16px"><button class="btn ghost" id="restart2">↺ Пройти заново</button></div>';
+  return h;
+}
+
+// ===== AI-ПОДКЛЮЧЕНИЕ (см. 5-AI-подключение.html) =====
+const AI_ENDPOINT = "";  // пусто → шаблон. Впишите URL вашего backend → включится живой AI.
+function aiPayload(p){
+  const m=matchProfs(p.riasec.code);
+  return {трек:'Путь · 18–35 лет',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,
+    слова:{люблю:p.open.love,поток:p.open.flow,польза:p.open.contribution,хобби:p.open.hobbies,платят_сейчас:p.open.paidFor,забирает_энергию:p.open.drain},
+    топ_профессии:m.spot.map(x=>x.n)};
+}
+async function enhanceWithAI(payload){
+  if(!AI_ENDPOINT) return null;
+  try{
+    const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!r.ok) return null;
+    return await r.json();  // {portrait, strengths_text, scenarios:[{prob,title,text}]}
+  }catch(e){ return null; }
+}
+
+// ===== ДВИЖОК ТЕСТА =====
+const ans={};let i=0;
+const host=document.getElementById('qhost'),nextBtn=document.getElementById('next'),backBtn=document.getElementById('back');
+function render(){
+  const q=Q[i];
+  document.getElementById('pbar').style.width=(i/Q.length*100)+'%';
+  document.getElementById('block').textContent='Блок: '+q.b;
+  document.getElementById('counter').textContent='Вопрос '+(i+1)+' из '+Q.length;
+  backBtn.style.visibility=i===0?'hidden':'visible';
+  let h='<div class="qcard"><div class="qkind">'+q.k+'</div><div class="qt">'+q.t+'</div>';
+  if(q.type==='likert'){h+='<div class="likert">'+L.map(n=>'<button data-v="'+n+'">'+n+'</button>').join('')+'</div><div class="lbl"><span>Совсем не про меня</span><span>Точно про меня</span></div>';}
+  else if(q.type==='single'){h+='<div class="opts">'+q.options.map(o=>'<button class="opt" data-v="'+encodeURIComponent(o[1])+'">'+o[0]+'<span class="chk">✓</span></button>').join('')+'</div>';}
+  else if(q.type==='multi'){h+='<div class="chipwrap">'+q.options.map(o=>'<button class="chipb" data-v="'+encodeURIComponent(o)+'">'+o+'</button>').join('')+'</div><p class="hint">Можно выбрать '+(q.max>=99?'несколько':('до '+q.max))+'.</p>';}
+  else if(q.type==='rank'){const cur=ans[q.id]||q.items.slice();ans[q.id]=cur;h+='<div class="rank">'+cur.map((it,idx)=>'<div class="ritem"><span class="num">'+(idx+1)+'</span><span class="nm">'+it+'</span><span class="arr"><button data-d="up">▲</button><button data-d="down">▼</button></span></div>').join('')+'</div><p class="hint">Стрелками ▲▼ поднимайте важное выше.</p>';}
+  else if(q.type==='open'){h+='<textarea placeholder="Пара предложений...">'+(ans[q.id]||'')+'</textarea><p class="hint">Необязательно, но помогает сделать отчёт точнее.</p>';}
+  h+='</div>';host.innerHTML=h;bind(q);syncNext(q);
+}
+function bind(q){
+  if(q.type==='likert'){host.querySelectorAll('.likert button').forEach(bt=>{if(ans[q.id]==+bt.dataset.v)bt.classList.add('sel');bt.onclick=()=>{host.querySelectorAll('.likert button').forEach(x=>x.classList.remove('sel'));bt.classList.add('sel');ans[q.id]=+bt.dataset.v;syncNext(q);};});}
+  else if(q.type==='single'){host.querySelectorAll('.opt').forEach(bt=>{const val=decodeURIComponent(bt.dataset.v);if(ans[q.id]===val)bt.classList.add('sel');bt.onclick=()=>{host.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));bt.classList.add('sel');ans[q.id]=val;syncNext(q);};});}
+  else if(q.type==='multi'){ans[q.id]=ans[q.id]||[];host.querySelectorAll('.chipb').forEach(bt=>{const val=decodeURIComponent(bt.dataset.v);if(ans[q.id].includes(val))bt.classList.add('sel');bt.onclick=()=>{const arr=ans[q.id];const k=arr.indexOf(val);if(k>=0){arr.splice(k,1);bt.classList.remove('sel');}else{if(arr.length>=q.max)return;arr.push(val);bt.classList.add('sel');}syncNext(q);};});}
+  else if(q.type==='rank'){host.querySelectorAll('.ritem .arr button').forEach(btn=>{btn.onclick=()=>{const item=btn.closest('.ritem');const list=item.parentNode;const kids=[...list.children];const idx=kids.indexOf(item);if(btn.dataset.d==='up'&&idx>0)list.insertBefore(item,kids[idx-1]);if(btn.dataset.d==='down'&&idx<kids.length-1)list.insertBefore(kids[idx+1],item);ans[q.id]=[...list.children].map(c=>c.querySelector('.nm').textContent);[...list.children].forEach((c,n)=>c.querySelector('.num').textContent=n+1);};});}
+  else if(q.type==='open'){const ta=host.querySelector('textarea');ta.oninput=()=>{ans[q.id]=ta.value;};}
+}
+function answered(q){if(q.type==='open'||q.type==='rank')return true;if(q.type==='multi')return (ans[q.id]||[]).length>0;return ans[q.id]!==undefined;}
+function syncNext(q){const ok=answered(q);nextBtn.disabled=!ok&&q.type!=='open';nextBtn.textContent=(ok||q.type==='open')?(i===Q.length-1?'Получить отчёт ✦':'Дальше →'):(q.type==='multi'?'Выберите вариант':'Выберите ответ');if(q.type==='open')nextBtn.disabled=false;}
+nextBtn.onclick=()=>{if(nextBtn.disabled)return;if(i<Q.length-1){i++;render();window.scrollTo({top:0,behavior:'smooth'});}else finish();};
+backBtn.onclick=()=>{if(i>0){i--;render();window.scrollTo({top:0,behavior:'smooth'});}};
+async function finish(){
+  const p=computeProfile(ans);
+  document.getElementById('test').style.display='none';
+  const rep=document.getElementById('report');
+  document.getElementById('pbar').style.width='100%';
+  document.getElementById('stage').classList.add('docw');
+  rep.classList.add('on');
+  rep.innerHTML='<div class="cover"><div class="eyebrow">готовим ваш отчёт…</div><h1>Секунду</h1><p class="muted" style="text-align:center">Собираем персональный разбор по вашим ответам.</p></div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+  let ai=null;
+  if(AI_ENDPOINT){ ai=await enhanceWithAI(aiPayload(p)); }
+  rep.innerHTML=buildReport(p,ans,ai);
+  wireSearch(p);
+  const rb=document.getElementById('restart2');if(rb)rb.onclick=()=>location.reload();
+}
+render();
+</script>
+</body>
+</html>

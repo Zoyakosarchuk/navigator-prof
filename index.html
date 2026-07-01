@@ -287,9 +287,9 @@
         <div class="step1"><span class="n">1</span> Выбери свой возраст</div>
       </div>
       <div class="ages">
-        <div class="agecard" data-go="s2"><div class="age">14–17</div><div class="tag">Старт</div><div class="desc">Таланты, выбор ВУЗа и направления, упор на нужные предметы.</div></div>
-        <div class="agecard" data-go="s2"><div class="age">18–35</div><div class="tag">Путь</div><div class="desc">Поиск своего направления, смена профессии, рост.</div></div>
-        <div class="agecard" data-go="s2"><div class="age">35+</div><div class="tag">Поворот</div><div class="desc">Выгорание, новый смысл, своё дело, второй старт.</div></div>
+        <div class="agecard" data-go="test-start.html"><div class="age">14–17</div><div class="tag">Старт</div><div class="desc">Таланты, выбор ВУЗа и направления, упор на нужные предметы.</div></div>
+        <div class="agecard" data-go="test-put.html"><div class="age">18–35</div><div class="tag">Путь</div><div class="desc">Поиск своего направления, смена профессии, рост.</div></div>
+        <div class="agecard" data-go="test-povorot.html"><div class="age">35+</div><div class="tag">Поворот</div><div class="desc">Выгорание, новый смысл, своё дело, второй старт.</div></div>
       </div>
       <div class="trust">
         <span>🇷🇺 РФ сервер</span>
@@ -565,7 +565,7 @@
   // Navigation: any element with data-go
   document.addEventListener('click',function(e){
     var t=e.target.closest('[data-go]');
-    if(t){go(t.getAttribute('data-go'));}
+    if(t){var g=t.getAttribute('data-go');if(g&&g.slice(-5)==='.html'){location.href=g;}else{go(g);}}
   });
 
   // Likert selection

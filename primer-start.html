@@ -138,6 +138,15 @@
   .pcard{background:linear-gradient(135deg,#eef0ff,#f6effd);border:1px solid #e3e6ff;border-radius:18px;padding:20px;margin:18px 0;text-align:center}
   .pcard .pcardtag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
   .pcard img{max-width:100%;border-radius:14px;box-shadow:0 8px 30px rgba(90,108,255,.18)}
+  .dlbar{text-align:center;margin:14px 0 22px}
+  .pcard .dlimg{display:inline-block;text-decoration:none;margin-top:12px}
+  @media print{
+    .noprint,.search,.nav,button,input,textarea,.dlimg{display:none!important}
+    body{background:#fff}
+    .stage{max-width:100%;padding:6px}
+    .card,.arch,.pcard,.qcard{box-shadow:none!important}
+    a{color:inherit;text-decoration:none}
+  }
   .herotext{text-align:left;max-width:600px;margin:6px auto 0}
   .burn{background:linear-gradient(180deg,#fff6f4,#fff);border:1px solid #f3d3ce;border-radius:14px;padding:18px 20px;margin:14px 0}
   .burnmeter{height:13px;border-radius:99px;background:linear-gradient(90deg,#1f9d62,#e0b020 55%,#c0392b);position:relative;margin:14px 0 6px}
@@ -242,7 +251,8 @@ const Q=[
  {id:'q51',b:'Склонности',k:'ранжирование',t:'С чем вам приятнее всего работать? Расставьте по порядку:',type:'rank',items:['Люди','Техника и механизмы','Природа и живое','Цифры, тексты, данные','Образы и творчество']},
  {id:'q52',b:'Состояние',k:'шкала',t:'После учёбы я часто чувствую упадок сил.',type:'likert'},
  {id:'q53',b:'Состояние',k:'шкала',t:'Учёба всё чаще кажется мне бессмысленной.',type:'likert'},
- {id:'q54',b:'Состояние',k:'шкала',t:'Я всё больше теряю интерес к учёбе.',type:'likert'}
+ {id:'q54',b:'Состояние',k:'шкала',t:'Я всё больше теряю интерес к учёбе.',type:'likert'},
+ {id:'q58',b:'Штрих для карточки',k:'выбор',t:'Ваш пол — чтобы персональная карточка получилась похожей на вас.',type:'single',options:[['Женский','женщина'],['Мужской','мужчина'],['Предпочту не указывать','']]}
 ];
 
 // ===== СКОРИНГ =====
@@ -259,7 +269,7 @@ function computeProfile(a){
   const virtues={Мудрость:0,Мужество:0,Человечность:0,Справедливость:0,Умеренность:0,Трансцендентность:0};
   (a.q25||[]).forEach(s=>{const v=VIRTUE[s];if(v)virtues[v]++;});
   const skills={'Адаптивность':pct(a.q32),'Критическое мышление':pct(a.q33),'Работа с технологиями':pct(a.q34),'Коммуникация':pct(a.q35),'Обучаемость':pct(a.q36),'Самостоятельность':pct(a.q37),'Любознательность':pct(a.q38)};
-  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46,childhood:a.q56,interests:a.q57}};
+  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),gender:a.q58,open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46,childhood:a.q56,interests:a.q57}};
 }
 
 // ===== КАТАЛОГ ПРОФЕССИЙ =====
@@ -514,12 +524,13 @@ function buildReport(p,a,ai){
   const d0=code[0],d1=code[1],w0=TW[d0]||TW.I,f=forecast(code);
   const AIS=(k,d)=>'<div class="syscmt"><span class="sct">что это значит для вас</span>'+((ai&&ai.sys&&ai.sys[k])?esc(ai.sys[k]):d)+'</div>';
   let h='';
+  h+='<div class="dlbar noprint"><button class="btn accent" onclick="window.print()">⬇ Скачать отчёт в PDF</button></div>';
   // ЭМОЦИОНАЛЬНЫЙ ЭКРАН (WOW)
   h+='<div class="hero">'+ILLUS(d0)+'<div class="eyebrow">кто вы</div><h1 class="wowtitle">'+title+'</h1></div>';
   // АРХЕТИП (Юнг)
   const a12=archetype12(p),A12=ARCH12[a12.top],A12b=ARCH12[a12.second]||A12,mt=mbtiType(b),MT=MBTI[mt];
   h+='<div class="arch"><div class="archtag">ваш архетип</div><h2 class="archname">'+a12.top+'</h2><div class="archsub">'+A12.tag+'</div><p>'+A12.d+'</p><div class="archrow"><div><b>Суперсила:</b> '+A12.power+'</div><div><b>Теневая сторона:</b> '+A12.shadow+'</div></div><h3>Как применить в жизни и работе</h3><p>'+A12.use+'</p><h3>Что вам подходит</h3><p>'+A12.fit+'.</p><h3>Ваш тип по MBTI: '+mt+' — '+MT.n+'</h3><p>'+MT.d+'</p><p><b style="color:#8a8aff">Что с этим делать:</b> '+MT.use+'</p><div class="arch2"><div class="archtag">второй ведущий архетип</div><h3 class="archname2">'+a12.second+'</h3><div class="archsub">'+(A12b.tag||'')+'</div><p>'+((ai&&ai.archetype2)?esc(ai.archetype2):(A12b.d||''))+'</p><p><b style="color:#8a8aff">Как сочетается с главным.</b> В вас соединяются '+a12.top+' и '+a12.second+': '+(A12b.power||'вторая грань')+' поддерживает вашу главную суперсилу. Такое сочетание даёт объём, которого нет у людей с одним ярким архетипом — и это ваше отличие.</p></div></div>';
-  if(ai&&ai.card_image){ h+='<div class="pcard"><div class="pcardtag">ваша карточка личности</div><img src="'+esc(ai.card_image)+'" alt="Карточка личности — '+esc(a12.top)+'"><p class="muted" style="margin:12px 0 0;font-size:13px">Сохраните и поделитесь — это ваш архетип «'+a12.top+'».</p></div>'; }
+  if(ai&&ai.card_image){ h+='<div class="pcard"><div class="pcardtag">ваша карточка личности</div><img src="'+esc(ai.card_image)+'" alt="Карточка личности — '+esc(a12.top)+'"><p class="muted" style="margin:12px 0 0;font-size:13px">Сохраните и поделитесь — это ваш архетип «'+a12.top+'».</p><a class="btn ghost dlimg" href="'+esc(ai.card_image)+'" download="navigator-kartochka.jpg">⬇ Скачать картинку</a></div>'; }
   // ПОРТРЕТ ЛИЧНОСТИ (богатый)
   const HOOK={R:'Есть люди-теоретики, а есть те, кто берёт и делает. Вы из вторых',I:'Есть люди-исполнители, а есть люди-вопросы. Вы из вторых',A:'Есть люди, которые повторяют, и есть те, кто создаёт своё. Вы из вторых',S:'Есть люди, которые только берут, и есть те, кто отдаёт и делает других сильнее. Вы из вторых',E:'Есть люди, которые ждут, и есть те, кто ведёт и запускает. Вы из вторых',C:'Есть люди, которые ищут бурю, и есть те, на ком держится тихая суша. Вы из вторых'};
   h+='<div class="sec-num">Портрет личности</div><h2>'+title+'</h2>';
@@ -678,7 +689,7 @@ function buildReport(p,a,ai){
   h+='<p class="muted" style="margin-top:0">Впишите профессию, направление или специальность ВУЗа — оценю, подходит ли она вам, и объясню почему, на основе вашего профиля.</p>';
   h+='<div class="search"><div class="row"><input id="sq" type="text" placeholder="Например: продуктовый аналитик, психология, врач…" /><button class="sbtn" id="sbtn">Проверить</button></div><div class="sres" id="sres"></div></div>';
   h+='<div class="note">Отчёт собран по вашим ответам в диагностике. Оценки — ориентир, не приговор.</div>';
-  h+='<div class="nav" style="margin-top:16px"><button class="btn ghost" id="restart2">↺ Пройти заново</button></div>';
+  h+='<div class="nav noprint" style="margin-top:16px;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn accent" onclick="window.print()">⬇ Скачать отчёт в PDF</button><button class="btn ghost" id="restart2">↺ Пройти заново</button></div>';
   return h;
 }
 
@@ -686,7 +697,7 @@ function buildReport(p,a,ai){
 const AI_ENDPOINT = "";  // пусто → шаблон. Впишите URL вашего backend → включится живой AI.
 function aiPayload(p){
   const m=matchProfs(p.riasec.code);
-  return {трек:'Старт · 14–19 лет, подросток-школьник',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,
+  return {трек:'Старт · 14–19 лет, подросток-школьник',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,пол:p.gender,
     слова:{люблю:p.open.love,поток:p.open.flow,польза:p.open.contribution,хобби:p.open.hobbies,платят_сейчас:p.open.paidFor,забирает_энергию:p.open.drain,мечта_детства:p.open.childhood,интересы:p.open.interests},
     топ_профессии:m.spot.map(x=>x.n)};
 }
@@ -742,7 +753,7 @@ async function finish(){
   wireSearch(p);
   const rb=document.getElementById('restart2');if(rb)rb.onclick=()=>location.reload();
 }
-var __P__={"q1":5,"q2":5,"q3":3,"q4":3,"q5":4,"q6":2,"q7":5,"q8":4,"q9":3,"q10":3,"q11":2,"q12":2,"q13":4,"q14":3,"q15":5,"q16":5,"q17":4,"q18":4,"q19":3,"q20":3,"q21":2,"q22":2,"q23":["Творчество","Свобода","Развитие","Деньги","Влияние","Польза","Признание"],"q24":["Творчество","Свобода","Развитие","Признание","Стабильность"],"q25":["Креативность","Любознательность","Доброта","Благоразумие"],"q26":["Образы и пространство","Слова и тексты","Логика и числа","Музыка и ритм","Тело и движение","Общение с людьми","Понимание себя","Природа"],"q27":"Создатель","q28":"Создатель","q29":"Создатель","q30":"Создавал/придумывал","q31":"Когда рисую или придумываю историю — забываю про время.","q32":5,"q33":3,"q34":4,"q35":4,"q36":5,"q37":3,"q38":5,"q39":"Рисовать, придумывать персонажей и миры.","q40":"Радовать людей рисунками и историями.","q55":"Рисование, комиксы и аниме.","q56":"Художником и мультипликатором.","q57":"Рисование комиксов, аниме, космос.","q41":"60–120 тыс","q42":"10–11 класс","q43":4,"q44":"Точные формулы без практики.","q45":["Творчество","Свобода"],"q51":["Образы и творчество","Люди","Техника и механизмы","Природа и живое","Цифры, тексты, данные"],"q52":2,"q53":2,"q54":2};
+var __P__={"q1":5,"q2":5,"q3":4,"q4":4,"q5":4,"q6":4,"q7":4,"q8":4,"q9":4,"q10":4,"q11":4,"q12":4,"q13":4,"q14":4,"q15":5,"q16":5,"q17":4,"q18":4,"q19":4,"q20":4,"q21":4,"q22":4,"q23":["Творчество","Деньги","Свобода","Влияние","Польза","Признание","Развитие"],"q24":["Творчество","Свобода","Стабильность","Семья","Развитие"],"q25":["Креативность","Доброта","Любознательность","Любовь к учению"],"q26":["Образы и пространство","Логика и числа","Слова и тексты","Музыка и ритм","Тело и движение","Общение с людьми","Понимание себя","Природа"],"q27":"Создатель","q28":"Создатель","q29":"Создатель","q30":"Создавал/придумывал","q31":"Когда рисую — забываю про время.","q32":4,"q33":4,"q34":4,"q35":4,"q36":5,"q37":4,"q38":5,"q39":"Рисовать и придумывать миры.","q40":"Радовать людей рисунками.","q55":"Рисование, комиксы, аниме.","q56":"Художником.","q57":"Комиксы и космос.","q41":"до 60 тыс","q42":"10–11 класс","q43":4,"q44":"Формулы без практики.","q45":["Творчество","Свобода"],"q51":["Образы и творчество","Люди","Техника и механизмы","Природа и живое","Цифры, тексты, данные"],"q52":4,"q53":4,"q54":4,"q58":"женщина"};
 try{Object.assign(ans,__P__);finish();}catch(e){}
 </script>
 </body>

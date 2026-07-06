@@ -31,13 +31,13 @@
   .hero .promise{font-size:15px;color:var(--muted);margin-top:18px}
   .ages{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:44px 0 10px}
   @media(max-width:720px){.ages{grid-template-columns:1fr}}
-  .agecard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;cursor:pointer;text-align:left;transition:.2s;box-shadow:var(--shadow);user-select:none}
+  .agecard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;cursor:pointer;text-align:left;transition:.2s;box-shadow:var(--shadow);user-select:none;display:flex;flex-direction:column}
   .agecard:hover{transform:translateY(-4px);border-color:var(--accent)}
   .agecard:active{transform:translateY(-1px)}
   .agecard .age{font-size:30px;font-weight:750;letter-spacing:-.02em}
   .agecard .tag{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:4px 11px;margin:10px 0 12px}
-  .agecard .desc{font-size:14.5px;color:var(--muted)}
-  .agecard .paypill{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;border-radius:999px;padding:10px 18px}
+  .agecard .desc{font-size:14.5px;color:var(--muted);margin:0 0 20px}
+  .agecard .paypill{display:block;margin-top:auto;text-align:center;background:var(--accent);color:#fff;font-weight:700;font-size:15px;border-radius:999px;padding:12px 18px}
   .agecard:hover .paypill{filter:brightness(1.06)}
   .trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:34px;font-size:13px;color:var(--muted)}
   .trust span{display:inline-flex;align-items:center;gap:6px}

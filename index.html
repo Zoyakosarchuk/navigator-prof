@@ -37,6 +37,8 @@
   .agecard .age{font-size:30px;font-weight:750;letter-spacing:-.02em}
   .agecard .tag{display:inline-block;font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:4px 11px;margin:10px 0 12px}
   .agecard .desc{font-size:14.5px;color:var(--muted)}
+  .agecard .paypill{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;border-radius:999px;padding:10px 18px}
+  .agecard:hover .paypill{filter:brightness(1.06)}
   .trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:34px;font-size:13px;color:var(--muted)}
   .trust span{display:inline-flex;align-items:center;gap:6px}
 
@@ -310,9 +312,9 @@
         <div class="step1"><span class="n">1</span> Выбери свой возраст</div>
       </div>
       <div class="ages">
-        <div class="agecard" data-go="test-start.html"><div class="age">14–19</div><div class="tag">Старт</div><div class="desc">Таланты, выбор ВУЗа и направления, упор на нужные предметы.</div></div>
-        <div class="agecard" data-go="test-put.html"><div class="age">20–35</div><div class="tag">Путь</div><div class="desc">Поиск своего направления, смена профессии, рост.</div></div>
-        <div class="agecard" data-go="test-povorot.html"><div class="age">35+</div><div class="tag">Поворот</div><div class="desc">Выгорание, новый смысл, своё дело, второй старт.</div></div>
+        <div class="agecard" data-go="https://payform.ru/3ibXRlz/"><div class="age">14–19</div><div class="tag">Старт</div><div class="desc">Таланты, выбор ВУЗа и направления, упор на нужные предметы.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
+        <div class="agecard" data-go="https://payform.ru/pmbXRhd/"><div class="age">20–35</div><div class="tag">Путь</div><div class="desc">Поиск своего направления, смена профессии, рост.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
+        <div class="agecard" data-go="https://payform.ru/u9bXRjF/"><div class="age">35+</div><div class="tag">Поворот</div><div class="desc">Выгорание, новый смысл, своё дело, второй старт.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
       </div>
       <div class="trust">
         <span>🇷🇺 РФ сервер</span>
@@ -588,7 +590,7 @@
   // Navigation: any element with data-go
   document.addEventListener('click',function(e){
     var t=e.target.closest('[data-go]');
-    if(t){var g=t.getAttribute('data-go');if(g&&g.slice(-5)==='.html'){location.href=g;}else{go(g);}}
+    if(t){var g=t.getAttribute('data-go');if(g&&(g.slice(-5)==='.html'||g.slice(0,4)==='http')){location.href=g;}else{go(g);}}
   });
 
   // Likert selection

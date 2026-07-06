@@ -464,10 +464,19 @@ const KW={
  C:['бухгалт','учёт','учет','финанс','аудит','логист','делопроизв','юрист','налог','документ','закуп','администрат','экономист','нотариус'],
  R:['инженер','техник','механик','строй','строит','электр','монтаж','агроном','ветеринар','повар','мастер','водител','наладчик','столяр','фермер','сварщ','робот','пилот']
 };
+const HKW={
+ A:['рисова','рисован','живопис','музык','танц','пени','вокал','театр','актёр','актер','фото','видео','дизайн','рукодел','вышив','лепк','керамик','гитар','пианино','творч','аниме','комикс','кино'],
+ I:['шахмат','робот','программир','наук','эксперимент','олимпиад','логическ','головолом','астроном','квиз'],
+ S:['волонт','вожат','дебат','настольн','благотвор','наставнич','анимац'],
+ R:['спорт','футбол','волейбол','баскетбол','хоккей','бег','плаван','лыж','велосип','сноуборд','коньк','единоборств','бокс','борьб','карат','дзюдо','самбо','кроссфит','тренаж','поход','туризм','рыбалк','охот','сад','огород','животн','верхов','скалолаз','йог','фитнес','гимнаст','атлет']
+};
+const TEAM=['футбол','волейбол','баскетбол','хоккей','командн','регби','гандбол'];
+const SOLO=['плаван','бег','лыж','велосип','теннис','шахмат','йог','скалолаз','единоборств','бокс','борьб','карат','дзюдо','гимнаст','атлет','фитнес','сноуборд','коньк'];
 const TNR={R:'Практик',I:'Исследователь',A:'Творец',S:'Помощник',E:'Лидер',C:'Организатор'};
 function evalFit(q,p){
   const s=q.toLowerCase().trim();
   const letters=[];for(const L in KW){if(KW[L].some(k=>s.includes(k)))letters.push(L);}
+  for(const L in HKW){if(HKW[L].some(k=>s.includes(k))&&!letters.includes(L))letters.push(L);}
   if(!letters.length){const hit=PROFS.find(pr=>{const n=pr.n.toLowerCase();return n.includes(s)||s.includes(n.split(' ')[0]);});if(hit)hit.t.split('').forEach(l=>{if(!letters.includes(l))letters.push(l);});}
   const code=p.riasec.code,w={};code.split('').forEach((c,i)=>w[c]=3-i);
   let score=0;const matched=[],missed=[];
@@ -480,6 +489,8 @@ function evalFit(q,p){
   if(missed.length)reasons.push('Эта сфера во многом опирается на тип «'+missed.map(l=>TNR[l]).join(', ')+'», выраженный у вас слабее — это стоит учесть.');
   if(vc==='yes')reasons.push('Ваш код '+code+' хорошо ложится на это направление — здесь ваш потенциал и рост.');
   if(vc==='no')reasons.push('Скорее всего, будет забирать энергию: ключевые задачи лежат вне вашего склада.');
+  var isTeam=TEAM.some(function(k){return s.includes(k);}),isSolo=SOLO.some(function(k){return s.includes(k);});
+  if(isTeam||isSolo){var ex=p.big5.extraversion;reasons.length=0;if(isTeam){if(ex>=55){verdict='Отлично подойдёт';vc='yes';reasons.push('Командный формат — прямо ваше: вы заряжаетесь от людей и общего азарта.');}else{verdict='Скорее подойдёт';vc='mid';reasons.push('Командный вид возможен, но по темпераменту вам ближе индивидуальные форматы, где свой ритм.');}}else{if(ex<=55){verdict='Отлично подойдёт';vc='yes';reasons.push('Индивидуальный формат — прямо ваше: сосредоточенность и свой темп.');}else{verdict='Подойдёт';vc='yes';reasons.push('Индивидуальный вид вам подойдёт; и оставляйте место командному — люди дают вам энергию.');}}}
   return {verdict,vc,reasons};
 }
 function wireSearch(p){
@@ -713,9 +724,9 @@ function buildReport(p,a,ai){
   // УМНЫЙ ПОИСК
   h+='<div class="sec-num">Итог</div><h2>Резюме по вашему разбору</h2>';
   h+='<div class="card"><p style="margin-top:0">'+((ai&&ai.summary)?ai.summary.split(/\n\n+|\n/).filter(Boolean).map(function(x){return esc(x);}).join('</p><p>'):('Если коротко: по складу вы — «'+title+'». Ваши самые подходящие направления сейчас — '+(m.spot.length?m.spot.map(function(x){return x.n;}).slice(0,3).join(', '):'из списка выше')+'. Двигайтесь к ролям, где сходятся ваши сильные стороны, тип и интерес — там ваш потенциал раскроется в полную силу.'))+'</p></div>';
-  h+='<div class="sec-num">Умный поиск</div><h2>Проверьте профессию или специальность</h2>';
-  h+='<p class="muted" style="margin-top:0">Впишите профессию, направление или специальность ВУЗа — оценю, подходит ли она вам, и объясню почему, на основе вашего профиля.</p>';
-  h+='<div class="search"><div class="row"><input id="sq" type="text" placeholder="Например: продуктовый аналитик, психология, врач…" /><button class="sbtn" id="sbtn">Проверить</button></div><div class="sres" id="sres"></div></div>';
+  h+='<div class="sec-num">Умный поиск</div><h2>Проверьте профессию, спорт или хобби</h2>';
+  h+='<p class="muted" style="margin-top:0">Впишите профессию, направление, спорт или хобби — оценю, подходит ли это вам по складу, и объясню почему.</p>';
+  h+='<div class="search"><div class="row"><input id="sq" type="text" placeholder="Например: дизайнер, психология, футбол, рисование…" /><button class="sbtn" id="sbtn">Проверить</button></div><div class="sres" id="sres"></div></div>';
   h+='<div class="note">Отчёт собран по вашим ответам в диагностике. Оценки — ориентир, не приговор.</div>';
   h+='<div class="nav noprint" style="margin-top:16px;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn accent" onclick="window.print()">⬇ Скачать отчёт в PDF</button><button class="btn ghost" id="restart2">↺ Пройти заново</button></div>';
   return h;

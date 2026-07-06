@@ -249,7 +249,8 @@ const Q=[
  {id:'q52',b:'Состояние',k:'шкала',t:'Я чувствую упадок сил даже после отдыха.',type:'likert'},
  {id:'q53',b:'Состояние',k:'шкала',t:'Работа всё чаще теряет для меня смысл.',type:'likert'},
  {id:'q54',b:'Состояние',k:'шкала',t:'Я всё больше отдаляюсь от своей работы.',type:'likert'},
- {id:'q58',b:'Штрих для карточки',k:'выбор',t:'Ваш пол — чтобы персональная карточка получилась похожей на вас.',type:'single',options:[['Женский','женщина'],['Мужской','мужчина'],['Предпочту не указывать','']]}
+ {id:'q58',b:'Штрих для карточки',k:'выбор',t:'Ваш пол — чтобы персональная карточка получилась похожей на вас.',type:'single',options:[['Женский','женщина'],['Мужской','мужчина']]},
+ {id:'q59',b:'Немного о вас',k:'выбор',t:'Откуда вы о нас узнали?',type:'single',options:[['Соцсети (Instagram, VK, TikTok)','соцсети'],['Telegram','telegram'],['От друзей или знакомых','рекомендация'],['Поиск в интернете','поиск'],['Реклама','реклама'],['Другое','другое']]}
 ];
 
 // ===== СКОРИНГ =====
@@ -266,7 +267,7 @@ function computeProfile(a){
   const virtues={Мудрость:0,Мужество:0,Человечность:0,Справедливость:0,Умеренность:0,Трансцендентность:0};
   (a.q25||[]).forEach(s=>{const v=VIRTUE[s];if(v)virtues[v]++;});
   const skills={'Адаптивность':pct(a.q32),'Критическое мышление':pct(a.q33),'Работа с технологиями':pct(a.q34),'Коммуникация':pct(a.q35),'Обучаемость':pct(a.q36),'Самостоятельность':pct(a.q37),'Любознательность':pct(a.q38)};
-  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),gender:a.q58,open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46}};
+  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),gender:a.q58,source:a.q59,open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46}};
 }
 
 // ===== КАТАЛОГ ПРОФЕССИЙ =====
@@ -663,7 +664,7 @@ function buildReport(p,a,ai){
 const AI_ENDPOINT = "https://zoyakosarchuk-navigator-ai-e478.twc1.net/";  // пусто → шаблон. Впишите URL вашего backend → включится живой AI.
 function aiPayload(p){
   const m=matchProfs(p.riasec.code);
-  return {трек:'Поворот · 35+ лет, взрослый со стажем',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,пол:p.gender,
+  return {трек:'Поворот · 35+ лет, взрослый со стажем',код:p.riasec.code,big5:p.big5,силы:p.strengths,драйверы:p.drivers,ценности:p.values,поток:p.flow,архетип_ведущий:archetype12(p).top,архетип_второй:archetype12(p).second,mbti:mbtiType(p.big5),климов:p.klimov,выгорание:p.burnout,интеллект:p.intelligences,пол:p.gender,источник:p.source,
     слова:{люблю:p.open.love,поток:p.open.flow,польза:p.open.contribution,хобби:p.open.hobbies,платят_сейчас:p.open.paidFor,забирает_энергию:p.open.drain},
     топ_профессии:m.spot.map(x=>x.n)};
 }

@@ -172,6 +172,13 @@
   .startblock{text-align:center;margin-top:14px}
   .startblock .step1{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:999px;padding:9px 20px;font-size:14px;font-weight:650;margin-bottom:8px}
   .startblock .step1 .n{background:#fff;color:var(--ink);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+  /* отзывы */
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+  @media(max-width:720px){.reviews{grid-template-columns:1fr}}
+  .review{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 20px;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column}
+  .rev-stars{color:#f5a623;font-size:15px;letter-spacing:2px;margin-bottom:8px}
+  .rev-text{font-size:15px;line-height:1.6;color:var(--ink);flex:1}
+  .rev-name{margin-top:14px;font-size:13.5px;color:var(--muted);font-weight:600}
   /* footer + cookie */
   .sitefoot{max-width:1000px;margin:40px auto 0;padding:24px 4px 8px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted)}
   .sitefoot .links a{color:var(--muted);text-decoration:none;margin-right:16px}
@@ -303,6 +310,18 @@
           <li>Конкретика по делу: что делать, куда идти, что обходить стороной.</li>
           <li>Результат сразу, без регистрации. Ответы стираются после отчёта.</li>
         </ul>
+      </div>
+    </div>
+
+    <!-- ОТЗЫВЫ · впишите реальные отзывы в карточки ниже, затем уберите style="display:none" у следующего div, чтобы блок показался на сайте -->
+    <div class="lp" id="reviews" style="display:none">
+      <div class="lead-label">отзывы</div>
+      <h2>Что говорят те, кто уже прошёл</h2>
+      <p class="lp-sub">Живые впечатления людей, которые получили свой разбор.</p>
+      <div class="reviews">
+        <div class="review"><div class="rev-stars">★★★★★</div><div class="rev-text">[Впишите сюда реальный отзыв клиента]</div><div class="rev-name">— Имя, город</div></div>
+        <div class="review"><div class="rev-stars">★★★★★</div><div class="rev-text">[Впишите сюда реальный отзыв клиента]</div><div class="rev-name">— Имя, город</div></div>
+        <div class="review"><div class="rev-stars">★★★★★</div><div class="rev-text">[Впишите сюда реальный отзыв клиента]</div><div class="rev-name">— Имя, город</div></div>
       </div>
     </div>
 

@@ -121,6 +121,9 @@
   .ideallist li::before{content:'✅';position:absolute;left:0;top:2px;font-size:13px}
   .idealhint{margin-top:7px;font-weight:600;color:var(--ink)}
   .chartcap{text-align:center;font-size:13px;color:var(--muted);margin:6px auto 2px;max-width:460px;line-height:1.5}
+  .loadbar{max-width:420px;margin:24px auto 12px;height:10px;background:var(--line);border-radius:999px;overflow:hidden}
+  .loadbar-fill{height:100%;width:0;background:linear-gradient(90deg,#5b6cff,#8a5bff);border-radius:999px;transition:width .45s ease}
+  .loadmsg{text-align:center;font-weight:600;color:var(--ink);margin:0}
   .pscale{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);margin:16px 0}
   .psrow{display:flex;align-items:center;gap:12px;margin:9px 0}.psrow .pl{width:120px;font-size:14px;font-weight:600;flex:none}
   .psrow .pt{flex:1;font-size:16px;letter-spacing:1px;color:var(--accent);overflow:hidden;white-space:nowrap}
@@ -784,7 +787,10 @@ function aiPayload(p){
 async function enhanceWithAI(payload){
   if(!AI_ENDPOINT) return null;
   try{
-    const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const ctrl=new AbortController();
+    const to=setTimeout(function(){ctrl.abort();},22000);
+    const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal});
+    clearTimeout(to);
     if(!r.ok) return null;
     return await r.json();  // {portrait, strengths_text, scenarios:[{prob,title,text}]}
   }catch(e){ return null; }
@@ -819,18 +825,27 @@ function syncNext(q){const ok=answered(q);nextBtn.disabled=!ok&&q.type!=='open';
 nextBtn.onclick=()=>{if(nextBtn.disabled)return;if(i<Q.length-1){i++;render();window.scrollTo({top:0,behavior:'smooth'});}else finish();};
 backBtn.onclick=()=>{if(i>0){i--;render();window.scrollTo({top:0,behavior:'smooth'});}};
 async function finish(){
-  const p=computeProfile(ans);
+  let p=null;
+  try{ p=computeProfile(ans); }catch(e){ p=null; }
   document.getElementById('test').style.display='none';
   const rep=document.getElementById('report');
   document.getElementById('pbar').style.width='100%';
   document.getElementById('stage').classList.add('docw');
   rep.classList.add('on');
-  rep.innerHTML='<div class="cover"><div class="eyebrow">анализируем ваши ответы</div><h1>Идёт обработка данных</h1><p class="muted" style="text-align:center">Собираем персональный разбор по 12 системам — это займёт несколько секунд.</p></div>';
+  rep.innerHTML='<div class="cover"><div class="eyebrow">анализируем твои ответы</div><h1>Собираем твой разбор</h1><div class="loadbar"><div class="loadbar-fill" id="lbf"></div></div><p class="loadmsg" id="lbm">Читаем твои ответы…</p><p class="muted" style="text-align:center;font-size:13px;margin-top:8px">Обычно занимает 10–20 секунд. Оставайся на этой странице.</p></div>';
   window.scrollTo({top:0,behavior:'smooth'});
+  var _lp=0,_lmi=0,_lmsgs=['Читаем твои ответы…','Считаем 12 систем личности…','Определяем сильные стороны…','Подбираем профессии под тебя…','Рисуем твою карточку личности…','Почти готово…'];
+  var _ltimer=setInterval(function(){var f=document.getElementById('lbf'),m=document.getElementById('lbm');_lp+=Math.max(0.5,(93-_lp)*0.055);if(_lp>93)_lp=93;if(f)f.style.width=_lp.toFixed(1)+'%';var ix=Math.min(_lmsgs.length-1,Math.floor(_lp/16));if(ix!==_lmi){_lmi=ix;if(m)m.textContent=_lmsgs[ix];}},400);
   let ai=null;
-  if(AI_ENDPOINT){ ai=await enhanceWithAI(aiPayload(p)); }
-  rep.innerHTML=buildReport(p,ans,ai);
-  wireSearch(p);
+  try{ if(AI_ENDPOINT && p){ ai=await enhanceWithAI(aiPayload(p)); } }catch(e){ ai=null; }
+  clearInterval(_ltimer);
+  try{
+    rep.innerHTML=buildReport(p,ans,ai);
+    wireSearch(p);
+  }catch(e){
+    try{ rep.innerHTML=buildReport(p,ans,null); wireSearch(p); }
+    catch(e2){ rep.innerHTML='<div class="cover"><h1>Секунду…</h1><p class="muted" style="text-align:center">Отчёт почти собран. Нажми кнопку ниже — он появится.</p><button class="btn accent" style="display:block;margin:18px auto" onclick="finish()">Показать отчёт</button></div>'; }
+  }
   const rb=document.getElementById('restart2');if(rb)rb.onclick=()=>location.reload();
 }
 render();

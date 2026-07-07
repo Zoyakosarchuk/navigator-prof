@@ -262,9 +262,8 @@ const Q=[
  {id:'q53',b:'Состояние',k:'шкала',t:'Работа всё чаще теряет для меня смысл.',type:'likert'},
  {id:'q54',b:'Состояние',k:'шкала',t:'Я всё больше отдаляюсь от своей работы.',type:'likert'},
  {id:'q58',b:'Штрих для карточки',k:'выбор',t:'Ваш пол — чтобы персональная карточка получилась похожей на вас.',type:'single',options:[['Женский','женщина'],['Мужской','мужчина']]},
- {id:'q59',b:'Немного о вас',k:'выбор',t:'Откуда вы о нас узнали?',type:'single',options:[['ВКонтакте','вконтакте'],['Telegram','telegram'],['От друзей или знакомых','рекомендация'],['Поиск в интернете','поиск'],['Реклама','реклама'],['Другое (напишу ниже)','другое']]},
- {id:'q60',b:'Психософия',k:'ранжирование',t:'Что для вас первично? Расставьте по важности:',type:'rank',items:['Воля — цели, решения, «я хочу»','Логика — смыслы, анализ, «я думаю»','Эмоция — чувства, вдохновение, «я чувствую»','Физика — тело, комфорт, деньги, «я делаю»']},
- {id:'q61',b:'Немного о вас',k:'открытый',t:'Если выбрали «Другое» — откуда именно вы о нас узнали?',type:'open',opt:true}
+ {id:'q59',b:'Немного о вас',k:'выбор',t:'Откуда вы о нас узнали?',type:'single',otherField:true,options:[['ВКонтакте','вконтакте'],['Telegram','telegram'],['От друзей или знакомых','рекомендация'],['Поиск в интернете','поиск'],['Реклама','реклама'],['Другое','другое']]},
+ {id:'q60',b:'Психософия',k:'ранжирование',t:'Что для вас первично? Расставьте по важности:',type:'rank',items:['Воля — цели, решения, «я хочу»','Логика — смыслы, анализ, «я думаю»','Эмоция — чувства, вдохновение, «я чувствую»','Физика — тело, комфорт, деньги, «я делаю»']}
 ];
 
 // ===== СКОРИНГ =====
@@ -273,6 +272,7 @@ function computeProfile(a){
   const pct=v=>Math.round((v-1)/4*100),avg=(x,y)=>(x+y)/2,avg3=(x,y,z)=>(x+y+z)/3;
   const big5={openness:pct(avg(a.q1,a.q2)),conscientiousness:pct(avg(a.q3,a.q4)),extraversion:pct(avg(a.q5,a.q6)),agreeableness:pct(avg(a.q7,a.q8)),stability:pct(avg(a.q9,a.q10))};
   const raw={R:a.q11+a.q12,I:a.q13+a.q14,A:a.q15+a.q16,S:a.q17+a.q18,E:a.q19+a.q20,C:a.q21+a.q22};
+  var _aB=0,_i26=(a.q26||[]).slice(0,3),_d23=(a.q23||[]).slice(0,3),_s25=(a.q25||[]),_h55=((a.q55||'')+'').toLowerCase();if(_i26.indexOf('Музыка и ритм')>=0)_aB+=1;if(_i26.indexOf('Образы и пространство')>=0)_aB+=1;if(_d23.indexOf('Творчество')>=0)_aB+=1;if(_s25.indexOf('Креативность')>=0)_aB+=0.5;if(_s25.indexOf('Чувство прекрасного')>=0)_aB+=0.5;if(/рисова|рисован|живопис|музык|пишу музык|пою|вокал|пени|танц|балет|театр|актёр|актер|фото|дизайн|творч|рукодел|лепк|керамик|гитар|пианино|скрипк|аниме|комикс|хореограф|поэзи|стих/.test(_h55))_aB+=1.5;raw.A=raw.A+Math.min(_aB,4);
   const riasecPct={};for(const k in raw)riasecPct[k]=Math.round((raw[k]-2)/8*100);
   const code=Object.entries(raw).sort((x,y)=>y[1]-x[1]).slice(0,3).map(e=>e[0]).join('');
   const roles={Создатель:0,Исследователь:0,Организатор:0,Исполнитель:0,Лидер:0,Наставник:0};
@@ -281,7 +281,7 @@ function computeProfile(a){
   const virtues={Мудрость:0,Мужество:0,Человечность:0,Справедливость:0,Умеренность:0,Трансцендентность:0};
   (a.q25||[]).forEach(s=>{const v=VIRTUE[s];if(v)virtues[v]++;});
   const skills={'Адаптивность':pct(a.q32),'Критическое мышление':pct(a.q33),'Работа с технологиями':pct(a.q34),'Коммуникация':pct(a.q35),'Обучаемость':pct(a.q36),'Самостоятельность':pct(a.q37),'Любознательность':pct(a.q38)};
-  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),psyche:(function(){var sc={'В':0,'Л':0,'Э':0,'Ф':0},M={'Воля':'В','Логика':'Л','Эмоция':'Э','Физика':'Ф'};if(Array.isArray(a.q60))a.q60.forEach(function(x,i){var k=M[(''+x).split(/[ —]/)[0]];if(k)sc[k]+=(4-i)*3;});var R=riasecPct||{},I26=(a.q26||[]),S25=(a.q25||[]),D23=(a.q23||[]);sc['В']+=(rolesPct['Лидер']||0)/25+(R.E||0)/25;sc['Л']+=(R.I||0)/25+(I26.indexOf('Логика и числа')===0?2:0)+pct(a.q33)/40;sc['Э']+=(R.A||0)/25+(R.S||0)/40+(S25.indexOf('Чувство прекрасного')>=0?1.5:0)+(big5.openness||0)/40;sc['Ф']+=(R.R||0)/25+(R.C||0)/40+(I26.indexOf('Тело и движение')>=0?1.5:0)+(D23.indexOf('Деньги')>=0?1:0);return ['В','Л','Э','Ф'].sort(function(x,y){return sc[y]-sc[x];});})(),gender:a.q58,source:(a.q59==='другое'&&a.q61?('другое: '+a.q61):a.q59),open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46}};
+  return {big5,riasec:{code,raw,pct:riasecPct},roles:rolesPct,virtues,skills,drivers:(a.q23||[]).slice(0,3),values:a.q24||[],strengths:a.q25||[],intelligences:(a.q26||[]).slice(0,3),flow:a.q30,income:a.q41,currentIncome:a.q50,occupation:a.q42,satisfaction:a.q43,motives:a.q45||[],klimov:(a.q51||[])[0],burnout:pct(avg3(a.q52,a.q53,a.q54)),psyche:(function(){var sc={'В':0,'Л':0,'Э':0,'Ф':0},M={'Воля':'В','Логика':'Л','Эмоция':'Э','Физика':'Ф'};if(Array.isArray(a.q60))a.q60.forEach(function(x,i){var k=M[(''+x).split(/[ —]/)[0]];if(k)sc[k]+=(4-i)*3;});var R=riasecPct||{},I26=(a.q26||[]),S25=(a.q25||[]),D23=(a.q23||[]);sc['В']+=(rolesPct['Лидер']||0)/25+(R.E||0)/25;sc['Л']+=(R.I||0)/25+(I26.indexOf('Логика и числа')===0?2:0)+pct(a.q33)/40;sc['Э']+=(R.A||0)/25+(R.S||0)/40+(S25.indexOf('Чувство прекрасного')>=0?1.5:0)+(big5.openness||0)/40;sc['Ф']+=(R.R||0)/25+(R.C||0)/40+(I26.indexOf('Тело и движение')>=0?1.5:0)+(D23.indexOf('Деньги')>=0?1:0);return ['В','Л','Э','Ф'].sort(function(x,y){return sc[y]-sc[x];});})(),gender:a.q58,source:(a.q59==='другое'&&a.q59_other?('другое: '+a.q59_other):a.q59),open:{flow:a.q31,love:a.q39,contribution:a.q40,hobbies:a.q55,drain:a.q44,paidFor:a.q46}};
 }
 
 // ===== КАТАЛОГ ПРОФЕССИЙ =====
@@ -749,6 +749,7 @@ function buildReport(p,a,ai){
   h+='<div class="spot">'+m.spot.map((x,i)=>'<div class="spotc"><div class="rank">★ попадание №'+(i+1)+'</div><h4>'+x.n+'</h4><p>'+x.why+'</p><div class="mini"><span class="tag '+demClass(x.d)+'">спрос: '+x.d+'</span><span class="tag '+riskClass(x.r)+'">ИИ: '+x.r+'</span></div></div>').join('')+'</div>';
   h+='<table><tr><th>Профессия</th><th>Почему</th><th>Спрос</th><th>Риск ИИ</th></tr>'+m.list.map(x=>'<tr><td class="pn">'+x.n+'</td><td>'+x.why+'</td><td><span class="tag '+demClass(x.d)+'">'+x.d+'</span></td><td><span class="tag '+riskClass(x.r)+'">'+x.r+'</span></td></tr>').join('')+'</table>';
   if(m.earth.length){h+='<h3>Если тянет ближе к рукам и земле</h3><div class="earth">'+m.earth.map(x=>'<div class="ec"><div class="en">'+x.n+'</div><div class="ed">'+x.why+'</div></div>').join('')+'</div>';}
+  if(code.includes('A')){var _crP=[['Художник / иллюстратор','образы и авторский стиль'],['Музыкант','слух, творчество, сцена'],['Танцор / хореограф','пластика и сцена'],['Актёр / актриса','перевоплощение и эмоции'],['Певец / вокалист','голос и выступления'],['Дизайнер','создавать новое'],['Режиссёр','видение и история'],['Блогер / контент-мейкер','свой голос и аудитория']];h+='<div class="card" style="border-color:#e0d4ff"><h3 style="margin-top:0">Творческая сторона — что тоже подходит</h3><p class="pmut" style="margin:0 0 10px">Тип «Творец» выражен — это сильная творческая жила. Эти направления тоже подходят:</p><div class="earth">'+_crP.map(function(c){return '<div class="ec"><div class="en">'+c[0]+'</div><div class="ed">'+c[1]+'</div></div>';}).join('')+'</div></div>';}
   // ВТОРОЙ СТАРТ (Поворот)
   h+='<div class="sec-num">Ваш опыт</div><h2>Второй старт: что переносится с вами</h2>';
   h+='<div class="syscmt"><span class="sct">отправная точка</span><b>Откуда стартуем.</b> Ваша сегодняшняя позиция — «'+(p.occupation||'—')+'»'+((p.currentIncome&&p.currentIncome!=='пока нет дохода')?(', доход '+p.currentIncome):'')+'. '+(p.satisfaction>=4?'Текущее дело в целом устраивает — значит, речь про рост и новый смысл, а не про бегство.':p.satisfaction<=2?'Радости от него мало — это честный сигнал к переменам.':'В нём есть и плюсы, и усталость — самое время осознанно выбрать вектор.')+'</div>';
@@ -797,7 +798,7 @@ async function enhanceWithAI(payload){
   if(!AI_ENDPOINT) return null;
   try{
     const ctrl=new AbortController();
-    const to=setTimeout(function(){ctrl.abort();},22000);
+    const to=setTimeout(function(){ctrl.abort();},55000);
     const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal});
     clearTimeout(to);
     if(!r.ok) return null;
@@ -816,7 +817,7 @@ function render(){
   backBtn.style.visibility=i===0?'hidden':'visible';
   let h='<div class="qcard"><div class="qkind">'+q.k+'</div><div class="qt">'+q.t+'</div>';
   if(q.type==='likert'){h+='<div class="likert">'+L.map(n=>'<button data-v="'+n+'">'+n+'</button>').join('')+'</div><div class="lbl"><span>Совсем не про меня</span><span>Точно про меня</span></div>';}
-  else if(q.type==='single'){h+='<div class="opts">'+q.options.map(o=>'<button class="opt" data-v="'+encodeURIComponent(o[1])+'">'+o[0]+'<span class="chk">✓</span></button>').join('')+'</div>';}
+  else if(q.type==='single'){h+='<div class="opts">'+q.options.map(o=>'<button class="opt" data-v="'+encodeURIComponent(o[1])+'">'+o[0]+'<span class="chk">✓</span></button>').join('')+'</div>';if(q.otherField){h+='<input id="otherinp" type="text" placeholder="Напишите, откуда именно" value="'+((ans[q.id+'_other']||'').replace(/"/g,'&quot;'))+'" style="display:'+(ans[q.id]==='другое'?'block':'none')+';margin-top:12px;width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit">';}}
   else if(q.type==='multi'){h+='<div class="chipwrap">'+q.options.map(o=>'<button class="chipb" data-v="'+encodeURIComponent(o)+'">'+o+'</button>').join('')+'</div><p class="hint">Можно выбрать '+(q.max>=99?'несколько':('до '+q.max))+'.</p>';}
   else if(q.type==='rank'){const cur=ans[q.id]||q.items.slice();ans[q.id]=cur;h+='<div class="rank">'+cur.map((it,idx)=>'<div class="ritem"><span class="num">'+(idx+1)+'</span><span class="nm">'+it+'</span><span class="arr"><button data-d="up">▲</button><button data-d="down">▼</button></span></div>').join('')+'</div><p class="hint">Стрелками ▲▼ поднимайте важное выше.</p>';}
   else if(q.type==='open'){h+='<textarea placeholder="Пара предложений...">'+(ans[q.id]||'')+'</textarea><p class="hint">Необязательно, но помогает сделать отчёт точнее.</p>';}
@@ -824,7 +825,7 @@ function render(){
 }
 function bind(q){
   if(q.type==='likert'){host.querySelectorAll('.likert button').forEach(bt=>{if(ans[q.id]==+bt.dataset.v)bt.classList.add('sel');bt.onclick=()=>{host.querySelectorAll('.likert button').forEach(x=>x.classList.remove('sel'));bt.classList.add('sel');ans[q.id]=+bt.dataset.v;syncNext(q);};});}
-  else if(q.type==='single'){host.querySelectorAll('.opt').forEach(bt=>{const val=decodeURIComponent(bt.dataset.v);if(ans[q.id]===val)bt.classList.add('sel');bt.onclick=()=>{host.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));bt.classList.add('sel');ans[q.id]=val;syncNext(q);};});}
+  else if(q.type==='single'){host.querySelectorAll('.opt').forEach(bt=>{const val=decodeURIComponent(bt.dataset.v);if(ans[q.id]===val)bt.classList.add('sel');bt.onclick=()=>{host.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));bt.classList.add('sel');ans[q.id]=val;if(q.otherField){var oi=host.querySelector('#otherinp');if(oi)oi.style.display=(val==='другое')?'block':'none';}syncNext(q);};});if(q.otherField){var oi2=host.querySelector('#otherinp');if(oi2)oi2.oninput=function(){ans[q.id+'_other']=oi2.value;};}}
   else if(q.type==='multi'){ans[q.id]=ans[q.id]||[];host.querySelectorAll('.chipb').forEach(bt=>{const val=decodeURIComponent(bt.dataset.v);if(ans[q.id].includes(val))bt.classList.add('sel');bt.onclick=()=>{const arr=ans[q.id];const k=arr.indexOf(val);if(k>=0){arr.splice(k,1);bt.classList.remove('sel');}else{if(arr.length>=q.max)return;arr.push(val);bt.classList.add('sel');}syncNext(q);};});}
   else if(q.type==='rank'){host.querySelectorAll('.ritem .arr button').forEach(btn=>{btn.onclick=()=>{const item=btn.closest('.ritem');const list=item.parentNode;const kids=[...list.children];const idx=kids.indexOf(item);if(btn.dataset.d==='up'&&idx>0)list.insertBefore(item,kids[idx-1]);if(btn.dataset.d==='down'&&idx<kids.length-1)list.insertBefore(kids[idx+1],item);ans[q.id]=[...list.children].map(c=>c.querySelector('.nm').textContent);[...list.children].forEach((c,n)=>c.querySelector('.num').textContent=n+1);};});}
   else if(q.type==='open'){const ta=host.querySelector('textarea');ta.oninput=()=>{ans[q.id]=ta.value;};}
@@ -844,7 +845,7 @@ async function finish(){
   rep.innerHTML='<div class="cover"><div class="eyebrow">анализируем ваши ответы</div><h1>Собираем ваш разбор</h1><div class="loadbar"><div class="loadbar-fill" id="lbf"></div></div><p class="loadmsg" id="lbm">Читаем ваши ответы…</p><p class="muted" style="text-align:center;font-size:13px;margin-top:8px">Обычно занимает 10–20 секунд. Оставайтесь на этой странице.</p></div>';
   window.scrollTo({top:0,behavior:'smooth'});
   var _lp=0,_lmi=0,_lmsgs=['Читаем ваши ответы…','Считаем 12 систем личности…','Определяем сильные стороны…','Подбираем профессии под вас…','Рисуем вашу карточку личности…','Почти готово…'];
-  var _ltimer=setInterval(function(){var f=document.getElementById('lbf'),m=document.getElementById('lbm');_lp+=Math.max(0.5,(93-_lp)*0.055);if(_lp>93)_lp=93;if(f)f.style.width=_lp.toFixed(1)+'%';var ix=Math.min(_lmsgs.length-1,Math.floor(_lp/16));if(ix!==_lmi){_lmi=ix;if(m)m.textContent=_lmsgs[ix];}},400);
+  var _ltimer=setInterval(function(){var f=document.getElementById('lbf'),m=document.getElementById('lbm');_lp+=Math.max(0.3,(96-_lp)*0.02);if(_lp>95)_lp=95;if(f)f.style.width=_lp.toFixed(1)+'%';var ix=Math.min(_lmsgs.length-1,Math.floor(_lp/16));if(ix!==_lmi){_lmi=ix;if(m)m.textContent=_lmsgs[ix];}},400);
   let ai=null;
   try{ if(AI_ENDPOINT && p){ ai=await enhanceWithAI(aiPayload(p)); } }catch(e){ ai=null; }
   clearInterval(_ltimer);

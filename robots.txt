@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://navigator-prof.ru/sitemap.xml

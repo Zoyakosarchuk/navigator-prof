@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://navigator-prof.ru/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://navigator-prof.ru/primer-start.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://navigator-prof.ru/primer-put.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://navigator-prof.ru/primer-povorot.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://navigator-prof.ru/blog.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-kak-vybrat-professiyu-podrostku.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-predmety-ege-professii.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-kak-ponyat-kem-stat.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-kuda-postupat.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-rebenok-ne-hochet-uchitsya.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-trevozhnost-vygoranie-podrostok.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-nuzhno-li-obrazovanie.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-smena-professii-posle-35.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-testy-na-proforientaciyu.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-big-five.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-riasec.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-via.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-tipy-intellekta.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-psihosofiya.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-cennosti.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-rabochiy-stil.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-motivaciya.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-ikigai.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-navyki-budushchego.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-klimov.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/blog-sistema-vygoranie.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://navigator-prof.ru/primer-start.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://navigator-prof.ru/primer-put.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://navigator-prof.ru/primer-povorot.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://navigator-prof.ru/oferta.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://navigator-prof.ru/politika.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://navigator-prof.ru/soglasie.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>

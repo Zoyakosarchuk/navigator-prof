@@ -203,7 +203,21 @@
 <div class="stage" id="stage">
   <div class="top"><a href="index.html" style="text-decoration:none;color:inherit"><div class="brand">Навигатор<span class="dot">.</span>будущего</div></a><div>Трек «Путь» · 20–35</div></div>
 
-  <div id="test">
+  
+  <div id="welcome" style="max-width:620px;margin:0 auto;padding-top:6px">
+    <div style="background:#fff;border:1px solid var(--line);border-radius:22px;padding:34px 30px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 44px rgba(0,0,0,.07)">
+      <div style="font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700">Трек «Путь» · 20–35</div>
+      <h1 style="font-size:28px;line-height:1.15;letter-spacing:-.02em;margin:10px 0 12px">Добро пожаловать в исследование</h1>
+      <p style="font-size:17px;color:var(--muted);margin:0 0 18px">Благодарим вас за доверие. Перед стартом — три простые вещи, от которых напрямую зависит, насколько точным получится ваш разбор.</p>
+      <div style="display:flex;gap:12px;align-items:flex-start;margin:15px 0"><div style="color:var(--accent);font-weight:800;font-size:17px;line-height:1.5">✦</div><p style="margin:0;font-size:15.5px">Отвечайте не задумываясь. <span style="color:var(--muted);font-size:14px">Первое, что приходит в голову, — и есть ваш верный ответ.</span></p></div><div style="display:flex;gap:12px;align-items:flex-start;margin:15px 0"><div style="color:var(--accent);font-weight:800;font-size:17px;line-height:1.5">✦</div><p style="margin:0;font-size:15.5px">Будьте честны с собой. <span style="color:var(--muted);font-size:14px">Результат теста напрямую зависит от ваших ответов — чем искреннее, тем точнее.</span></p></div><div style="display:flex;gap:12px;align-items:flex-start;margin:15px 0"><div style="color:var(--accent);font-weight:800;font-size:17px;line-height:1.5">✦</div><p style="margin:0;font-size:15.5px">Выделите 15 минут и не отвлекайтесь. <span style="color:var(--muted);font-size:14px">Спокойная обстановка помогает услышать себя.</span></p></div>
+      <div style="height:1px;background:var(--line);margin:22px 0"></div>
+      <p style="font-size:15.5px;color:var(--muted);margin:0 0 8px">Здесь нет верных и неверных ответов. Готовы?</p>
+      <button class="btn accent" style="display:block;width:100%;padding:16px;font-size:17px;border-radius:14px;margin-top:8px;cursor:pointer" onclick="document.getElementById('welcome').style.display='none';document.getElementById('test').style.display='';window.scrollTo({top:0,behavior:'smooth'});">Начать тест →</button>
+      <p style="text-align:center;font-size:12.5px;color:var(--muted);margin:12px 0 0">Совет: пройдите тест за один заход, не закрывая страницу.</p>
+    </div>
+  </div>
+
+  <div id="test" style="display:none">
     <div class="progress"><i id="pbar"></i></div>
     <div class="meta"><span id="block"></span><span id="counter"></span></div>
     <div id="qhost"></div>
@@ -619,7 +633,7 @@ function buildReport(p,a,ai){
   // АРХЕТИП (Юнг)
   const a12=archetype12(p),A12=ARCH12[a12.top],A12b=ARCH12[a12.second]||A12,mt=mbtiType(b),MT=MBTI[mt];
   h+='<div class="arch"><div class="archtag">ваш архетип</div><h2 class="archname">'+a12.top+'</h2><div class="archsub">'+A12.tag+'</div><p>'+A12.d+'</p><div class="archrow"><div><b>Суперсила:</b> '+A12.power+'</div><div><b>Теневая сторона:</b> '+A12.shadow+'</div></div><h3>Как применить в жизни и работе</h3><p>'+A12.use+'</p><h3>Что вам подходит</h3><p>'+A12.fit+'.</p><h3>Ваш тип по MBTI: '+mt+' — '+MT.n+'</h3><p>'+MT.d+'</p><p><b style="color:#8a8aff">Что с этим делать:</b> '+MT.use+'</p><div class="arch2"><div class="archtag">второй ведущий архетип</div><h3 class="archname2">'+a12.second+'</h3><div class="archsub">'+(A12b.tag||'')+'</div><p>'+((ai&&ai.archetype2)?esc(ai.archetype2):(A12b.d||''))+'</p><p><b style="color:#8a8aff">Как сочетается с главным.</b> В вас соединяются '+a12.top+' и '+a12.second+': '+(A12b.power||'вторая грань')+' поддерживает вашу главную суперсилу. Такое сочетание даёт объём, которого нет у людей с одним ярким архетипом — и это ваше отличие.</p></div></div>';
-  if(ai&&ai.card_image){ h+='<div class="pcard"><div class="pcardtag">ваша карточка личности</div><img src="'+esc(ai.card_image)+'" alt="Карточка личности — '+esc(a12.top)+'"><p class="muted" style="margin:12px 0 0;font-size:13px">Сохраните и поделитесь — это ваш архетип «'+a12.top+'».</p><a class="btn ghost dlimg" href="'+esc(ai.card_image)+'" download="navigator-kartochka.jpg">⬇ Скачать картинку</a></div>'; }
+  if(ai&&ai.card_image){ h+=cardHTML(ai.card_image,a12.top); } else if(ai){ h+='<div class="pcard" id="cardslot" data-top="'+esc(a12.top)+'"><div class="pcardtag">ваша карточка личности</div><p class="muted" style="margin:6px 0 0;font-size:13px">рисуем вашу карточку… ✦</p></div>'; }
   // ПОРТРЕТ ЛИЧНОСТИ (богатый)
   const HOOK={R:'Есть люди-теоретики, а есть те, кто берёт и делает. Вы из вторых',I:'Есть люди-исполнители, а есть люди-вопросы. Вы из вторых',A:'Есть люди, которые повторяют, и есть те, кто создаёт своё. Вы из вторых',S:'Есть люди, которые только берут, и есть те, кто отдаёт и делает других сильнее. Вы из вторых',E:'Есть люди, которые ждут, и есть те, кто ведёт и запускает. Вы из вторых',C:'Есть люди, которые ищут бурю, и есть те, на ком держится тихая суша. Вы из вторых'};
   h+='<div class="sec-num">Портрет личности</div><h2>'+title+'</h2>';
@@ -806,12 +820,32 @@ async function enhanceWithAI(payload){
   if(!AI_ENDPOINT) return null;
   try{
     const ctrl=new AbortController();
-    const to=setTimeout(function(){ctrl.abort();},55000);
+    const to=setTimeout(function(){ctrl.abort();},70000);
     const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal});
     clearTimeout(to);
     if(!r.ok) return null;
     return await r.json();  // {portrait, strengths_text, scenarios:[{prob,title,text}]}
   }catch(e){ return null; }
+}
+
+function cardHTML(src,top){return '<div class="pcard"><div class="pcardtag">ваша карточка личности</div><img src="'+src+'" alt="Карточка личности — '+esc(top)+'"><p class="muted" style="margin:12px 0 0;font-size:13px">Сохраните и поделитесь — это ваш архетип «'+top+'».</p><a class="btn ghost dlimg" href="'+src+'" download="navigator-kartochka.jpg">⬇ Скачать картинку</a></div>';}
+function injectCard(src){var slot=document.getElementById('cardslot');if(!slot||!src)return;slot.outerHTML=cardHTML(src,slot.getAttribute('data-top')||'');}
+async function startCardImage(payload){
+  if(!AI_ENDPOINT)return; var slot=document.getElementById('cardslot'); if(!slot)return;
+  try{
+    var s=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:'image_submit'}))});
+    if(!s.ok){slot.remove();return;}
+    var sd=await s.json(); var opId=sd.opId; if(!opId){slot.remove();return;}
+    for(var k=0;k<40;k++){
+      await new Promise(function(r){setTimeout(r,3000);});
+      var pr=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'image_poll',opId:opId})});
+      if(!pr.ok)continue;
+      var pd=await pr.json();
+      if(pd.card_image){injectCard(pd.card_image);return;}
+      if(pd.done)break;
+    }
+  }catch(e){}
+  var s2=document.getElementById('cardslot'); if(s2)s2.remove();
 }
 
 // ===== ДВИЖОК ТЕСТА =====
@@ -860,6 +894,7 @@ async function finish(){
   try{
     rep.innerHTML=buildReport(p,ans,ai);
     wireSearch(p);
+    if(ai&&p&&AI_ENDPOINT){ startCardImage(aiPayload(p)); }
   }catch(e){
     try{ rep.innerHTML=buildReport(p,ans,null); wireSearch(p); }
     catch(e2){ rep.innerHTML='<div class="cover"><h1>Секунду…</h1><p class="muted" style="text-align:center">Отчёт почти собран. Нажмите кнопку ниже — он появится.</p><button class="btn accent" style="display:block;margin:18px auto" onclick="finish()">Показать отчёт</button></div>'; }

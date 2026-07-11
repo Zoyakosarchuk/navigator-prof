@@ -30,6 +30,14 @@ h1{font-size:29px;line-height:1.15;letter-spacing:-.02em;margin:10px 0 10px}
 .mini{text-align:center;font-size:12.5px;color:var(--muted);margin:12px 0 0}
 .back{display:inline-block;margin-top:20px;font-size:14px;color:var(--accent);text-decoration:none}
 .divider{height:1px;background:var(--line);margin:24px 0}
+.agree{margin:22px 0 6px;text-align:left}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:14px;color:var(--ink);cursor:pointer}
+.chk input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:none;cursor:pointer}
+.chk a{color:var(--accent)}
+.cta.disabled{opacity:.5;filter:grayscale(.25);cursor:not-allowed}
+.warn{display:none;color:#c0392b;font-size:13px;text-align:center;margin:8px 0 0}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -59,8 +67,20 @@ h1{font-size:29px;line-height:1.15;letter-spacing:-.02em;margin:10px 0 10px}
   <div class="step"><div class="n">2</div><div><b>Тест — 55 вопросов, около 15 минут</b><p>Спокойно, по одному вопросу. Ничего скачивать и устанавливать не нужно.</p></div></div>
   <div class="step"><div class="n">3</div><div><b>Ваш персональный разбор</b><p>Портрет по 12 методикам и подходящие профессии. Обязательно скачайте PDF и попробуйте умный поиск профессий в конце отчёта — это самое интересное.</p></div></div>
   <div class="trust"><span>🔒 Серверы в РФ</span><span>🙈 Анонимно</span><span>⚡ Доступ сразу</span></div>
-  <a class="cta" href="https://payform.ru/pmbXRhd/">Перейти к оплате — 1399 ₽ →</a>
-  <p class="mini">Оплата откроется на защищённой странице Продамуса.</p>
+  <div class="agree">
+    <label class="chk"><input type="checkbox" id="a1"><span>Я принимаю условия <a href="/oferta.html" target="_blank">Публичной оферты</a> и <a href="/politika.html" target="_blank">Политики конфиденциальности</a>.</span></label>
+    <label class="chk"><input type="checkbox" id="a2"><span>Я даю <a href="/soglasie.html" target="_blank">согласие на обработку персональных данных</a>.</span></label>
+  </div>
+  <a class="cta disabled" id="paybtn" href="https://payform.ru/pmbXRhd/" aria-disabled="true">Перейти к оплате — 1399 ₽ →</a>
+  <p id="agwarn" class="warn">Отметьте оба согласия, чтобы продолжить.</p>
+  <p class="mini">Нажимая «Перейти к оплате», вы подтверждаете согласие с указанными документами. Оплата откроется на защищённой странице Продамуса.</p>
+  <script>
+  (function(){var a1=document.getElementById("a1"),a2=document.getElementById("a2"),b=document.getElementById("paybtn"),w=document.getElementById("agwarn");
+  function upd(){var ok=a1.checked&&a2.checked;b.classList.toggle("disabled",!ok);b.setAttribute("aria-disabled",String(!ok));if(ok)w.style.display="none";}
+  a1.addEventListener("change",upd);a2.addEventListener("change",upd);
+  b.addEventListener("click",function(e){if(!(a1.checked&&a2.checked)){e.preventDefault();w.style.display="block";b.classList.add("shake");setTimeout(function(){b.classList.remove("shake");},500);}});
+  upd();})();
+  </script>
   <a class="back" href="/">← Вернуться на главную</a>
 </div>
 </div>

@@ -40,6 +40,16 @@
   .earn .box.hot{background:linear-gradient(120deg,var(--accent),var(--accent2))}
   .earn .box.hot .big{color:#fff}
   .earn .box.hot .cap{color:#eef0ff}
+  .calc .clbl{display:block;font-size:15.5px;margin-bottom:8px}
+  .calc .clbl b{color:var(--accent);font-size:18px}
+  .calc input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;margin:4px 0 18px;height:6px}
+  .calcout{display:flex;gap:16px;flex-wrap:wrap}
+  .calcout .cbox{flex:1;min-width:180px;text-align:center;background:var(--green-soft);border-radius:14px;padding:20px 14px}
+  .calcout .cbox.hot{background:linear-gradient(120deg,var(--accent),var(--accent2))}
+  .calcout .cnum{font-size:30px;font-weight:750;color:var(--green)}
+  .calcout .cbox.hot .cnum{color:#fff}
+  .calcout .cc{font-size:13px;color:var(--muted)}
+  .calcout .cbox.hot .cc{color:#eef0ff}
   ul{padding-left:22px}li{margin:7px 0}
   .who{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin:0}
   @media(max-width:680px){.who{grid-template-columns:1fr}}
@@ -86,7 +96,7 @@
     <div class="steps">
       <div class="step"><div class="n">1</div><b>Вы оставляете заявку</b><p>Пишете нам — мы выдаём вам персональный промокод и ссылку с вашей меткой.</p></div>
       <div class="step"><div class="n">2</div><b>Рекомендуете тест</b><p>Своим клиентам, подписчикам, ученикам, родителям. По промокоду им скидка 10%.</p></div>
-      <div class="step"><div class="n">3</div><b>Получаете 25%</b><p>С каждой оплаты по вашей ссылке. Выплата по факту, вперёд вкладывать ничего не нужно.</p></div>
+      <div class="step"><div class="n">3</div><b>Получаете 25%</b><p>С каждой оплаты по вашей ссылке. Выплаты еженедельно, по пятницам. Вперёд вкладывать ничего не нужно.</p></div>
     </div>
   </div>
 
@@ -101,6 +111,26 @@
     </div>
     <p class="mini">Расчёт прозрачный: клиент платит 1259 ₽ (−10% по промокоду), ваши 25% ≈ 315 ₽ с продажи. У партнёра с большой аудиторией сотни рекомендаций в месяц — это уже серьёзный доход без вложений и без потолка.</p>
   </div>
+
+  <h2>Прикиньте свой доход</h2>
+  <div class="card calc">
+    <label class="clbl" for="cr">Продаж по вашей ссылке в месяц: <b id="cv">100</b></label>
+    <input id="cr" type="range" min="0" max="1000000" step="10" value="100">
+    <div class="calcout">
+      <div class="cbox"><div class="cnum" id="cmonth">31 500 ₽</div><div class="cc">ваш доход в месяц</div></div>
+      <div class="cbox hot"><div class="cnum" id="cweek">≈7 326 ₽</div><div class="cc">выплата каждую пятницу</div></div>
+    </div>
+    <p class="mini">Двигайте ползунок. Расчёт от 25% с оплаты (≈315 ₽ с продажи). <b>Выплаты — еженедельно, по пятницам</b>, по факту продаж.</p>
+  </div>
+  <script>
+  (function(){
+    var per=315, r=document.getElementById('cr'), v=document.getElementById('cv'),
+        m=document.getElementById('cmonth'), w=document.getElementById('cweek');
+    function fmt(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';}
+    function upd(){var s=+r.value; v.textContent=s; var mo=s*per; m.textContent=fmt(mo); w.textContent='≈'+fmt(mo/4.3);}
+    r.addEventListener('input',upd); upd();
+  })();
+  </script>
 
   <h2>Кому это подходит</h2>
   <div class="card">
@@ -121,7 +151,7 @@
       <li><b>Спокойно с данными.</b> Анонимно, без регистрации, ответы стираются после отчёта, серверы в РФ. Для работы с семьями это снимает половину вопросов.</li>
       <li><b>Реальная польза.</b> Человек получает персональный разбор по 12 методикам, подходящие профессии и план — а не просто «тест ради теста».</li>
     </ul>
-    <div class="trust"><span>🔒 Серверы в РФ</span><span>🙈 Анонимно</span><span>⚡ Доступ сразу после оплаты</span><span>📄 PDF-отчёт</span></div>
+    <div class="trust"><span>🔒 Серверы в РФ</span><span>🙈 Анонимно</span><span>⚡ Доступ сразу после оплаты</span><span>📄 PDF-отчёт</span><span>🗓 Выплаты по пятницам</span></div>
   </div>
 
   <h2>Наши партнёры</h2>

@@ -665,7 +665,7 @@ function buildReport(p,a,ai){
   // АРХЕТИП (Юнг)
   const a12=archetype12(p),A12=ARCH12[a12.top],A12b=ARCH12[a12.second]||A12,mt=mbtiType(b),MT=MBTI[mt];
   h+='<div class="arch"><div class="archtag">ваш архетип</div><h2 class="archname">'+a12.top+'</h2><div class="archsub">'+A12.tag+'</div><p>'+A12.d+'</p><div class="archrow"><div><b>Суперсила:</b> '+A12.power+'</div><div><b>Теневая сторона:</b> '+A12.shadow+'</div></div><h3>Как применить в жизни и работе</h3><p>'+A12.use+'</p><h3>Что вам подходит</h3><p>'+A12.fit+'.</p><h3>Ваш тип по MBTI: '+mt+' — '+MT.n+'</h3><p>'+MT.d+'</p><p><b style="color:#8a8aff">Что с этим делать:</b> '+MT.use+'</p><div class="arch2"><div class="archtag">второй ведущий архетип</div><h3 class="archname2">'+a12.second+'</h3><div class="archsub">'+(A12b.tag||'')+'</div><p>'+((ai&&ai.archetype2)?esc(ai.archetype2):(A12b.d||''))+'</p><p><b style="color:#8a8aff">Как сочетается с главным.</b> В вас соединяются '+a12.top+' и '+a12.second+': '+(A12b.power||'вторая грань')+' поддерживает вашу главную суперсилу. Такое сочетание даёт объём, которого нет у людей с одним ярким архетипом — и это ваше отличие.</p></div></div>';
-  if(ai&&ai.card_image){ h+=cardHTML(ai.card_image,a12.top); } else if(ai){ h+='<div class="pcard" id="cardslot" data-top="'+esc(a12.top)+'"><div class="pcardtag">ваша карточка личности</div><p class="muted" style="margin:6px 0 0;font-size:13px">рисуем вашу карточку… ✦</p></div>'; }
+  if(ai&&ai.card_image){ h+=cardHTML(ai.card_image,a12.top); } else { h+='<div class="pcard" id="cardslot" data-top="'+esc(a12.top)+'"><div class="pcardtag">ваша карточка личности</div><p class="muted" style="margin:6px 0 0;font-size:13px">рисуем вашу карточку… ✦</p></div>'; }
   // ПОРТРЕТ ЛИЧНОСТИ (богатый)
   const HOOK={R:'Есть люди-теоретики, а есть те, кто берёт и делает. Вы из вторых',I:'Есть люди-исполнители, а есть люди-вопросы. Вы из вторых',A:'Есть люди, которые повторяют, и есть те, кто создаёт своё. Вы из вторых',S:'Есть люди, которые только берут, и есть те, кто отдаёт и делает других сильнее. Вы из вторых',E:'Есть люди, которые ждут, и есть те, кто ведёт и запускает. Вы из вторых',C:'Есть люди, которые ищут бурю, и есть те, на ком держится тихая суша. Вы из вторых'};
   h+='<div class="sec-num">Портрет личности</div><h2>'+title+'</h2>';
@@ -951,7 +951,7 @@ async function finish(){
   try{
     rep.innerHTML=buildReport(p,ans,ai);
     wireSearch(p);
-    if(ai&&p&&AI_ENDPOINT){ startCardImage(aiPayload(p)); }
+    if(p&&AI_ENDPOINT){ startCardImage(aiPayload(p)); }
   }catch(e){
     try{ rep.innerHTML=buildReport(p,ans,null); wireSearch(p); }
     catch(e2){ rep.innerHTML='<div class="cover"><h1>Секунду…</h1><p class="muted" style="text-align:center">Отчёт почти собран. Нажми кнопку ниже — он появится.</p><button class="btn accent" style="display:block;margin:18px auto" onclick="finish()">Показать отчёт</button></div>'; }

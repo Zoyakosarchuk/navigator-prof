@@ -208,7 +208,22 @@
   <div class="top"><a href="index.html" style="text-decoration:none;color:inherit"><div class="brand">Навигатор<span class="dot">.</span>будущего</div></a><div>Трек «Поворот» · 35+</div></div>
 
   
-  <div id="test">
+  <div id="welcome" style="max-width:620px;margin:6px auto 0">
+    <div style="background:#fff;border:1px solid #e7e7ea;border-radius:22px;padding:32px 28px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 44px rgba(0,0,0,.07)">
+      <div style="font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#5b6cff;font-weight:700">Поворот · 35+</div>
+      <h1 style="font-size:29px;line-height:1.15;letter-spacing:-.02em;margin:10px 0;color:#2a2140">Добро пожаловать в исследование</h1>
+      <p style="font-size:17px;color:#6e6e73;margin:0 0 22px">Благодарим вас за доверие. Перед стартом — три простые вещи, от которых напрямую зависит, насколько точным получится ваш разбор.</p>
+      <div style="display:flex;gap:12px;align-items:flex-start;margin:15px 0"><div style="color:#5b6cff;font-weight:800;flex:none;font-size:17px;line-height:1.5">✦</div><p style="margin:0;font-size:15.5px;color:#2a2140">Отвечайте не задумываясь. <span style="color:#6e6e73;font-size:14px">Первое, что приходит в голову, — и есть ваш верный ответ.</span></p></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;margin:15px 0"><div style="color:#5b6cff;font-weight:800;flex:none;font-size:17px;line-height:1.5">✦</div><p style="margin:0;font-size:15.5px;color:#2a2140">Будьте честны с собой. <span style="color:#6e6e73;font-size:14px">Результат теста напрямую зависит от ваших ответов — чем искреннее, тем точнее разбор.</span></p></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;margin:15px 0"><div style="color:#5b6cff;font-weight:800;flex:none;font-size:17px;line-height:1.5">✦</div><p style="margin:0;font-size:15.5px;color:#2a2140">Выделите 15 минут и не отвлекайтесь. <span style="color:#6e6e73;font-size:14px">Спокойная обстановка помогает услышать себя.</span></p></div>
+      <div style="height:1px;background:#e7e7ea;margin:24px 0"></div>
+      <p style="font-size:15.5px;color:#6e6e73;margin:0 0 12px">Здесь нет верных и неверных ответов. Готовы?</p>
+      <button type="button" onclick="document.getElementById('welcome').style.display='none';document.getElementById('test').style.display='block';window.scrollTo(0,0);" style="display:block;width:100%;text-align:center;background:linear-gradient(120deg,#5b6cff,#8a5bff);color:#fff;font-weight:700;font-size:17px;border:none;cursor:pointer;padding:16px;border-radius:14px;margin-top:4px">Начать тест →</button>
+      <p style="text-align:center;font-size:12.5px;color:#6e6e73;margin:12px 0 0">Совет: пройдите тест за один заход, не закрывая страницу.</p>
+    </div>
+  </div>
+
+  <div id="test" style="display:none">
     <div class="progress"><i id="pbar"></i></div>
     <div class="meta"><span id="block"></span><span id="counter"></span></div>
     <div id="qhost"></div>

@@ -46,7 +46,8 @@
   .hero p{font-size:19px;color:var(--muted);max-width:560px;margin:6px auto 0}
   .hero .promise{font-size:15px;color:var(--muted);margin-top:18px}
   .ages{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:44px 0 10px}
-  @media(max-width:720px){.ages{grid-template-columns:1fr}}
+  .ages .delo{grid-column:2}
+  @media(max-width:720px){.ages{grid-template-columns:1fr}.ages .delo{grid-column:auto}}
   .agecard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;cursor:pointer;text-align:left;transition:.2s;box-shadow:var(--shadow);user-select:none;display:flex;flex-direction:column}
   .agecard:hover{transform:translateY(-4px);border-color:var(--accent)}
   .agecard:active{transform:translateY(-1px)}
@@ -371,7 +372,7 @@
         <div class="agecard" data-go="pered-oplatoy-start.html"><div class="age">14–19</div><div class="tag">Старт</div><div class="desc">Таланты, выбор ВУЗа и направления, упор на нужные предметы.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
         <div class="agecard" data-go="pered-oplatoy-put.html"><div class="age">20–35</div><div class="tag">Путь</div><div class="desc">Поиск своего направления, смена профессии, рост.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
         <div class="agecard" data-go="pered-oplatoy-povorot.html"><div class="age">35+</div><div class="tag">Поворот</div><div class="desc">Выгорание, новый смысл, своё дело, второй старт.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
-        <div class="agecard" data-go="pered-oplatoy-delo.html"><div class="age" style="font-size:24px;letter-spacing:-.01em;line-height:1.1">Своё дело</div><div class="tag">предпринимателю</div><div class="desc">Тип основателя, ниши под вас с разбором рисков и план запуска.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
+        <div class="agecard delo" data-go="pered-oplatoy-delo.html"><div class="age" style="font-size:24px;letter-spacing:-.01em;line-height:1.1">Своё дело</div><div class="tag">предпринимателю</div><div class="desc">Тип основателя, ниши под вас с разбором рисков и план запуска.</div><div class="paypill">Пройти за 1399 ₽ →</div></div>
       </div>
       <div class="trust">
         <span>🇷🇺 РФ сервер</span>

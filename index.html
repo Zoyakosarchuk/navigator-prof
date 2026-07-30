@@ -743,5 +743,35 @@
   }
 })();
 </script>
+
+<!-- ===== Exit-intent попап: лид-магнит ===== -->
+<div id="npExit" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(30,25,50,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;max-width:460px;width:100%;border-radius:22px;padding:34px 30px;text-align:center;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.3);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif">
+    <button id="npExitClose" aria-label="Закрыть" style="position:absolute;top:14px;right:16px;border:none;background:none;font-size:26px;line-height:1;color:#9a9aa6;cursor:pointer">&times;</button>
+    <div style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#5b6cff;font-weight:700">3 гайда на выбор · бесплатно</div>
+    <h2 style="font-size:25px;line-height:1.2;letter-spacing:-.02em;color:#20233a;margin:10px 0 6px">Уходите? Заберите гайд</h2>
+    <p style="font-size:15.5px;color:#5a5a70;margin:0 0 18px">Коротко и по делу. Выберите, что ближе:</p>
+    <a href="/lp-gayd-roditelyu.html" style="display:block;text-align:left;text-decoration:none;background:#f4f5ff;border:1.5px solid #e7e7ea;border-radius:14px;padding:13px 16px;margin-bottom:10px"><b style="color:#20233a;font-size:15.5px">Родителям</b><br><span style="color:#5a5a70;font-size:13px">Как помочь подростку выбрать профессию — 5 шагов</span></a>
+    <a href="/lp-gayd-professii.html" style="display:block;text-align:left;text-decoration:none;background:#f4f5ff;border:1.5px solid #e7e7ea;border-radius:14px;padding:13px 16px;margin-bottom:10px"><b style="color:#20233a;font-size:15.5px">Профессии будущего</b><br><span style="color:#5a5a70;font-size:13px">Куда идти и что не заберёт искусственный интеллект</span></a>
+    <a href="/lp-gayd-podrostku.html" style="display:block;text-align:left;text-decoration:none;background:#f4f5ff;border:1.5px solid #e7e7ea;border-radius:14px;padding:13px 16px;margin-bottom:6px"><b style="color:#20233a;font-size:15.5px">Подростку</b><br><span style="color:#5a5a70;font-size:13px">Не знаешь, кем стать? Разберись за 10 минут</span></a>
+    <button id="npExitNo" style="margin-top:10px;border:none;background:none;color:#9a9aa6;font-size:13px;cursor:pointer">Нет, спасибо</button>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='np_exit_shown';
+  var box=document.getElementById('npExit');
+  if(!box) return;
+  function shown(){try{return sessionStorage.getItem(KEY)==='1';}catch(e){return window.__npExit;}}
+  function mark(){try{sessionStorage.setItem(KEY,'1');}catch(e){window.__npExit=true;}}
+  function open(){ if(shown())return; box.style.display='flex'; mark(); try{if(window.ym)ym(110509461,'reachGoal','exit_popup');}catch(_){}}
+  function close(){ box.style.display='none'; }
+  document.addEventListener('mouseout',function(e){ if(!e.relatedTarget && e.clientY<=0){ open(); } });
+  setTimeout(function(){ if(!shown()) open(); }, 45000); // подстраховка для мобильных
+  document.getElementById('npExitClose').addEventListener('click',close);
+  document.getElementById('npExitNo').addEventListener('click',close);
+  box.addEventListener('click',function(e){ if(e.target===box) close(); });
+})();
+</script>
 </body>
 </html>

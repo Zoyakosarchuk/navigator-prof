@@ -635,6 +635,7 @@ function buildBizReport(p,a,ai){
   function esc(s){return (''+(s==null?'':s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function card(t,body){return '<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:18px 20px;margin:0 0 14px"><h2 style="font-size:19px;margin:0 0 8px;color:#20233a">'+t+'</h2>'+body+'</div>';}
   var b=p.biz||{};
+  try{ window.__bizPayload=(typeof aiPayload==='function')?aiPayload(p):null; }catch(e){}
   var A={
     'визионер':['Визионер','Вы видите картину целиком и заражаете идеей. Сила — вдохновлять и задавать направление. Риск — распыляться и буксовать на рутине; рядом нужен человек-система.'],
     'эксперт':['Эксперт-ремесленник','Ваша сила — глубина в конкретном деле, люди платят за качество. Риск — уйти в перфекционизм и забыть про продажи и упаковку.'],
@@ -662,12 +663,11 @@ function buildBizReport(p,a,ai){
   else {verdict='Сначала подготовьте базу'+(gaps.length?' — '+gaps.slice(0,2).join(', '):'')+'. Это снизит риск и нервы на старте.';vcol='#d9534f';}
   var strengths=(p.strengths||[]).slice(0,3);
   var ideaTxt=(b.идея_есть&&(''+b.идея_есть).indexOf('нет')<0&&b.идея)?esc(b.идея):'';
-  var h='<div style="max-width:720px;margin:0 auto">';
-  h+='<div style="font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#5b6cff;font-weight:700">Своё дело · ваш разбор</div>';
+  var h='<div style="max-width:720px;margin:40px auto 0;border-top:2px solid #eef0ff;padding-top:26px">';
+  h+='<div style="font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#5b6cff;font-weight:700">Что это значит для вашего дела</div>';
   h+='<h1 style="font-size:30px;letter-spacing:-.02em;margin:6px 0 18px;color:#20233a">Тип основателя: '+esc(arch[0])+'</h1>';
-  h+=card('Кто вы в деле','<p style="margin:0">'+esc(arch[1])+'</p>'+(ai&&ai.архетип?'<p style="margin:10px 0 0">'+esc(ai.архетип)+'</p>':''));
-  h+=card('Ваши опоры как предпринимателя','<ul style="margin:0;padding-left:20px">'+strengths.map(function(s){return '<li style="margin:5px 0">'+esc(s)+'</li>';}).join('')+'</ul>'+(ai&&ai.сильные_предприниматель?'<p style="margin:10px 0 0;color:#5a5a70">'+esc([].concat(ai.сильные_предприниматель).join('; '))+'</p>':''));
-  h+=card('Ваша модель бизнеса: '+esc(model[0]),'<p style="margin:0">'+esc(model[1])+'</p>'+(ai&&ai.модель_комментарий?'<p style="margin:10px 0 0">'+esc(ai.модель_комментарий)+'</p>':''));
+  h+=card('Кто вы в деле','<p style="margin:0">'+esc(arch[1])+'</p>');
+  h+=card('Ваша модель бизнеса: '+esc(model[0]),'<p style="margin:0">'+esc(model[1])+'</p>');
   h+='<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:20px 22px;margin:0 0 14px">';
   h+='<h2 style="font-size:19px;margin:0 0 10px;color:#20233a">Готовность к запуску</h2>';
   h+='<div style="background:#eef0ff;border-radius:999px;height:12px;overflow:hidden;margin:0 0 8px"><div style="height:12px;width:'+pc+'%;background:'+vcol+'"></div></div>';
@@ -675,20 +675,7 @@ function buildBizReport(p,a,ai){
   h+='<p style="margin:0;color:#20233a">'+esc(verdict)+'</p>'+(ai&&ai.готовность_комментарий?'<p style="margin:10px 0 0;color:#5a5a70">'+esc(ai.готовность_комментарий)+'</p>':'');
   h+='</div>';
   h+='<h2 style="font-size:22px;margin:26px 0 12px;color:#20233a">Ниши под вас</h2>';
-  if(ai&&Array.isArray(ai.ниши)&&ai.ниши.length){
-    ai.ниши.forEach(function(n){
-      h+='<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:18px 20px;margin:0 0 12px">';
-      h+='<h3 style="font-size:18px;margin:0 0 4px;color:#5b6cff">'+esc(n['название']||'')+'</h3>';
-      if(n['суть'])h+='<p style="margin:0 0 10px;color:#20233a">'+esc(n['суть'])+'</p>';
-      var sw=n['свот']||{};
-      function rw(l,v,c){return v?('<tr><td style="padding:5px 8px;font-weight:700;color:'+c+';width:34%;vertical-align:top">'+l+'</td><td style="padding:5px 8px;color:#20233a">'+esc(v)+'</td></tr>'):'';}
-      h+='<table style="width:100%;border-collapse:collapse;font-size:14px;background:#f7f7fb;border-radius:10px">'+rw('Сильные',sw['сильные'],'#1f9d62')+rw('Слабые',sw['слабые'],'#c98a00')+rw('Возможности',sw['возможности'],'#5b6cff')+rw('Риски',sw['риски'],'#d9534f')+rw('Запасной ход',sw['запасной_ход'],'#20233a')+'</table></div>';
-    });
-  } else {
-    h+='<div style="background:#eef0ff;border:1px dashed #8a5bff;border-radius:16px;padding:18px 20px;margin:0 0 12px">';
-    h+='<p style="margin:0 0 8px;color:#20233a">Ваши ниши складываются на пересечении: <b>'+esc(strengths.join(', '))+'</b> × <b>'+esc(model[0])+'</b>'+(ideaTxt?' × <b>ваша идея: '+ideaTxt+'</b>':'')+'.</p>';
-    h+='<p style="margin:0;color:#5a5a70">ИИ подберёт 3–5 конкретных ниш с разбором сильные / слабые / возможности / риски. Если блок пустой — идёт подбор, обновите страницу через минуту.</p></div>';
-  }
+  h+='<div id="bizNiches"><div style="background:#eef0ff;border:1px dashed #8a5bff;border-radius:16px;padding:18px 20px;margin:0 0 12px;color:#5a5a70">ИИ подбирает 3–5 ниш под вас с честным разбором рисков… Это займёт до минуты, ничего обновлять не нужно.</div></div>';
   var plan=(ai&&Array.isArray(ai.план_90)&&ai.план_90.length)?ai.план_90:[
     (ideaTxt?'Проверьте свою идею: поговорите с 8–10 потенциальными клиентами и соберите их реальные боли.':'Выберите одну нишу из списка и поговорите с 8–10 людьми из неё — соберите реальные боли.'),
     'Соберите минимальное предложение и сделайте первую платную продажу — пусть маленькую.',
@@ -696,15 +683,49 @@ function buildBizReport(p,a,ai){
   ];
   h+='<h2 style="font-size:22px;margin:26px 0 12px;color:#20233a">План на первые 90 дней</h2>';
   h+='<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:18px 20px;margin:0 0 14px"><ol style="margin:0;padding-left:22px">'+plan.map(function(s){return '<li style="margin:8px 0">'+esc(s)+'</li>';}).join('')+'</ol></div>';
-  h+='<div style="background:linear-gradient(135deg,#5b6cff,#8a5bff);color:#fff;border-radius:18px;padding:24px;margin:24px 0 10px;text-align:center">';
-  h+='<h3 style="margin:0 0 6px;color:#fff;font-size:20px">Мини-бизнес-план под конкретную нишу</h3>';
-  h+='<p style="color:#eef0ff;margin:0 0 14px">ИИ развернёт: что продавать, кому, с чего начать и сколько нужно на старт.</p>';
-  h+='<button id="bizPlanBtn" onclick="this.textContent=\'Подключается на следующем шаге ✦\';this.disabled=true;" style="background:#fff;color:#5b6cff;font-weight:700;border:none;padding:13px 24px;border-radius:999px;font-size:16px;cursor:pointer">Собрать мини-план по нише →</button>';
-  h+='</div></div>';
+  h+='<p style="color:#5a5a70;font-size:14.5px;margin:22px 0 0;text-align:center">Под каждой нишей выше есть кнопка «Собрать мини-план» — ИИ развернёт, что продавать, кому, с чего начать и сколько нужно на старт.</p>';
+  h+='</div>';
   return h;
 }
+function bizEsc(s){return (''+(s==null?'':s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function bizNicheCard(n){
+  n=n||{}; var sw=n['свот']||{}; var nm=bizEsc(n['название']||'');
+  function rw(l,v,c){return v?('<tr><td style="padding:5px 8px;font-weight:700;color:'+c+';width:34%;vertical-align:top">'+l+'</td><td style="padding:5px 8px;color:#20233a">'+bizEsc(v)+'</td></tr>'):'';}
+  var h='<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:18px 20px;margin:0 0 12px">';
+  h+='<h3 style="font-size:18px;margin:0 0 4px;color:#5b6cff">'+nm+'</h3>';
+  if(n['суть'])h+='<p style="margin:0 0 10px;color:#20233a">'+bizEsc(n['суть'])+'</p>';
+  h+='<table style="width:100%;border-collapse:collapse;font-size:14px;background:#f7f7fb;border-radius:10px">'+rw('Сильные',sw['сильные'],'#1f9d62')+rw('Слабые',sw['слабые'],'#c98a00')+rw('Возможности',sw['возможности'],'#5b6cff')+rw('Риски',sw['риски'],'#d9534f')+rw('Запасной ход',sw['запасной_ход'],'#20233a')+'</table>';
+  h+='<button class="bizPlanBtn" data-niche="'+nm.replace(/"/g,'&quot;')+'" style="margin-top:12px;background:linear-gradient(120deg,#5b6cff,#8a5bff);color:#fff;font-weight:700;border:none;padding:11px 20px;border-radius:999px;font-size:14px;cursor:pointer">Собрать мини-план по этой нише →</button>';
+  h+='<div class="bizPlanHost" style="margin-top:12px"></div></div>';
+  return h;
+}
+function renderBizNiches(list){
+  var host=document.getElementById('bizNiches'); if(!host)return;
+  if(!list||!list.length){ host.innerHTML='<div style="background:#eef0ff;border:1px dashed #8a5bff;border-radius:16px;padding:18px 20px;color:#5a5a70">Ниши с первого раза подобрать не удалось. Обновите страницу — ИИ попробует снова.</div>'; return; }
+  host.innerHTML=list.map(bizNicheCard).join('');
+  Array.prototype.forEach.call(host.querySelectorAll('.bizPlanBtn'),function(btn){ btn.addEventListener('click',function(){ bizPlan(btn.getAttribute('data-niche'),btn); }); });
+}
+function fetchBizNiches(payload){
+  if(!AI_ENDPOINT||!payload)return;
+  fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:'biz_niches'}))})
+    .then(function(r){return r.json();}).then(function(d){ renderBizNiches(d&&d['ниши']); }).catch(function(){ renderBizNiches([]); });
+}
+function bizPlan(niche,btn){
+  var host=btn.parentNode.querySelector('.bizPlanHost'); var payload=window.__bizPayload;
+  if(!host||!payload||!AI_ENDPOINT)return;
+  btn.disabled=true; btn.textContent='Собираю мини-план…';
+  host.innerHTML='<p style="color:#5a5a70;margin:8px 0 0">ИИ разворачивает план…</p>';
+  fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:'biz_plan','ниша':niche}))})
+    .then(function(r){return r.json();}).then(function(d){
+      function sec(t,v){return v?('<p style="margin:0 0 8px"><b style="color:#5b6cff">'+t+':</b> '+bizEsc(v)+'</p>'):'';}
+      var h='<div style="background:#f4f5ff;border:1px solid #e7e7ea;border-radius:12px;padding:16px 18px">';
+      h+=sec('Что продавать',d['оффер'])+sec('Кому',d['клиент']);
+      if(Array.isArray(d['первые_шаги'])&&d['первые_шаги'].length){h+='<p style="margin:0 0 4px"><b style="color:#5b6cff">Первые шаги:</b></p><ol style="margin:0 0 8px;padding-left:20px">'+d['первые_шаги'].map(function(s){return '<li style="margin:4px 0">'+bizEsc(s)+'</li>';}).join('')+'</ol>';}
+      h+=sec('Деньги на старт',d['деньги'])+sec('Как проверить спрос',d['проверка'])+'</div>';
+      host.innerHTML=h; btn.textContent='Готово ✓';
+    }).catch(function(){ host.innerHTML='<p style="color:#d9534f;margin:8px 0 0">План собрать не получилось. Попробуйте ещё раз.</p>'; btn.disabled=false; btn.textContent='Собрать мини-план по этой нише →'; });
+}
 function buildReport(p,a,ai){
-  return buildBizReport(p,a,ai);
   const code=p.riasec.code, b=p.big5;
   const title=archetype(code,b);
   const m=matchProfs(code);
@@ -984,11 +1005,11 @@ async function finish(){
   try{ if(AI_ENDPOINT && p){ ai=await enhanceWithAI(aiPayload(p)); } }catch(e){ ai=null; }
   clearInterval(_ltimer);
   try{
-    rep.innerHTML=buildReport(p,ans,ai);
+    rep.innerHTML=buildReport(p,ans,ai)+buildBizReport(p,ans,ai);
     wireSearch(p);
-    if(p&&AI_ENDPOINT){ startCardImage(aiPayload(p)); }
+    if(p&&AI_ENDPOINT){ startCardImage(aiPayload(p)); fetchBizNiches(aiPayload(p)); }
   }catch(e){
-    try{ rep.innerHTML=buildReport(p,ans,null); wireSearch(p); }
+    try{ rep.innerHTML=buildReport(p,ans,null)+buildBizReport(p,ans,null); wireSearch(p); if(p&&AI_ENDPOINT){ fetchBizNiches(aiPayload(p)); } }
     catch(e2){ rep.innerHTML='<div class="cover"><h1>Секунду…</h1><p class="muted" style="text-align:center">Отчёт почти собран. Нажмите кнопку ниже — он появится.</p><button class="btn accent" style="display:block;margin:18px auto" onclick="finish()">Показать отчёт</button></div>'; }
   }
   const rb=document.getElementById('restart2');if(rb)rb.onclick=()=>location.reload();

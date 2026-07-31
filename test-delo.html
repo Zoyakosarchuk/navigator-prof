@@ -969,13 +969,21 @@ function aiPayload(p){
 }
 async function enhanceWithAI(payload){
   if(!AI_ENDPOINT) return null;
+  // Тяжёлое ядро 12 систем разбито на два коротких параллельных запроса,
+  // чтобы платформа не обрывала длинный запрос. Результаты сливаются в один объект.
+  function part(mode){
+    var ctrl=new AbortController();
+    var to=setTimeout(function(){try{ctrl.abort();}catch(e){}},48000);
+    return fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:mode})),signal:ctrl.signal})
+      .then(function(r){clearTimeout(to);return r.ok?r.json():{};}).catch(function(){return {};});
+  }
   try{
-    const ctrl=new AbortController();
-    const to=setTimeout(function(){ctrl.abort();},70000);
-    const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal});
-    clearTimeout(to);
-    if(!r.ok) return null;
-    return await r.json();  // {portrait, strengths_text, scenarios:[{prob,title,text}]}
+    var res=await Promise.all([part('biz_core_a'),part('biz_core_b')]);
+    var a=res[0]||{}, b=res[1]||{};
+    var sys=Object.assign({}, a.sys||{}, b.sys||{});
+    var out={portrait:a.portrait||'',summary:a.summary||'',sys:sys,scenarios:(b.scenarios&&b.scenarios.length)?b.scenarios:(a.scenarios||[])};
+    if(!out.portrait && !Object.keys(sys).length) return null;
+    return out;
   }catch(e){ return null; }
 }
 

@@ -667,6 +667,9 @@ function buildBizReport(p,a,ai){
   h+='<div style="font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#5b6cff;font-weight:700">Что это значит для вашего дела</div>';
   h+='<h1 style="font-size:30px;letter-spacing:-.02em;margin:6px 0 18px;color:#20233a">Тип основателя: '+esc(arch[0])+'</h1>';
   h+=card('Кто вы в деле','<p style="margin:0">'+esc(arch[1])+'</p>');
+  var W={'визионер':'визионеры вроде Стива Джобса или Илона Маска — те, кто видит будущее и ведёт за собой','эксперт':'основатели-мастера вроде Джеймса Дайсона — те, кто строит бренд на качестве и глубине','системщик':'строители систем вроде Джеффа Безоса — те, кто превращает идею в отлаженный масштаб','продавец':'предприниматели-коммуникаторы вроде Ричарда Брэнсона — те, кто заражает идеей и продаёт'};
+  var wm=W[b.тип]||'предприниматели, которые сочетают несколько сильных ролей сразу';
+  h+=card('Кто вы из предпринимателей мира','<p style="margin:0">Предприниматели вашего склада — это '+esc(wm)+'. Это не про «стать таким же», а про то, какая сильная сторона ведёт вас в деле.</p>');
   h+=card('Ваша модель бизнеса: '+esc(model[0]),'<p style="margin:0">'+esc(model[1])+'</p>');
   h+='<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:20px 22px;margin:0 0 14px">';
   h+='<h2 style="font-size:19px;margin:0 0 10px;color:#20233a">Готовность к запуску</h2>';
@@ -693,37 +696,72 @@ function bizNicheCard(n){
   function rw(l,v,c){return v?('<tr><td style="padding:5px 8px;font-weight:700;color:'+c+';width:34%;vertical-align:top">'+l+'</td><td style="padding:5px 8px;color:#20233a">'+bizEsc(v)+'</td></tr>'):'';}
   var h='<div style="background:#fff;border:1px solid #e7e7ea;border-radius:16px;padding:18px 20px;margin:0 0 12px">';
   h+='<h3 style="font-size:18px;margin:0 0 4px;color:#5b6cff">'+nm+'</h3>';
-  if(n['суть'])h+='<p style="margin:0 0 10px;color:#20233a">'+bizEsc(n['суть'])+'</p>';
+  if(n['суть'])h+='<p style="margin:0 0 8px;color:#20233a">'+bizEsc(n['суть'])+'</p>';
+  if(n['потенциал'])h+='<div style="margin:0 0 10px;font-weight:700;color:#1f9d62">💰 Примерный доход: '+bizEsc(n['потенциал'])+'</div>';
   h+='<table style="width:100%;border-collapse:collapse;font-size:14px;background:#f7f7fb;border-radius:10px">'+rw('Сильные',sw['сильные'],'#1f9d62')+rw('Слабые',sw['слабые'],'#c98a00')+rw('Возможности',sw['возможности'],'#5b6cff')+rw('Риски',sw['риски'],'#d9534f')+rw('Запасной ход',sw['запасной_ход'],'#20233a')+'</table>';
   h+='<button class="bizPlanBtn" data-niche="'+nm.replace(/"/g,'&quot;')+'" style="margin-top:12px;background:linear-gradient(120deg,#5b6cff,#8a5bff);color:#fff;font-weight:700;border:none;padding:11px 20px;border-radius:999px;font-size:14px;cursor:pointer">Собрать мини-план по этой нише →</button>';
   h+='<div class="bizPlanHost" style="margin-top:12px"></div></div>';
   return h;
 }
+function bizDefaultNiches(){
+  var pl=window.__bizPayload||{}; var b=pl['бизнес']||{}; var f=b['формат']||'';
+  var idea=(b['идея_есть']&&(''+b['идея_есть']).indexOf('нет')<0&&b['идея'])?(''+b['идея']):'';
+  var base={
+    'услуга':[['Услуга под ключ в вашей сфере','Делаете сами то, что умеете лучше всего, для узкого сегмента.','от 40–80 тыс на старте до 150–250 тыс/мес'],['Консультации и наставничество','Продаёте свой опыт часами или пакетами — минимум вложений.','от 30–60 тыс до 150 тыс/мес'],['Мини-агентство','Собираете команду и берёте проекты крупнее, чем в одиночку.','от 100 тыс, потолок выше']],
+    'продукт':[['Свой продукт малой партией','Один востребованный товар, проверенный на небольшой партии.','от 50 тыс, зависит от наценки и оборота'],['Товар под конкретную боль','Нишевый продукт для узкой аудитории с чёткой потребностью.','от 60–120 тыс/мес'],['Перепродажа с добавленной ценностью','Берёте готовое и усиливаете упаковкой, сервисом, подбором.','от 40 тыс, растёт с оборотом']],
+    'контент':[['Экспертный блог + платный продукт','Растите аудиторию контентом, продаёте курс или консультации.','от 0 на старте до 100–300 тыс/мес'],['Платный клуб по подписке','Регулярный доход с закрытого сообщества.','100 подписчиков × 500–900 ₽ ≈ 50–90 тыс/мес'],['Онлайн-курс','Упаковываете экспертизу в программу и продаёте запусками.','от 100 тыс за запуск']],
+    'локальный':[['Локальная студия или точка','Услуга или товар для людей рядом — понятный спрос.','от 80–150 тыс/мес при хорошем месте'],['Выездной сервис','Приезжаете к клиенту — без аренды на старте.','от 50–100 тыс/мес'],['Локальное сообщество и события','Мероприятия и клуб по интересам в вашем городе.','от 40 тыс, растёт с участниками']],
+    'масштаб':[['Онлайн-курс на масштаб','Программа, которую можно продавать сотням без потери качества.','от 100 тыс до 1 млн+ за запуск'],['Подписочный сервис','Регулярная выручка с растущей базы подписчиков.','растёт с аудиторией, потолок высокий'],['Платформа или маркетплейс','Сводите тех, кому нужно, с теми, кто даёт. Долгий, но масштабный путь.','долгий разгон, потолок очень высокий']]
+  };
+  var arr=base[f]||base['услуга'];
+  return arr.map(function(x){ return {'название':(idea?(x[0]+' — в сфере «'+idea+'»'):x[0]),'суть':x[1],'потенциал':x[2],'свот':{'сильные':'Опирается на ваши сильные стороны и выбранный формат.','слабые':'Нужна регулярность и доведение до конца.','возможности':'Спрос устойчив, можно расти постепенно.','риски':'Конкуренция и спад мотивации без быстрых результатов.','запасной_ход':'Начните с малого теста — проверьте спрос до вложений.'}}; });
+}
+function bizDefaultPlan(niche){
+  return '<div style="background:#f4f5ff;border:1px solid #e7e7ea;border-radius:12px;padding:16px 18px">'+
+    '<p style="margin:0 0 8px;color:#8a6d1f;font-size:13px">Базовый план (персональный ИИ-план подтянется при обновлении страницы):</p>'+
+    '<p style="margin:0 0 8px"><b style="color:#5b6cff">Что продавать:</b> одно понятное предложение в нише «'+bizEsc(niche)+'» — начните с самого простого варианта.</p>'+
+    '<p style="margin:0 0 8px"><b style="color:#5b6cff">Кому:</b> узкому сегменту с явной болью — так проще найти первых клиентов.</p>'+
+    '<p style="margin:0 0 4px"><b style="color:#5b6cff">Первые шаги:</b></p><ol style="margin:0 0 8px;padding-left:20px"><li>Поговорите с 8–10 людьми из ниши, соберите их реальные боли.</li><li>Сделайте минимальное предложение и первую продажу.</li><li>Повторите и посчитайте экономику.</li></ol>'+
+    '<p style="margin:0 0 8px"><b style="color:#5b6cff">Деньги на старт:</b> начните с минимальных вложений — проверьте спрос до крупных трат.</p>'+
+    '<p style="margin:0"><b style="color:#5b6cff">Как проверить спрос:</b> предложите продукт 10 людям за 1–2 недели — реальные оплаты покажут всё.</p></div>';
+}
 function renderBizNiches(list){
   var host=document.getElementById('bizNiches'); if(!host)return;
-  if(!list||!list.length){ host.innerHTML='<div style="background:#eef0ff;border:1px dashed #8a5bff;border-radius:16px;padding:18px 20px;color:#5a5a70">Ниши с первого раза подобрать не удалось. Обновите страницу — ИИ попробует снова.</div>'; return; }
-  host.innerHTML=list.map(bizNicheCard).join('');
+  var useDefault=(!list||!list.length);
+  var arr=useDefault?bizDefaultNiches():list;
+  var note=useDefault?'<p style="color:#8a6d1f;background:#fff6e6;border:1px solid #ffe2a8;border-radius:10px;padding:10px 14px;font-size:13.5px;margin:0 0 12px">Это базовые направления под ваш формат. Персональный ИИ-подбор подтянется, если обновить страницу чуть позже.</p>':'';
+  host.innerHTML=note+arr.map(bizNicheCard).join('');
   Array.prototype.forEach.call(host.querySelectorAll('.bizPlanBtn'),function(btn){ btn.addEventListener('click',function(){ bizPlan(btn.getAttribute('data-niche'),btn); }); });
 }
 function fetchBizNiches(payload){
-  if(!AI_ENDPOINT||!payload)return;
-  fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:'biz_niches'}))})
-    .then(function(r){return r.json();}).then(function(d){ renderBizNiches(d&&d['ниши']); }).catch(function(){ renderBizNiches([]); });
+  if(!AI_ENDPOINT||!payload){ renderBizNiches([]); return; }
+  var done=false;
+  var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+  var to=setTimeout(function(){ if(done)return; done=true; if(ctrl){try{ctrl.abort();}catch(e){}} renderBizNiches([]); },55000);
+  fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:'biz_niches'})),signal:ctrl?ctrl.signal:undefined})
+    .then(function(r){return r.json();}).then(function(d){ if(done)return; done=true; clearTimeout(to); renderBizNiches(d&&d['ниши']); })
+    .catch(function(){ if(done)return; done=true; clearTimeout(to); renderBizNiches([]); });
 }
 function bizPlan(niche,btn){
   var host=btn.parentNode.querySelector('.bizPlanHost'); var payload=window.__bizPayload;
-  if(!host||!payload||!AI_ENDPOINT)return;
+  if(!host)return;
   btn.disabled=true; btn.textContent='Собираю мини-план…';
-  host.innerHTML='<p style="color:#5a5a70;margin:8px 0 0">ИИ разворачивает план…</p>';
+  host.innerHTML='<p style="color:#5a5a70;margin:8px 0 0">Готовим план…</p>';
+  if(!payload||!AI_ENDPOINT){ host.innerHTML=bizDefaultPlan(niche); btn.textContent='Готово ✓'; return; }
+  var done=false;
+  var to=setTimeout(function(){ if(done)return; done=true; host.innerHTML=bizDefaultPlan(niche); btn.textContent='Готово ✓'; },55000);
   fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},payload,{mode:'biz_plan','ниша':niche}))})
     .then(function(r){return r.json();}).then(function(d){
+      if(done)return; done=true; clearTimeout(to);
       function sec(t,v){return v?('<p style="margin:0 0 8px"><b style="color:#5b6cff">'+t+':</b> '+bizEsc(v)+'</p>'):'';}
+      var filled=d&&(d['оффер']||d['клиент']||(Array.isArray(d['первые_шаги'])&&d['первые_шаги'].length));
+      if(!filled){ host.innerHTML=bizDefaultPlan(niche); btn.textContent='Готово ✓'; return; }
       var h='<div style="background:#f4f5ff;border:1px solid #e7e7ea;border-radius:12px;padding:16px 18px">';
       h+=sec('Что продавать',d['оффер'])+sec('Кому',d['клиент']);
       if(Array.isArray(d['первые_шаги'])&&d['первые_шаги'].length){h+='<p style="margin:0 0 4px"><b style="color:#5b6cff">Первые шаги:</b></p><ol style="margin:0 0 8px;padding-left:20px">'+d['первые_шаги'].map(function(s){return '<li style="margin:4px 0">'+bizEsc(s)+'</li>';}).join('')+'</ol>';}
       h+=sec('Деньги на старт',d['деньги'])+sec('Как проверить спрос',d['проверка'])+'</div>';
       host.innerHTML=h; btn.textContent='Готово ✓';
-    }).catch(function(){ host.innerHTML='<p style="color:#d9534f;margin:8px 0 0">План собрать не получилось. Попробуйте ещё раз.</p>'; btn.disabled=false; btn.textContent='Собрать мини-план по этой нише →'; });
+    }).catch(function(){ if(done)return; done=true; clearTimeout(to); host.innerHTML=bizDefaultPlan(niche); btn.textContent='Готово ✓'; });
 }
 function buildReport(p,a,ai){
   const code=p.riasec.code, b=p.big5;
